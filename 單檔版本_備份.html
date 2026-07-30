@@ -225,6 +225,14 @@ input[type=range]::-moz-range-thumb{width:32px;height:32px;border-radius:50%;
 .bigbtn.o{background:#fff;color:var(--navy);border:2.5px solid var(--navy)}
 .bigbtn.sm{padding:14px;font-size:16px;margin-top:12px}
 
+/* 康和專區的兩顆大按鈕（左圖示、右兩行字） */
+.cz{margin-bottom:4px}
+.cz-b{text-decoration:none;justify-content:flex-start;gap:14px;padding:17px 18px;text-align:left}
+.cz-ic{width:30px;height:30px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round}
+.cz-tx{display:flex;flex-direction:column;line-height:1.3}
+.cz-tx i{font-style:normal;font-size:13.5px;font-weight:600;opacity:.78;margin-top:3px}
+
 /* ===== 14. 風險等級標籤 RR1–RR5 ===== */
 .pill{font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:20px;
   background:var(--green-lt);color:var(--green);white-space:nowrap;flex:0 0 auto}
@@ -346,6 +354,9 @@ input[type=range]::-moz-range-thumb{width:32px;height:32px;border-radius:50%;
 .sheet-kv.full.sub{font-size:14px;color:var(--ink-2);padding-top:0}
 .sheet-warn{background:var(--gold-lt);border-radius:12px;padding:13px;margin:14px 0 16px;
   font-size:14px;color:#8A5510;line-height:1.65}
+/* 對話框裡的大字說明（樂齡基準：內文 ≥ 18px） */
+.sheet-x{font-size:18px;line-height:1.8;color:var(--ink);margin:2px 0 18px}
+.sheet-x b{color:var(--navy)}
 .ok-ic{width:64px;height:64px;border-radius:50%;background:var(--green);color:#fff;
   font-size:36px;display:flex;align-items:center;justify-content:center;margin:4px auto 12px}
 
@@ -654,7 +665,46 @@ var GENERAL_DISCLAIMER =
   "及風險揭露事項，並依自身風險承受能力、財務狀況及投資目標，審慎評估並諮詢專業意見。";
 
 /* ==========================================================================
-   ===== 6. AI 小幫手 =====
+   ===== 6. 康和專區（從原型跳出去，連到康和真正的服務）=====
+   --------------------------------------------------------------------------
+   ★ app.scheme 是「康和掌先機」的 iOS URL Scheme，目前查不到官方公開資料，
+     請向康和資訊部確認後填入正式值。
+     填錯或使用者沒安裝，行為完全一樣：跳出說明對話框 → 導到 App Store，
+     所以先放著不會讓畫面壞掉，只是 iPhone 已安裝的人也會被導到下載頁。
+   ★ Android 不需要 scheme：用 intent:// 加套件名（android）就能開，
+     沒安裝時瀏覽器會自動走 browser_fallback_url 到 Google Play。
+   ========================================================================== */
+var CONCORDS = {
+
+  /* ① 下單 App */
+  app: {
+    nm:      "康和掌先機",
+    sub:     "報價、下單、庫存查詢",
+    scheme:  "touchstock://",     // ← 待康和資訊確認
+    android: "com.csc",           // Google Play 套件名
+    ios:     "https://apps.apple.com/tw/app/id354656495/",
+    play:    "https://play.google.com/store/apps/details?id=com.csc",
+    waitMs:  1400,                // 等這麼久還沒跳走，就視為沒安裝
+
+    /* 沒安裝時跳出的大字說明對話框 */
+    askT:  "需要「康和掌先機」",
+    askX:  "下單要在康和的「掌先機」App 裡完成。<br>" +
+           "您的手機看起來還沒有安裝，我幫您打開下載頁面，<b>安裝是免費的</b>，" +
+           "裝好之後回來按同一顆按鈕就會直接打開。",
+    askGo: "好，帶我去下載",
+    askNo: "先不要"
+  },
+
+  /* ② 投顧網站（用外部瀏覽器開新分頁） */
+  site: {
+    nm:  "康和投顧網站",
+    sub: "盤勢分析、研究報告（用瀏覽器開啟）",
+    url: "https://stock.concords.com.tw/Default1.aspx"
+  }
+};
+
+/* ==========================================================================
+   ===== 7. AI 小幫手 =====
    --------------------------------------------------------------------------
    要新增問答，在 AI_QUICK 加一句問題，再到 AI_ANSWERS 補上對應回答即可。
    回答裡可以用 <button class="ai-go" data-go="畫面id">文字</button> 做導頁。
@@ -720,7 +770,7 @@ var VOICE_MATCH = [
 ];
 
 /* ==========================================================================
-   ===== 7. 營業員視角（同一套資料，換一個身分看）=====
+   ===== 8. 營業員視角（同一套資料，換一個身分看）=====
    --------------------------------------------------------------------------
    客戶端的行為（問了什麼、試算了什麼、缺口多少）在這裡變成可行動的名單。
    ========================================================================== */
@@ -759,7 +809,7 @@ var CLIENT_TIMELINE = [
 /* 假設缺口全部以「月配息債券基金」承接時的換算基準 */
 var ADV_CONV = { yield:0.055, feeRate:0.015 };
 
-/* ===== 8. 兩種身分、各自的畫面 ===== */
+/* ===== 9. 兩種身分、各自的畫面 ===== */
 var ROLES = [
   { id:"client",  nm:"客戶視角",   who:"陳伯伯" },
   { id:"advisor", nm:"營業員視角", who:"王專員" }
@@ -791,7 +841,7 @@ var NAV_ICONS = {
   advClient: '<circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/>'
 };
 
-/* ===== 9. 無障礙：字級三段（zoom 倍率） ===== */
+/* ===== 10. 無障礙：字級三段（zoom 倍率） ===== */
 var FONT_STEPS = [
   { k:"標準", z:1    },
   { k:"大",   z:1.15 },
@@ -799,7 +849,7 @@ var FONT_STEPS = [
 ];
 
 /* ==========================================================================
-   ===== 10. 執行期狀態（程式會自行改寫，不用手動設定）=====
+   ===== 11. 執行期狀態（程式會自行改寫，不用手動設定）=====
    ========================================================================== */
 var PLAN = null;   // 使用者在 ② 選定的補缺口方案，選了之後 ① 月曆會跟著變
 
@@ -949,7 +999,35 @@ S.invest = function () {
   '<div class="disc">' + INVEST_DISCLAIMER +
     '<div class="disc-x">' + GENERAL_DISCLAIMER + '</div></div>' +
 
-  '<button class="bigbtn p">預約營業員說明商品</button>';
+  '<button class="bigbtn p">預約營業員說明商品</button>' +
+
+  S.concordsZone();
+};
+
+/* ---------- 共用區塊：康和專區 ----------
+   兩顆大按鈕（跳去掌先機下單 App、開康和投顧網站）。
+   目前放在畫面 ④ 最下方；想放到別的畫面，就在那個畫面的字串裡加一次
+   S.concordsZone() 即可（例如 ⑤ AI 小幫手），行為由 app.js 的
+   initConcordsZone() 自動接上，不用另外寫程式。
+
+   網址刻意不寫在這裡的 href：一律由 app.js 從 CONCORDS 填入。
+   這樣 產生單檔.py 的「不得有外部參照」檢查才過得去。               */
+S.concordsZone = function () {
+  var a = CONCORDS.app, s = CONCORDS.site;
+  return '' +
+  '<div class="sec-h">康和專區</div>' +
+  '<div class="cz">' +
+    '<button class="bigbtn p cz-b" id="czApp">' +
+      '<svg class="cz-ic" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/>' +
+      '<path d="M10.5 5.6h3"/><path d="M9.3 15.2l2.6-3.1 2 1.7 2.8-3.6"/></svg>' +
+      '<span class="cz-tx">開啟' + a.nm + '下單<i>' + a.sub + '</i></span>' +
+    '</button>' +
+    '<a class="bigbtn o cz-b" id="czSite" target="_blank" rel="noopener noreferrer">' +
+      '<svg class="cz-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/>' +
+      '<path d="M3.3 9.5h17.4M3.3 14.5h17.4M12 3a16 16 0 000 18M12 3a16 16 0 010 18"/></svg>' +
+      '<span class="cz-tx">' + s.nm + '<i>' + s.sub + '</i></span>' +
+    '</a>' +
+  '</div>';
 };
 
 /* ==========================================================================
@@ -1269,6 +1347,8 @@ var NOTES = {
     if (key === 'ai')        initAI();
     if (key === 'advToday')  initAdvToday();
     if (key === 'advList')   initAdvList();
+
+    initConcordsZone();   /* 有放康和專區的畫面才會接到東西 */
   }
 
   function setActive(sel, key, attr) {
@@ -1567,6 +1647,73 @@ var NOTES = {
     });
 
     paintProducts('all');
+  }
+
+  /* ======================================================================
+     康和專區（哪個畫面放了 S.concordsZone() 就自動生效）
+     ====================================================================== */
+  function initConcordsZone() {
+    var app = document.getElementById('czApp');
+    if (app) app.addEventListener('click', openTradeApp);
+
+    /* 網址從 data.js 填入，外部瀏覽器開新分頁 */
+    var site = document.getElementById('czSite');
+    if (site) site.setAttribute('href', CONCORDS.site.url);
+  }
+
+  /* ----------------------------------------------------------------------
+     開啟「掌先機」下單 App
+     ----------------------------------------------------------------------
+     Android：intent:// 帶套件名，沒安裝時瀏覽器自己走 fallback 到 Google Play。
+     iOS：先試 URL Scheme，時間內畫面沒有被切走就當成沒安裝 → 跳說明對話框。
+     桌機：本來就沒有 App，直接跳說明對話框並給 App Store 連結。
+     ====================================================================== */
+  function openTradeApp() {
+    var a  = CONCORDS.app;
+    var ua = navigator.userAgent;
+
+    if (/Android/i.test(ua)) {
+      location.href = 'intent://open#Intent;package=' + a.android +
+        ';S.browser_fallback_url=' + encodeURIComponent(a.play) + ';end';
+      return;
+    }
+
+    if (!/iPhone|iPad|iPod/i.test(ua)) { askInstall(); return; }
+
+    var timer = setTimeout(function () {
+      document.removeEventListener('visibilitychange', gone);
+      askInstall();
+    }, a.waitMs);
+
+    /* 畫面被切走 ＝ App 真的開起來了，就不要再跳下載對話框 */
+    function gone() {
+      if (document.hidden) {
+        clearTimeout(timer);
+        document.removeEventListener('visibilitychange', gone);
+      }
+    }
+    document.addEventListener('visibilitychange', gone);
+
+    location.href = a.scheme;
+  }
+
+  /* 沒安裝時的大字說明對話框 → 確認後才導到商店下載頁 */
+  function askInstall() {
+    var a     = CONCORDS.app;
+    var store = /Android/i.test(navigator.userAgent) ? a.play : a.ios;
+
+    showSheet(
+      '<div class="sheet-big">' + a.askT + '</div>' +
+      '<div class="sheet-x">' + a.askX + '</div>' +
+      '<button class="bigbtn p" id="czGo">' + a.askGo + '</button>' +
+      '<button class="bigbtn o" id="czNo">' + a.askNo + '</button>'
+    );
+
+    document.getElementById('czGo').addEventListener('click', function () {
+      closeSheet();
+      window.open(store, '_blank', 'noopener');
+    });
+    document.getElementById('czNo').addEventListener('click', closeSheet);
   }
 
   function paintProducts(cat) {

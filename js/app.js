@@ -109,6 +109,8 @@
     if (key === 'ai')        initAI();
     if (key === 'advToday')  initAdvToday();
     if (key === 'advList')   initAdvList();
+
+    initConcordsZone();   /* 有放康和專區的畫面才會接到東西 */
   }
 
   function setActive(sel, key, attr) {
@@ -407,6 +409,73 @@
     });
 
     paintProducts('all');
+  }
+
+  /* ======================================================================
+     康和專區（哪個畫面放了 S.concordsZone() 就自動生效）
+     ====================================================================== */
+  function initConcordsZone() {
+    var app = document.getElementById('czApp');
+    if (app) app.addEventListener('click', openTradeApp);
+
+    /* 網址從 data.js 填入，外部瀏覽器開新分頁 */
+    var site = document.getElementById('czSite');
+    if (site) site.setAttribute('href', CONCORDS.site.url);
+  }
+
+  /* ----------------------------------------------------------------------
+     開啟「掌先機」下單 App
+     ----------------------------------------------------------------------
+     Android：intent:// 帶套件名，沒安裝時瀏覽器自己走 fallback 到 Google Play。
+     iOS：先試 URL Scheme，時間內畫面沒有被切走就當成沒安裝 → 跳說明對話框。
+     桌機：本來就沒有 App，直接跳說明對話框並給 App Store 連結。
+     ====================================================================== */
+  function openTradeApp() {
+    var a  = CONCORDS.app;
+    var ua = navigator.userAgent;
+
+    if (/Android/i.test(ua)) {
+      location.href = 'intent://open#Intent;package=' + a.android +
+        ';S.browser_fallback_url=' + encodeURIComponent(a.play) + ';end';
+      return;
+    }
+
+    if (!/iPhone|iPad|iPod/i.test(ua)) { askInstall(); return; }
+
+    var timer = setTimeout(function () {
+      document.removeEventListener('visibilitychange', gone);
+      askInstall();
+    }, a.waitMs);
+
+    /* 畫面被切走 ＝ App 真的開起來了，就不要再跳下載對話框 */
+    function gone() {
+      if (document.hidden) {
+        clearTimeout(timer);
+        document.removeEventListener('visibilitychange', gone);
+      }
+    }
+    document.addEventListener('visibilitychange', gone);
+
+    location.href = a.scheme;
+  }
+
+  /* 沒安裝時的大字說明對話框 → 確認後才導到商店下載頁 */
+  function askInstall() {
+    var a     = CONCORDS.app;
+    var store = /Android/i.test(navigator.userAgent) ? a.play : a.ios;
+
+    showSheet(
+      '<div class="sheet-big">' + a.askT + '</div>' +
+      '<div class="sheet-x">' + a.askX + '</div>' +
+      '<button class="bigbtn p" id="czGo">' + a.askGo + '</button>' +
+      '<button class="bigbtn o" id="czNo">' + a.askNo + '</button>'
+    );
+
+    document.getElementById('czGo').addEventListener('click', function () {
+      closeSheet();
+      window.open(store, '_blank', 'noopener');
+    });
+    document.getElementById('czNo').addEventListener('click', closeSheet);
   }
 
   function paintProducts(cat) {

@@ -143,7 +143,35 @@ S.invest = function () {
   '<div class="disc">' + INVEST_DISCLAIMER +
     '<div class="disc-x">' + GENERAL_DISCLAIMER + '</div></div>' +
 
-  '<button class="bigbtn p">預約營業員說明商品</button>';
+  '<button class="bigbtn p">預約營業員說明商品</button>' +
+
+  S.concordsZone();
+};
+
+/* ---------- 共用區塊：康和專區 ----------
+   兩顆大按鈕（跳去掌先機下單 App、開康和投顧網站）。
+   目前放在畫面 ④ 最下方；想放到別的畫面，就在那個畫面的字串裡加一次
+   S.concordsZone() 即可（例如 ⑤ AI 小幫手），行為由 app.js 的
+   initConcordsZone() 自動接上，不用另外寫程式。
+
+   網址刻意不寫在這裡的 href：一律由 app.js 從 CONCORDS 填入。
+   這樣 產生單檔.py 的「不得有外部參照」檢查才過得去。               */
+S.concordsZone = function () {
+  var a = CONCORDS.app, s = CONCORDS.site;
+  return '' +
+  '<div class="sec-h">康和專區</div>' +
+  '<div class="cz">' +
+    '<button class="bigbtn p cz-b" id="czApp">' +
+      '<svg class="cz-ic" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/>' +
+      '<path d="M10.5 5.6h3"/><path d="M9.3 15.2l2.6-3.1 2 1.7 2.8-3.6"/></svg>' +
+      '<span class="cz-tx">開啟' + a.nm + '下單<i>' + a.sub + '</i></span>' +
+    '</button>' +
+    '<a class="bigbtn o cz-b" id="czSite" target="_blank" rel="noopener noreferrer">' +
+      '<svg class="cz-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/>' +
+      '<path d="M3.3 9.5h17.4M3.3 14.5h17.4M12 3a16 16 0 000 18M12 3a16 16 0 010 18"/></svg>' +
+      '<span class="cz-tx">' + s.nm + '<i>' + s.sub + '</i></span>' +
+    '</a>' +
+  '</div>';
 };
 
 /* ==========================================================================

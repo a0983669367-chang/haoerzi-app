@@ -19,9 +19,16 @@
   function init() {
     buildRoles();
     bindOnce();
+    paintFooter();
     paintChrome();
     render(screens()[0].id);
     registerServiceWorker();
+  }
+
+  /* 桌機版頁尾的風險揭露，跟 App 內共用 data.js 的同一份文字 */
+  function paintFooter() {
+    var el = document.getElementById('footDisc');
+    if (el) el.textContent = GENERAL_DISCLAIMER;
   }
 
   /* 只綁一次的事件（元素本身不會被換掉，只換 innerHTML） */

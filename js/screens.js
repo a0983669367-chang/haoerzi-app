@@ -54,6 +54,8 @@ S.cash = function () {
     '</div>' +
   '</div>' +
 
+  '<div class="disc">' + GENERAL_DISCLAIMER + '</div>' +
+
   (on ? '' : '<button class="bigbtn o" data-go="pension">我想每個月領更多 →</button>');
 };
 
@@ -76,7 +78,9 @@ S.pension = function () {
 
   '<div class="result" id="gapbox"></div>' +
 
-  '<div id="solbox"></div>';
+  '<div id="solbox"></div>' +
+
+  '<div class="disc">' + GENERAL_DISCLAIMER + '</div>';
 };
 
 /* ---------- 畫面 ③：老本撐多久試算 ---------- */
@@ -112,6 +116,8 @@ S.calc = function () {
       (CONFIG.inflation * 100).toFixed(1) + '%</span></div>' +
   '</div>' +
 
+  '<div class="disc">' + GENERAL_DISCLAIMER + '</div>' +
+
   '<button class="bigbtn p">預約營業員視訊討論</button>' +
   '<button class="bigbtn o" data-go="invest">看看能提高現金流的商品</button>';
 };
@@ -134,7 +140,8 @@ S.invest = function () {
 
   '<div id="prodbox"></div>' +
 
-  '<div class="disc">' + INVEST_DISCLAIMER + '</div>' +
+  '<div class="disc">' + INVEST_DISCLAIMER +
+    '<div class="disc-x">' + GENERAL_DISCLAIMER + '</div></div>' +
 
   '<button class="bigbtn p">預約營業員說明商品</button>';
 };
@@ -230,5 +237,6 @@ S.ai = function () {
     '<path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21M8.5 21h7"/></svg>' +
     '<span id="micTx">按住說話</span></button>' +
 
-  '<div class="disc">' + AI_DISCLAIMER + '</div>';
+  '<div class="disc">' + AI_DISCLAIMER +
+    '<div class="disc-x">' + GENERAL_DISCLAIMER + '</div></div>';
 };

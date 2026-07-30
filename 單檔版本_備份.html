@@ -5,7 +5,7 @@
   這支檔案是由 index.html + css/ + js/ 自動合併產生的，方便單獨寄送或
   雙擊開啟。要修改內容請改原始的 js/data.js，改完後執行 產生單檔.py
   重新產生一次，不要直接改這裡。
-  產生日期：2026-07-27　·　對應 service-worker 版本：v3
+  產生日期：2026-07-30　·　對應 service-worker 版本：v3
   ------------------------------------------------------------------
 -->
 <html lang="zh-Hant">
@@ -307,6 +307,8 @@ input[type=range]::-moz-range-thumb{width:32px;height:32px;border-radius:50%;
 
 .disc{font-size:12.5px;color:var(--ink-2);line-height:1.7;background:#E9EEF2;
   border-radius:12px;padding:12px 14px;margin-bottom:12px}
+/* 同一個揭露框裡的第二段（通用風險揭露），用細線跟上一段分開 */
+.disc-x{margin-top:9px;padding-top:9px;border-top:1px solid #D5DEE5}
 .spk{display:block;margin-top:10px;background:#EEF3F6;border:0;border-radius:10px;
   padding:9px 13px;font-size:14px;font-family:inherit;color:var(--navy);
   font-weight:600;cursor:pointer}
@@ -405,6 +407,10 @@ input[type=range]::-moz-range-thumb{width:32px;height:32px;border-radius:50%;
 
 .foot{max-width:1180px;margin:34px auto 0;text-align:center;font-size:13.5px;color:#8496A3;line-height:1.8}
 
+/* 頁尾的風險揭露：內容由 app.js 從 data.js 的 GENERAL_DISCLAIMER 填入 */
+.foot-disc{max-width:820px;margin:14px auto 0;padding-top:13px;border-top:1px solid #DCE3E9;
+  text-align:left;font-size:12.5px;line-height:1.85;color:#7C8E9B}
+
 /* ==========================================================================
    24. 手機版 / PWA 全螢幕模式
    在手機上開啟，或「加到主畫面」後開啟時，隱藏所有桌機說明元素，
@@ -476,6 +482,8 @@ input[type=range]::-moz-range-thumb{width:32px;height:32px;border-radius:50%;
 <footer class="foot">
   原型為模擬畫面，數據皆為示意，非真實帳戶資料。<br>
   設計基準：內文字級 ≥ 18px、主要數字 ≥ 40px、按鈕高度 ≥ 56px、對比度符合 WCAG 2.1 AA。
+  <!-- 風險揭露文字由 app.js 從 data.js 的 GENERAL_DISCLAIMER 填入，只維護一份 -->
+  <div class="foot-disc" id="footDisc"></div>
 </footer>
 
 <script>
@@ -638,6 +646,12 @@ var ORDER = {
 var INVEST_DISCLAIMER =
   "以上為模擬示意，非實際商品條件。投資均有風險，配息可能來自本金；" +
   "結構型商品不保本，65 歲以上客戶承作前須完成加強版適合度評估與商品說明。";
+
+/* 全站通用風險揭露
+   出現在客戶端五個畫面的最下方，以及桌機版頁尾。改這裡就會一起變。 */
+var GENERAL_DISCLAIMER =
+  "以上內容僅為模擬範例，不代表實際投資報酬，投資均有風險，請於實際操作前詳閱相關商品說明書" +
+  "及風險揭露事項，並依自身風險承受能力、財務狀況及投資目標，審慎評估並諮詢專業意見。";
 
 /* ==========================================================================
    ===== 6. AI 小幫手 =====
@@ -846,6 +860,8 @@ S.cash = function () {
     '</div>' +
   '</div>' +
 
+  '<div class="disc">' + GENERAL_DISCLAIMER + '</div>' +
+
   (on ? '' : '<button class="bigbtn o" data-go="pension">我想每個月領更多 →</button>');
 };
 
@@ -868,7 +884,9 @@ S.pension = function () {
 
   '<div class="result" id="gapbox"></div>' +
 
-  '<div id="solbox"></div>';
+  '<div id="solbox"></div>' +
+
+  '<div class="disc">' + GENERAL_DISCLAIMER + '</div>';
 };
 
 /* ---------- 畫面 ③：老本撐多久試算 ---------- */
@@ -904,6 +922,8 @@ S.calc = function () {
       (CONFIG.inflation * 100).toFixed(1) + '%</span></div>' +
   '</div>' +
 
+  '<div class="disc">' + GENERAL_DISCLAIMER + '</div>' +
+
   '<button class="bigbtn p">預約營業員視訊討論</button>' +
   '<button class="bigbtn o" data-go="invest">看看能提高現金流的商品</button>';
 };
@@ -926,7 +946,8 @@ S.invest = function () {
 
   '<div id="prodbox"></div>' +
 
-  '<div class="disc">' + INVEST_DISCLAIMER + '</div>' +
+  '<div class="disc">' + INVEST_DISCLAIMER +
+    '<div class="disc-x">' + GENERAL_DISCLAIMER + '</div></div>' +
 
   '<button class="bigbtn p">預約營業員說明商品</button>';
 };
@@ -1022,7 +1043,8 @@ S.ai = function () {
     '<path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21M8.5 21h7"/></svg>' +
     '<span id="micTx">按住說話</span></button>' +
 
-  '<div class="disc">' + AI_DISCLAIMER + '</div>';
+  '<div class="disc">' + AI_DISCLAIMER +
+    '<div class="disc-x">' + GENERAL_DISCLAIMER + '</div></div>';
 };
 
 
@@ -1157,9 +1179,16 @@ var NOTES = {
   function init() {
     buildRoles();
     bindOnce();
+    paintFooter();
     paintChrome();
     render(screens()[0].id);
     registerServiceWorker();
+  }
+
+  /* 桌機版頁尾的風險揭露，跟 App 內共用 data.js 的同一份文字 */
+  function paintFooter() {
+    var el = document.getElementById('footDisc');
+    if (el) el.textContent = GENERAL_DISCLAIMER;
   }
 
   /* 只綁一次的事件（元素本身不會被換掉，只換 innerHTML） */

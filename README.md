@@ -98,6 +98,7 @@ requirements.txt        Streamlit 部署要裝的套件
 | 各類商品的費用 | `data.js` → `CAT_FEE` |
 | 申購試算的金額範圍 | `data.js` → `ORDER` |
 | AI 問答內容 | `data.js` → `AI_QUICK`、`AI_ANSWERS` |
+| 通用風險揭露文字 | `data.js` → `GENERAL_DISCLAIMER`（五個客戶畫面與桌機頁尾共用同一份） |
 | 語音關鍵字對應 | `data.js` → `VOICE_MATCH` |
 | 客戶風險屬性 | `data.js` → `CONFIG.riskProfile`、`CONFIG.maxRR` |
 | 營業員的客戶名單 | `data.js` → `CLIENTS`、`ADVISOR` |
@@ -122,3 +123,5 @@ python3 產生單檔.py
 ## 免責
 
 所有數據皆為模擬示意，非真實帳戶資料。未串接後端 API，無個資與交易功能。
+
+以上內容僅為模擬範例，不代表實際投資報酬，投資均有風險，請於實際操作前詳閱相關商品說明書及風險揭露事項，並依自身風險承受能力、財務狀況及投資目標，審慎評估並諮詢專業意見。

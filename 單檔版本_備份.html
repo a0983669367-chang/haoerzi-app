@@ -169,6 +169,14 @@ body{
 .pay-total .v{font-size:22px}
 .list-title{margin-bottom:8px;font-weight:600;color:var(--ink);font-size:14px}
 
+/* ===== 9-2. 畫面 ① 的左右子頁切換（現金流月曆 ／ 老本撐多久） ===== */
+.subtabs{display:flex;gap:4px;background:#E3EAEF;border-radius:14px;padding:4px;margin-bottom:16px}
+.subtab{flex:1;min-width:0;background:none;border:0;border-radius:11px;
+  font-family:inherit;font-size:16px;font-weight:700;color:var(--ink-2);
+  padding:13px 6px;cursor:pointer;transition:.15s;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.subtab.on{background:#fff;color:var(--navy);box-shadow:0 1px 4px rgba(15,76,117,.16)}
+
 /* ===== 10. 區塊小標與鍵值列（月退俸／投資頁共用） ===== */
 .sec-h{font-size:16px;font-weight:700;color:var(--navy);margin:20px 0 10px;
   padding-left:11px;border-left:5px solid var(--gold)}
@@ -224,6 +232,15 @@ input[type=range]::-moz-range-thumb{width:32px;height:32px;border-radius:50%;
 .bigbtn.r{background:var(--red);color:#fff}
 .bigbtn.o{background:#fff;color:var(--navy);border:2.5px solid var(--navy)}
 .bigbtn.sm{padding:14px;font-size:16px;margin-top:12px}
+
+/* ===== 13-2. 康和專區 ===== */
+/* 專區標題直接用康和 logo（原檔同時留在 assets/logo-concords.png，
+   這裡內嵌成 data URI，單檔版本才不會有外部參照） */
+.cz-head{text-align:center}
+.cz-logo{width:100%;max-width:250px;height:46px;margin:2px auto 12px;
+  background-repeat:no-repeat;background-position:center;background-size:contain;
+  background-image:url("data:image/png;base64,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")}
+.cz-head .sub{text-align:left}
 
 /* 康和專區的兩顆大按鈕（左圖示、右兩行字） */
 .cz{margin-bottom:4px}
@@ -816,11 +833,19 @@ var ROLES = [
 ];
 
 var SCREENS_CLIENT = [
-  { id:"cash",    tab:"① 現金流月曆", nav:"現金流", title:"本月現金流"   },
-  { id:"pension", tab:"② 我的月退俸", nav:"月退俸", title:"我的月退俸"   },
-  { id:"calc",    tab:"③ 老本撐多久", nav:"試算",   title:"老本試算"     },
-  { id:"invest",  tab:"④ 投資商品",   nav:"投資",   title:"好日子精選"   },
-  { id:"ai",      tab:"⑤ AI 小幫手",  nav:"小幫手", title:"好日子小幫手" }
+  { id:"cash",     tab:"① 現金流 ・ 試算", nav:"現金流", title:"本月現金流"   },
+  { id:"pension",  tab:"② 我的月退俸",     nav:"月退俸", title:"我的月退俸"   },
+  { id:"concords", tab:"③ 康和專區",       nav:"康和",   title:"康和專區"     },
+  { id:"invest",   tab:"④ 投資商品",       nav:"投資",   title:"好日子精選"   },
+  { id:"ai",       tab:"⑤ AI 小幫手",      nav:"小幫手", title:"好日子小幫手" }
+];
+
+/* 畫面 ① 裡的左右兩個子頁（同一個分頁，上方按鈕切換）
+   切換時上方標題列與右側講稿都會跟著換。
+   nt = 對應 notes.js 裡的講稿 key                                    */
+var CASH_SUBS = [
+  { id:"cal",  nm:"現金流月曆", title:"本月現金流", nt:"cash" },
+  { id:"calc", nm:"老本撐多久", title:"老本試算",   nt:"calc" }
 ];
 
 var SCREENS_ADVISOR = [
@@ -834,6 +859,7 @@ var NAV_ICONS = {
   cash:      '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   pension:   '<circle cx="12" cy="12" r="9"/><path d="M15 9H10.8a2.3 2.3 0 000 4.6h2.4a2.3 2.3 0 010 4.6H9M12 6.6v1.2M12 16.2v1.4"/>',
   calc:      '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/>',
+  concords:  '<path d="M3 21h18M5 21V9.5l7-4.5 7 4.5V21"/><path d="M9.5 21v-5.5h5V21"/>',
   invest:    '<path d="M3 20h18"/><path d="M6 16l4.2-5 3.3 2.8L20 7.5"/><path d="M20 11.5v-4h-4"/>',
   ai:        '<path d="M21 11.5a7.5 7.5 0 01-7.5 7.5H8l-4 3v-4.6A7.5 7.5 0 0111.5 4h2A7.5 7.5 0 0121 11.5z"/><path d="M12.2 8.4l.85 2.05 2.05.85-2.05.85-.85 2.05-.85-2.05-2.05-.85 2.05-.85z"/>',
   advToday:  '<path d="M4 6.5h16M4 12h16M4 17.5h10"/><path d="M17.5 17.5l1.6 1.6 3-3.4"/>',
@@ -852,6 +878,7 @@ var FONT_STEPS = [
    ===== 11. 執行期狀態（程式會自行改寫，不用手動設定）=====
    ========================================================================== */
 var PLAN = null;   // 使用者在 ② 選定的補缺口方案，選了之後 ① 月曆會跟著變
+var SUB  = "cal";  // 畫面 ① 目前顯示哪個子頁（CASH_SUBS 的 id）
 
 
 /* ==========================================================================
@@ -864,10 +891,23 @@ var PLAN = null;   // 使用者在 ② 選定的補缺口方案，選了之後 �
 
 var S = {};
 
-/* ---------- 畫面 ①：現金流月曆 ----------
+/* ---------- 畫面 ①：現金流月曆 ＋ 老本試算（同一個分頁，上方左右切換）----------
+   上面兩顆按鈕切換子頁，切換由 app.js 的 SUB 決定，標題與右側講稿會一起換。  */
+S.cash = function () {
+  return '' +
+  '<div class="subtabs" id="subtabs">' +
+    CASH_SUBS.map(function (s) {
+      return '<button class="subtab' + (s.id === SUB ? ' on' : '') +
+             '" data-sub="' + s.id + '">' + s.nm + '</button>';
+    }).join('') +
+  '</div>' +
+  (SUB === 'calc' ? S.calc() : S.cashCal());
+};
+
+/* ---------- ①-左：現金流月曆 ----------
    若使用者在 ② 選過方案（PLAN 有值），這一頁會切換成「模擬後」的樣子：
    總額補到目標、月曆多一顆虛線金點、明細多一列。                       */
-S.cash = function () {
+S.cashCal = function () {
   var on  = !!PLAN;
   var sum = TOTAL + (on ? PLAN.add : 0);
 
@@ -939,7 +979,7 @@ S.pension = function () {
   '<div class="disc">' + GENERAL_DISCLAIMER + '</div>';
 };
 
-/* ---------- 畫面 ③：老本撐多久試算 ---------- */
+/* ---------- ①-右：老本撐多久試算（原本的畫面 ③，現在併進 ① 的右邊）---------- */
 S.calc = function () {
   return '' +
   '<div class="card">' +
@@ -999,23 +1039,34 @@ S.invest = function () {
   '<div class="disc">' + INVEST_DISCLAIMER +
     '<div class="disc-x">' + GENERAL_DISCLAIMER + '</div></div>' +
 
-  '<button class="bigbtn p">預約營業員說明商品</button>' +
-
-  S.concordsZone();
+  '<button class="bigbtn p">預約營業員說明商品</button>';
 };
 
-/* ---------- 共用區塊：康和專區 ----------
-   兩顆大按鈕（跳去掌先機下單 App、開康和投顧網站）。
-   目前放在畫面 ④ 最下方；想放到別的畫面，就在那個畫面的字串裡加一次
-   S.concordsZone() 即可（例如 ⑤ AI 小幫手），行為由 app.js 的
-   initConcordsZone() 自動接上，不用另外寫程式。
+/* ---------- 畫面 ③：康和專區 ----------
+   標題不用文字，直接放康和 logo（logo 以 data URI 存在 styles.css 的 .cz-logo）。 */
+S.concords = function () {
+  return '' +
+  '<div class="card cz-head">' +
+    '<div class="cz-logo" role="img" aria-label="康和證券"></div>' +
+    '<div class="sub">好日子裡看到的商品與試算都由康和證券提供。' +
+      '下面兩個入口會離開好日子，連到康和的下單 App 與投顧網站。</div>' +
+  '</div>' +
+
+  S.concordsZone() +
+
+  '<div class="disc">' + GENERAL_DISCLAIMER + '</div>';
+};
+
+/* ---------- 共用區塊：康和專區的兩顆大按鈕 ----------
+   跳去掌先機下單 App、開康和投顧網站。
+   想在別的畫面也放一組，就在那個畫面的字串裡加一次 S.concordsZone()，
+   行為由 app.js 的 initConcordsZone() 自動接上，不用另外寫程式。
 
    網址刻意不寫在這裡的 href：一律由 app.js 從 CONCORDS 填入。
    這樣 產生單檔.py 的「不得有外部參照」檢查才過得去。               */
 S.concordsZone = function () {
   var a = CONCORDS.app, s = CONCORDS.site;
   return '' +
-  '<div class="sec-h">康和專區</div>' +
   '<div class="cz">' +
     '<button class="bigbtn p cz-b" id="czApp">' +
       '<svg class="cz-ic" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/>' +
@@ -1160,14 +1211,27 @@ var NOTES = {
   },
 
   calc: {
-    k: "功能 ③ ‧ 焦慮轉介",
+    k: "功能 ① 右 ‧ 焦慮轉介",
     h: "老本撐多久試算",
-    lead: "回答退休族最深層的焦慮。功能 ② 管的是「這個月」，這一頁管的是「一輩子」——兩個時間尺度，兩種成交理由。",
+    lead: "跟月曆同一個分頁，用上方按鈕左右切換。月曆回答「這個月領多少」，這一頁回答「能領多久」——同一筆錢的兩個問法，放在一起長輩才不用記自己在哪一頁。",
     n: [
+      ["為什麼跟月曆併頁", "兩頁看的是同一筆資產，只是時間尺度不同。併頁後底部導覽少一格，讓出來的位置給「康和專區」。", "g"],
       ["一根滑桿，一個答案", "刻意不提供多重參數。複雜的試算工具長輩不會用，簡單的才會天天打開。", "g"],
       ["結果用顏色分級", "綠（安全）／黃（勉強）／紅（不足），不必看懂數字也知道狀況。", "o"],
       ["天然的服務轉介點", "結果偏黃或紅時引導「預約營業員視訊」與「提高現金流的商品」——把數位工具接回 15 家分公司的人力優勢。", ""],
       ["簡報 demo 建議", "現場把滑桿從 3.8 萬拉到 7 萬，畫面由綠轉紅，這一秒最有說服力。", ""]
+    ]
+  },
+
+  concords: {
+    k: "功能 ③ ‧ 導流康和",
+    h: "康和專區",
+    lead: "好日子是「養需求」的地方，真正的下單與研究資源在康和本來就有的系統裡。這一頁把兩者接起來，不重造輪子。",
+    n: [
+      ["接回既有戰力", "掌先機是康和現成的下單 App、投顧網站有現成的研究報告。原型不必自己做下單與報價，只要把客戶準確地送過去。", "g"],
+      ["沒安裝也不會斷掉", "偵測到沒裝掌先機時，先用大字說明「下單要用這個 App、安裝免費」，按了才跳商店。長輩最怕的是按下去畫面突然變了卻不知道發生什麼事。", "o"],
+      ["這一格是換來的", "月曆與試算併頁後空出的位置。導覽列只有五格，每一格都要換得到東西。", ""],
+      ["第二期可做的事", "帶著客戶身分與商品代號進掌先機（deep link 參數），讓他一進 App 就停在要下單的那一檔，而不是首頁。", ""]
     ]
   },
 
@@ -1286,7 +1350,10 @@ var NOTES = {
     /* 畫面內任何 [data-go] 按鈕都能跳頁 */
     document.getElementById('body').addEventListener('click', function (e) {
       var b = e.target.closest('[data-go]');
-      if (b) render(b.dataset.go);
+      if (!b) return;
+      /* 跳回 ① 一律停在月曆那一邊（會用到的情境都是要看月曆） */
+      if (b.dataset.go === 'cash') SUB = 'cal';
+      render(b.dataset.go);
     });
     document.getElementById('a11y').addEventListener('click', stepFont);
   }
@@ -1330,7 +1397,10 @@ var NOTES = {
 
     var meta = screens().filter(function (s) { return s.id === key; })[0];
     if (!meta) return;
-    document.getElementById('scr-title').textContent = meta.title;
+
+    /* 畫面 ① 有兩個子頁，標題與講稿要跟著左右切換 */
+    var sub = (key === 'cash') ? curSub() : null;
+    document.getElementById('scr-title').textContent = sub ? sub.title : meta.title;
 
     var body = document.getElementById('body');
     body.innerHTML = S[key]();
@@ -1338,17 +1408,33 @@ var NOTES = {
 
     setActive('#tabs .tab', key, 's');
     setActive('#nav button', key, 's');
-    renderNotes(key);
+    renderNotes(sub ? sub.nt : key);
 
-    if (key === 'cash')      initCalendar();
+    if (key === 'cash')      initCashSubs();
     if (key === 'pension')   initPension();
-    if (key === 'calc')      initCalc();
     if (key === 'invest')    initInvest();
     if (key === 'ai')        initAI();
     if (key === 'advToday')  initAdvToday();
     if (key === 'advList')   initAdvList();
 
     initConcordsZone();   /* 有放康和專區的畫面才會接到東西 */
+  }
+
+  /* ---------- 畫面 ① 的左右子頁 ---------- */
+  function curSub() {
+    return CASH_SUBS.filter(function (s) { return s.id === SUB; })[0] || CASH_SUBS[0];
+  }
+
+  function initCashSubs() {
+    document.getElementById('subtabs').addEventListener('click', function (e) {
+      var b = e.target.closest('button');
+      if (!b || b.dataset.sub === SUB) return;
+      SUB = b.dataset.sub;
+      render('cash');
+    });
+
+    /* 兩個子頁各自的內容初始化 */
+    if (SUB === 'calc') initCalc(); else initCalendar();
   }
 
   function setActive(sel, key, attr) {
@@ -1565,11 +1651,12 @@ var NOTES = {
       k: s.k, nm: s.nm, cat: s.cat, day: s.day, freq: s.freq,
       add: gap, need: need, needTx: wan(need), target: target
     };
+    SUB = 'cal';        /* 模擬後要看的是月曆，不是試算 */
     render('cash');
   }
 
   /* ======================================================================
-     畫面 ③：老本撐多久試算
+     畫面 ①-右：老本撐多久試算
      ====================================================================== */
   function initCalc() {
     var sl = document.getElementById('exp');

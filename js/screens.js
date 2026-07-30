@@ -8,10 +8,23 @@
 
 var S = {};
 
-/* ---------- 畫面 ①：現金流月曆 ----------
+/* ---------- 畫面 ①：現金流月曆 ＋ 老本試算（同一個分頁，上方左右切換）----------
+   上面兩顆按鈕切換子頁，切換由 app.js 的 SUB 決定，標題與右側講稿會一起換。  */
+S.cash = function () {
+  return '' +
+  '<div class="subtabs" id="subtabs">' +
+    CASH_SUBS.map(function (s) {
+      return '<button class="subtab' + (s.id === SUB ? ' on' : '') +
+             '" data-sub="' + s.id + '">' + s.nm + '</button>';
+    }).join('') +
+  '</div>' +
+  (SUB === 'calc' ? S.calc() : S.cashCal());
+};
+
+/* ---------- ①-左：現金流月曆 ----------
    若使用者在 ② 選過方案（PLAN 有值），這一頁會切換成「模擬後」的樣子：
    總額補到目標、月曆多一顆虛線金點、明細多一列。                       */
-S.cash = function () {
+S.cashCal = function () {
   var on  = !!PLAN;
   var sum = TOTAL + (on ? PLAN.add : 0);
 
@@ -83,7 +96,7 @@ S.pension = function () {
   '<div class="disc">' + GENERAL_DISCLAIMER + '</div>';
 };
 
-/* ---------- 畫面 ③：老本撐多久試算 ---------- */
+/* ---------- ①-右：老本撐多久試算（原本的畫面 ③，現在併進 ① 的右邊）---------- */
 S.calc = function () {
   return '' +
   '<div class="card">' +
@@ -143,23 +156,34 @@ S.invest = function () {
   '<div class="disc">' + INVEST_DISCLAIMER +
     '<div class="disc-x">' + GENERAL_DISCLAIMER + '</div></div>' +
 
-  '<button class="bigbtn p">預約營業員說明商品</button>' +
-
-  S.concordsZone();
+  '<button class="bigbtn p">預約營業員說明商品</button>';
 };
 
-/* ---------- 共用區塊：康和專區 ----------
-   兩顆大按鈕（跳去掌先機下單 App、開康和投顧網站）。
-   目前放在畫面 ④ 最下方；想放到別的畫面，就在那個畫面的字串裡加一次
-   S.concordsZone() 即可（例如 ⑤ AI 小幫手），行為由 app.js 的
-   initConcordsZone() 自動接上，不用另外寫程式。
+/* ---------- 畫面 ③：康和專區 ----------
+   標題不用文字，直接放康和 logo（logo 以 data URI 存在 styles.css 的 .cz-logo）。 */
+S.concords = function () {
+  return '' +
+  '<div class="card cz-head">' +
+    '<div class="cz-logo" role="img" aria-label="康和證券"></div>' +
+    '<div class="sub">好日子裡看到的商品與試算都由康和證券提供。' +
+      '下面兩個入口會離開好日子，連到康和的下單 App 與投顧網站。</div>' +
+  '</div>' +
+
+  S.concordsZone() +
+
+  '<div class="disc">' + GENERAL_DISCLAIMER + '</div>';
+};
+
+/* ---------- 共用區塊：康和專區的兩顆大按鈕 ----------
+   跳去掌先機下單 App、開康和投顧網站。
+   想在別的畫面也放一組，就在那個畫面的字串裡加一次 S.concordsZone()，
+   行為由 app.js 的 initConcordsZone() 自動接上，不用另外寫程式。
 
    網址刻意不寫在這裡的 href：一律由 app.js 從 CONCORDS 填入。
    這樣 產生單檔.py 的「不得有外部參照」檢查才過得去。               */
 S.concordsZone = function () {
   var a = CONCORDS.app, s = CONCORDS.site;
   return '' +
-  '<div class="sec-h">康和專區</div>' +
   '<div class="cz">' +
     '<button class="bigbtn p cz-b" id="czApp">' +
       '<svg class="cz-ic" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/>' +

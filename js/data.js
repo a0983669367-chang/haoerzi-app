@@ -316,11 +316,19 @@ var ROLES = [
 ];
 
 var SCREENS_CLIENT = [
-  { id:"cash",    tab:"① 現金流月曆", nav:"現金流", title:"本月現金流"   },
-  { id:"pension", tab:"② 我的月退俸", nav:"月退俸", title:"我的月退俸"   },
-  { id:"calc",    tab:"③ 老本撐多久", nav:"試算",   title:"老本試算"     },
-  { id:"invest",  tab:"④ 投資商品",   nav:"投資",   title:"好日子精選"   },
-  { id:"ai",      tab:"⑤ AI 小幫手",  nav:"小幫手", title:"好日子小幫手" }
+  { id:"cash",     tab:"① 現金流 ・ 試算", nav:"現金流", title:"本月現金流"   },
+  { id:"pension",  tab:"② 我的月退俸",     nav:"月退俸", title:"我的月退俸"   },
+  { id:"concords", tab:"③ 康和專區",       nav:"康和",   title:"康和專區"     },
+  { id:"invest",   tab:"④ 投資商品",       nav:"投資",   title:"好日子精選"   },
+  { id:"ai",       tab:"⑤ AI 小幫手",      nav:"小幫手", title:"好日子小幫手" }
+];
+
+/* 畫面 ① 裡的左右兩個子頁（同一個分頁，上方按鈕切換）
+   切換時上方標題列與右側講稿都會跟著換。
+   nt = 對應 notes.js 裡的講稿 key                                    */
+var CASH_SUBS = [
+  { id:"cal",  nm:"現金流月曆", title:"本月現金流", nt:"cash" },
+  { id:"calc", nm:"老本撐多久", title:"老本試算",   nt:"calc" }
 ];
 
 var SCREENS_ADVISOR = [
@@ -334,6 +342,7 @@ var NAV_ICONS = {
   cash:      '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   pension:   '<circle cx="12" cy="12" r="9"/><path d="M15 9H10.8a2.3 2.3 0 000 4.6h2.4a2.3 2.3 0 010 4.6H9M12 6.6v1.2M12 16.2v1.4"/>',
   calc:      '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/>',
+  concords:  '<path d="M3 21h18M5 21V9.5l7-4.5 7 4.5V21"/><path d="M9.5 21v-5.5h5V21"/>',
   invest:    '<path d="M3 20h18"/><path d="M6 16l4.2-5 3.3 2.8L20 7.5"/><path d="M20 11.5v-4h-4"/>',
   ai:        '<path d="M21 11.5a7.5 7.5 0 01-7.5 7.5H8l-4 3v-4.6A7.5 7.5 0 0111.5 4h2A7.5 7.5 0 0121 11.5z"/><path d="M12.2 8.4l.85 2.05 2.05.85-2.05.85-.85 2.05-.85-2.05-2.05-.85 2.05-.85z"/>',
   advToday:  '<path d="M4 6.5h16M4 12h16M4 17.5h10"/><path d="M17.5 17.5l1.6 1.6 3-3.4"/>',
@@ -352,3 +361,4 @@ var FONT_STEPS = [
    ===== 11. 執行期狀態（程式會自行改寫，不用手動設定）=====
    ========================================================================== */
 var PLAN = null;   // 使用者在 ② 選定的補缺口方案，選了之後 ① 月曆會跟著變
+var SUB  = "cal";  // 畫面 ① 目前顯示哪個子頁（CASH_SUBS 的 id）

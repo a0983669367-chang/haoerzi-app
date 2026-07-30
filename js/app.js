@@ -48,7 +48,10 @@
     /* 畫面內任何 [data-go] 按鈕都能跳頁 */
     document.getElementById('body').addEventListener('click', function (e) {
       var b = e.target.closest('[data-go]');
-      if (b) render(b.dataset.go);
+      if (!b) return;
+      /* 跳回 ① 一律停在月曆那一邊（會用到的情境都是要看月曆） */
+      if (b.dataset.go === 'cash') SUB = 'cal';
+      render(b.dataset.go);
     });
     document.getElementById('a11y').addEventListener('click', stepFont);
   }
@@ -92,7 +95,10 @@
 
     var meta = screens().filter(function (s) { return s.id === key; })[0];
     if (!meta) return;
-    document.getElementById('scr-title').textContent = meta.title;
+
+    /* 畫面 ① 有兩個子頁，標題與講稿要跟著左右切換 */
+    var sub = (key === 'cash') ? curSub() : null;
+    document.getElementById('scr-title').textContent = sub ? sub.title : meta.title;
 
     var body = document.getElementById('body');
     body.innerHTML = S[key]();
@@ -100,17 +106,33 @@
 
     setActive('#tabs .tab', key, 's');
     setActive('#nav button', key, 's');
-    renderNotes(key);
+    renderNotes(sub ? sub.nt : key);
 
-    if (key === 'cash')      initCalendar();
+    if (key === 'cash')      initCashSubs();
     if (key === 'pension')   initPension();
-    if (key === 'calc')      initCalc();
     if (key === 'invest')    initInvest();
     if (key === 'ai')        initAI();
     if (key === 'advToday')  initAdvToday();
     if (key === 'advList')   initAdvList();
 
     initConcordsZone();   /* 有放康和專區的畫面才會接到東西 */
+  }
+
+  /* ---------- 畫面 ① 的左右子頁 ---------- */
+  function curSub() {
+    return CASH_SUBS.filter(function (s) { return s.id === SUB; })[0] || CASH_SUBS[0];
+  }
+
+  function initCashSubs() {
+    document.getElementById('subtabs').addEventListener('click', function (e) {
+      var b = e.target.closest('button');
+      if (!b || b.dataset.sub === SUB) return;
+      SUB = b.dataset.sub;
+      render('cash');
+    });
+
+    /* 兩個子頁各自的內容初始化 */
+    if (SUB === 'calc') initCalc(); else initCalendar();
   }
 
   function setActive(sel, key, attr) {
@@ -327,11 +349,12 @@
       k: s.k, nm: s.nm, cat: s.cat, day: s.day, freq: s.freq,
       add: gap, need: need, needTx: wan(need), target: target
     };
+    SUB = 'cal';        /* 模擬後要看的是月曆，不是試算 */
     render('cash');
   }
 
   /* ======================================================================
-     畫面 ③：老本撐多久試算
+     畫面 ①-右：老本撐多久試算
      ====================================================================== */
   function initCalc() {
     var sl = document.getElementById('exp');

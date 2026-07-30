@@ -1,0 +1,34 @@
+{
+  "name": "康和好日子 — 銀髮退休現金流管家",
+  "short_name": "好日子",
+  "description": "不看漲跌，只看這個月我能領多少、能領多久。",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0F4C75",
+  "theme_color": "#0F4C75",
+  "lang": "zh-Hant",
+  "dir": "ltr",
+  "categories": ["finance", "lifestyle"],
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

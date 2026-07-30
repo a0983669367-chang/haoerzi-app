@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<!--
+  康和「好日子」— 銀髮退休現金流管家　【單檔版本】
+  ------------------------------------------------------------------
+  這支檔案是由 index.html + css/ + js/ 自動合併產生的，方便單獨寄送或
+  雙擊開啟。要修改內容請改原始的 js/data.js，改完後執行 產生單檔.py
+  重新產生一次，不要直接改這裡。
+  產生日期：2026-07-27　·　對應 service-worker 版本：v3
+  ------------------------------------------------------------------
+-->
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>康和「好日子」— 銀髮退休現金流管家</title>
+<meta name="description" content="康和證券銀髮理財 App 原型：現金流月曆、三桶水資產配置、老本試算、防詐守門員、家庭共管。">
+
+<meta name="theme-color" content="#0F4C75">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="好日子">
+
+<style>
+/* ==========================================================================
+   康和「好日子」App 樣式表
+   --------------------------------------------------------------------------
+   想改「顏色」→ 改下面第 1 區的 :root 變數，全站會一起變
+   想改「字級」→ 搜尋 font-size
+   想改「手機尺寸」→ 搜尋 .phone 的 width、.screen 的 height
+   ========================================================================== */
+
+/* ===== 1. 色彩與設計變數（改這裡就能換整套配色） ===== */
+:root{
+  --navy:#0F4C75;        /* 主色：康和品牌藍 */
+  --navy-dk:#0A3557;
+  --teal:#1B7B8C;        /* 輔色 */
+  --gold:#D98A1F;        /* 強調色：金額、入帳 */
+  --gold-lt:#FBF0DC;
+  --green:#2E7D5B;       /* 安全 / 正向 */
+  --green-lt:#E4F2EA;
+  --red:#C0392B;         /* 警告 / 詐騙 */
+  --red-lt:#FBE9E7;
+  --ink:#1C2B36;         /* 主要文字 */
+  --ink-2:#4A5D6B;       /* 次要文字 */
+  --line:#DDE5EB;
+  --bg:#EEF2F5;
+  --card:#FFFFFF;
+
+  --radius:18px;
+  --font:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+body{
+  margin:0;padding:32px 16px 60px;
+  background:var(--bg);
+  font-family:var(--font);
+  color:var(--ink);
+}
+
+/* ===== 2. 桌機版頁首 ===== */
+.page-head{max-width:1180px;margin:0 auto 26px;text-align:center}
+.page-head h1{font-size:27px;margin:0 0 8px;letter-spacing:.5px}
+.page-head h1 span{color:var(--navy)}
+.page-head p{margin:0;color:var(--ink-2);font-size:16px}
+.badge{display:inline-block;margin-top:12px;background:var(--navy);color:#fff;
+  font-size:13px;padding:5px 14px;border-radius:20px;letter-spacing:1px}
+
+/* ===== 3. 畫面切換頁籤 ===== */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:900px;margin:26px auto 24px}
+.tab{
+  background:#fff;border:2px solid var(--line);color:var(--ink-2);
+  padding:11px 18px;border-radius:30px;font-size:15px;font-weight:600;
+  cursor:pointer;transition:.15s;font-family:inherit;
+}
+.tab:hover{border-color:var(--navy)}
+.tab.on{background:var(--navy);border-color:var(--navy);color:#fff}
+
+/* ===== 4. 版面 ===== */
+.stage{display:flex;gap:38px;justify-content:center;align-items:flex-start;
+  max-width:1180px;margin:0 auto;flex-wrap:wrap}
+
+/* ===== 5. 手機外框 ===== */
+.phone{
+  width:392px;flex:0 0 392px;background:#0d1418;border-radius:44px;padding:13px;
+  box-shadow:0 26px 60px rgba(10,40,65,.30);position:relative;
+}
+.notch{position:absolute;top:13px;left:50%;transform:translateX(-50%);
+  width:132px;height:26px;background:#0d1418;border-radius:0 0 16px 16px;z-index:6}
+.screen{
+  background:#F5F8FA;border-radius:33px;overflow:hidden;height:768px;
+  display:flex;flex-direction:column;position:relative;
+}
+.statusbar{height:34px;flex:0 0 34px;background:var(--navy);color:#fff;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 20px 4px;font-size:13px;font-weight:600}
+.appbar{background:var(--navy);color:#fff;padding:8px 20px 16px}
+.appbar .bar-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.appbar .greet{font-size:15px;opacity:.85}
+.appbar .title{font-size:23px;font-weight:700;margin-top:3px}
+/* 無障礙：字級切換鈕（點一下循環 標準 → 大 → 特大） */
+.a11y{background:rgba(255,255,255,.18);border:0;border-radius:20px;color:#fff;
+  font-family:inherit;font-size:13px;font-weight:700;padding:7px 13px;cursor:pointer;
+  display:flex;align-items:center;gap:5px}
+.a11y .a11y-a{font-size:17px;font-weight:800;line-height:1}
+.body{flex:1;overflow-y:auto;padding:18px 16px 20px;-webkit-overflow-scrolling:touch}
+.body::-webkit-scrollbar{width:0}
+
+/* ===== 6. 底部導覽列 ===== */
+.nav{flex:0 0 76px;background:#fff;border-top:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-around;padding-bottom:8px}
+.nav button{background:none;border:0;font-family:inherit;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:#93A5B1;font-size:12px;font-weight:600;padding:6px 4px;flex:1}
+.nav button svg{width:25px;height:25px;stroke:currentColor;fill:none;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+.nav button.on{color:var(--navy)}
+
+/* ===== 7. 通用卡片 ===== */
+.card{background:var(--card);border-radius:var(--radius);padding:18px;margin-bottom:14px;
+  box-shadow:0 2px 8px rgba(15,76,117,.07)}
+.card h3{margin:0 0 12px;font-size:18px;font-weight:700}
+.sub{font-size:14px;color:var(--ink-2);line-height:1.6}
+
+/* ===== 8. 主要金額區塊 ===== */
+.hero{background:linear-gradient(140deg,var(--navy) 0%,var(--teal) 100%);
+  color:#fff;border-radius:20px;padding:22px 20px;margin-bottom:16px}
+.hero .lbl{font-size:16px;opacity:.9}
+.hero .amt{font-size:46px;font-weight:800;letter-spacing:-1px;margin:6px 0 2px;line-height:1.05}
+.hero .amt small{font-size:20px;font-weight:600;margin-right:4px;opacity:.9}
+.hero .note{font-size:14.5px;opacity:.9;margin-top:8px;
+  background:rgba(255,255,255,.16);padding:7px 12px;border-radius:10px;display:inline-block}
+/* 模擬狀態（使用者在 ② 選了補缺口方案之後） */
+.hero.sim{background:linear-gradient(140deg,var(--gold) 0%,#B4700F 100%)}
+
+/* ===== 9. 現金流月曆 ===== */
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-head b{font-size:18px}
+.cal-head span{color:var(--navy);font-size:22px;font-weight:700;padding:0 8px;cursor:pointer}
+/* minmax(0,1fr)：1fr 的隱含最小值是內容寬度，放大字級時 7 欄會壓不下去而溢出，
+   改成 minmax(0,1fr) 才能真的等分縮小 */
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.cal .dow{text-align:center;font-size:13px;color:var(--ink-2);font-weight:700;padding:4px 0}
+.cal .day{aspect-ratio:1/1.05;border-radius:10px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-size:15px;font-weight:600;
+  border:2px solid transparent;background:#F5F8FA;color:var(--ink)}
+.cal .day.blank{background:transparent}
+.cal .day.pay{background:var(--gold-lt);border-color:var(--gold);color:var(--navy-dk);cursor:pointer}
+.cal .day.pay .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);margin-top:3px}
+.cal .day.pay.sel{background:var(--gold);color:#fff}
+.cal .day.pay.sel .dot{background:#fff}
+/* 模擬方案的入帳日：虛線外框，跟真實入帳區隔開 */
+.cal .day.plan{background:#fff;border:2.5px dashed var(--gold);color:var(--gold)}
+.cal .day.plan .dot{background:var(--gold)}
+.cal .day.plan.sel{background:var(--gold);color:#fff;border-style:solid}
+
+.pay-list{margin-top:14px;border-top:2px dashed var(--line);padding-top:12px}
+.pay-row{display:flex;justify-content:space-between;align-items:center;
+  padding:11px 0;border-bottom:1px solid #F0F4F7;font-size:16px}
+.pay-row:last-child{border-bottom:0}
+.pay-row .d{color:var(--ink-2);font-size:14px}
+.pay-row .n{font-weight:600}
+.pay-row .v{color:var(--green);font-weight:800;font-size:18px}
+.pay-row.sim .n{color:var(--gold)}
+.pay-row.sim .v{color:var(--gold)}
+.pay-total{border-top:2px solid var(--line);margin-top:6px;padding-top:12px}
+.pay-total .n{font-size:17px}
+.pay-total .v{font-size:22px}
+.list-title{margin-bottom:8px;font-weight:600;color:var(--ink);font-size:14px}
+
+/* ===== 10. 區塊小標與鍵值列（月退俸／投資頁共用） ===== */
+.sec-h{font-size:16px;font-weight:700;color:var(--navy);margin:20px 0 10px;
+  padding-left:11px;border-left:5px solid var(--gold)}
+.kv-row{display:flex;justify-content:space-between;align-items:center;
+  padding-top:13px;margin-top:13px;border-top:1px dashed var(--line);font-size:15.5px;color:var(--ink-2)}
+.kv-row b{font-size:19px;color:var(--navy)}
+
+/* ===== 11. 試算滑桿 ===== */
+.slider-wrap{margin:16px 0 6px}
+.slider-val{font-size:32px;font-weight:800;color:var(--navy);text-align:center;margin-bottom:6px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:14px;border-radius:10px;
+  background:#DCE6EC;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:40px;height:40px;
+  border-radius:50%;background:#fff;border:5px solid var(--navy);cursor:pointer;
+  box-shadow:0 3px 8px rgba(0,0,0,.22)}
+input[type=range]::-moz-range-thumb{width:32px;height:32px;border-radius:50%;
+  background:#fff;border:5px solid var(--navy);cursor:pointer}
+.range-ends{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);margin-top:6px}
+
+.result{background:var(--green-lt);border-radius:16px;padding:18px;text-align:center;margin-top:16px;
+  border:2px solid #BFE0CE}
+.result.warn{background:var(--gold-lt);border-color:#EBCB94}
+.result.bad{background:var(--red-lt);border-color:#F0BDB6}
+.result .lbl{font-size:16px;color:var(--ink-2)}
+.result .big{font-size:44px;font-weight:800;color:var(--green);line-height:1.1;margin:4px 0}
+.result.warn .big{color:var(--gold)}
+.result.bad .big{color:var(--red)}
+.result .tip{font-size:14.5px;color:var(--ink-2);margin-top:6px;line-height:1.6}
+
+.timeline{height:26px;border-radius:13px;background:#DCE6EC;overflow:hidden;margin:14px 0 4px;position:relative}
+.timeline .fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--green));
+  transition:width .6s;display:flex;align-items:center;justify-content:flex-end;
+  padding-right:9px;color:#fff;font-size:12.5px;font-weight:700}
+
+/* ===== 12. 提示與警示卡 ===== */
+.alert{border-radius:16px;padding:16px;margin-bottom:13px;display:flex;gap:13px;align-items:flex-start}
+.alert .ic{flex:0 0 42px;height:42px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:22px}
+.alert.hi{background:var(--red-lt);border:2px solid #F0BDB6}
+.alert.hi .ic{background:var(--red);color:#fff}
+.alert.md{background:var(--gold-lt);border:2px solid #EBCB94}
+.alert.md .ic{background:var(--gold);color:#fff}
+.alert.ok{background:var(--green-lt);border:2px solid #BFE0CE}
+.alert.ok .ic{background:var(--green);color:#fff}
+.alert .t{font-size:16.5px;font-weight:700;margin-bottom:4px}
+.alert .x{font-size:14.5px;color:var(--ink-2);line-height:1.62}
+
+/* ===== 13. 大按鈕（樂齡設計：高度 ≥ 56px） ===== */
+.bigbtn{width:100%;border:0;border-radius:16px;padding:19px;font-size:19px;font-weight:700;
+  font-family:inherit;cursor:pointer;margin-bottom:11px;display:flex;
+  align-items:center;justify-content:center;gap:9px}
+.bigbtn.p{background:var(--navy);color:#fff}
+.bigbtn.r{background:var(--red);color:#fff}
+.bigbtn.o{background:#fff;color:var(--navy);border:2.5px solid var(--navy)}
+.bigbtn.sm{padding:14px;font-size:16px;margin-top:12px}
+
+/* ===== 14. 風險等級標籤 RR1–RR5 ===== */
+.pill{font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:20px;
+  background:var(--green-lt);color:var(--green);white-space:nowrap;flex:0 0 auto}
+.pill.rr1,.pill.rr2{background:var(--green-lt);color:var(--green)}
+.pill.rr3{background:#E2F0F3;color:var(--teal)}
+.pill.rr4{background:var(--gold-lt);color:var(--gold)}
+.pill.rr5{background:var(--red-lt);color:var(--red)}
+
+/* ===== 15. 月退俸：補足缺口的方案卡 ===== */
+.sol{background:var(--card);border-radius:var(--radius);padding:17px;margin-bottom:12px;
+  border:2px solid var(--line);box-shadow:0 2px 10px rgba(15,76,117,.05)}
+.sol.s-a{border-left:7px solid var(--green)}
+.sol.s-b{border-left:7px solid var(--teal)}
+.sol.s-c{border-left:7px solid var(--gold)}
+.sol-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px}
+.sol-tag{font-size:13px;font-weight:700;color:var(--ink-2);letter-spacing:1px}
+.sol-nm{font-size:20px;font-weight:800;color:var(--ink)}
+.sol-cat{font-size:13.5px;color:var(--ink-2);margin-top:2px}
+.sol-need{display:flex;align-items:baseline;justify-content:space-between;
+  background:#F4F8FA;border-radius:12px;padding:11px 14px;margin:11px 0 9px}
+.sol-need span{font-size:14.5px;color:var(--ink-2)}
+.sol-need b{font-size:27px;font-weight:800;color:var(--navy)}
+.sol-d{font-size:14px;color:var(--ink-2);line-height:1.62;margin-bottom:4px}
+.sol-fit{font-size:13.5px;font-weight:600;margin-top:9px;padding:8px 11px;border-radius:10px;line-height:1.55}
+.sol-fit.ok{background:var(--green-lt);color:var(--green)}
+.sol-fit.no{background:var(--gold-lt);color:#9A5F0C}
+
+/* ===== 16. 投資頁：風險屬性、分類籤、商品卡 ===== */
+.kyc{border-left:7px solid var(--navy)}
+.kyc-l{font-size:14px;color:var(--ink-2)}
+.kyc-v{font-size:21px;font-weight:800;color:var(--navy);margin:3px 0 8px;
+  display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+
+.chips{display:flex;gap:7px;overflow-x:auto;padding:2px 0 10px;margin-bottom:2px;
+  scrollbar-width:none}
+.chips::-webkit-scrollbar{height:0}
+.chip{flex:0 0 auto;border:2px solid var(--line);background:#fff;color:var(--ink-2);
+  border-radius:20px;padding:9px 15px;font-size:14.5px;font-weight:600;
+  font-family:inherit;cursor:pointer;white-space:nowrap}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+
+.prod{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px;
+  border:2px solid var(--line);box-shadow:0 2px 10px rgba(15,76,117,.05)}
+.prod.warn{border-color:#EBCB94}
+.prod-top{display:flex;align-items:flex-start;justify-content:space-between;gap:9px}
+.prod-nm{font-size:17.5px;font-weight:700;color:var(--ink);line-height:1.4}
+.prod-cash{background:var(--gold-lt);border-radius:11px;padding:10px 13px;margin:10px 0 8px;
+  font-size:15px;color:#8A5510;font-weight:600}
+.prod-cash b{font-size:23px;font-weight:800;color:var(--gold)}
+.prod-cash.alt{background:#EEF3F6;color:var(--navy)}
+.prod-d{font-size:14px;color:var(--ink-2);line-height:1.62}
+.prod-meta{display:flex;gap:14px;margin-top:8px;font-size:13px;color:var(--ink-2)}
+.prod-meta span{background:#F2F6F8;border-radius:8px;padding:4px 9px}
+
+/* ===== 17. AI 小幫手：對話、快捷問題、麥克風 ===== */
+.chat{display:flex;flex-direction:column;gap:11px;margin-bottom:16px}
+.bb{max-width:88%;padding:14px 16px;border-radius:18px;font-size:15.5px;line-height:1.68}
+.bb.ai{background:var(--card);border:2px solid var(--line);border-bottom-left-radius:5px;
+  align-self:flex-start;color:var(--ink)}
+.bb.me{background:var(--navy);color:#fff;border-bottom-right-radius:5px;
+  align-self:flex-end;font-weight:600}
+.bb.typing{color:var(--ink-2);font-style:italic}
+.ai-go{display:block;width:100%;margin-top:11px;background:#fff;color:var(--navy);
+  border:2px solid var(--navy);border-radius:12px;padding:11px;font-size:15px;
+  font-weight:700;font-family:inherit;cursor:pointer}
+.alert .ai-go{margin-top:10px}
+
+.quick{margin-bottom:14px}
+.qbtn{display:block;width:100%;text-align:left;background:#fff;border:2px solid var(--line);
+  border-radius:14px;padding:15px 16px;font-size:16px;font-family:inherit;color:var(--ink);
+  cursor:pointer;margin-bottom:9px;line-height:1.5}
+.qbtn:hover{border-color:var(--navy)}
+
+.mic{width:100%;border:0;border-radius:16px;padding:20px;font-size:20px;font-weight:700;
+  font-family:inherit;cursor:pointer;background:var(--navy);color:#fff;
+  display:flex;align-items:center;justify-content:center;gap:11px;margin-bottom:12px}
+.mic .mic-ic{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;flex:0 0 26px}
+.mic.on{background:var(--red)}
+
+.disc{font-size:12.5px;color:var(--ink-2);line-height:1.7;background:#E9EEF2;
+  border-radius:12px;padding:12px 14px;margin-bottom:12px}
+.spk{display:block;margin-top:10px;background:#EEF3F6;border:0;border-radius:10px;
+  padding:9px 13px;font-size:14px;font-family:inherit;color:var(--navy);
+  font-weight:600;cursor:pointer}
+
+/* ===== 18. 卡片內的次要動作鈕（選方案、試算並申購、撥電話） ===== */
+.pick{width:100%;margin-top:11px;background:var(--navy);color:#fff;border:0;
+  border-radius:12px;padding:14px;font-size:16px;font-weight:700;
+  font-family:inherit;cursor:pointer}
+.prod.open .pick{background:#fff;color:var(--navy);border:2px solid var(--navy)}
+
+/* ===== 19. 申購試算面板 ===== */
+.order{margin-top:14px;padding-top:15px;border-top:2px dashed var(--line)}
+.ord-h{font-size:16px;font-weight:700;margin-bottom:10px}
+.ord-out{display:flex;gap:10px;margin:14px 0 10px}
+.ord-out>div{flex:1;background:var(--green-lt);border-radius:12px;padding:11px 13px}
+.ord-out span{display:block;font-size:13px;color:var(--ink-2)}
+.ord-out b{font-size:20px;color:var(--green);font-weight:800}
+.ord-out .alt{flex:1;background:#EEF3F6;color:var(--navy);font-size:14px;line-height:1.6}
+.ord-fee{font-size:14px;color:var(--ink-2);background:#F4F8FA;border-radius:10px;
+  padding:10px 13px;margin-bottom:13px}
+.ord-fee b{color:var(--navy);font-size:16px}
+
+/* ===== 20. 二次確認浮層（防誤觸） ===== */
+.sheet{position:absolute;inset:0;background:rgba(10,32,50,.55);display:none;
+  align-items:flex-end;z-index:20}
+.sheet.on{display:flex}
+.sheet-box{width:100%;background:#fff;border-radius:22px 22px 0 0;padding:22px 18px 18px;
+  max-height:88%;overflow-y:auto}
+.sheet-t{font-size:15px;color:var(--ink-2);text-align:center}
+.sheet-big{font-size:23px;font-weight:800;color:var(--navy);text-align:center;margin:6px 0 16px;line-height:1.35}
+.sheet-kv{display:flex;justify-content:space-between;align-items:center;
+  padding:12px 0;border-bottom:1px solid #F0F4F7;font-size:15.5px;color:var(--ink-2)}
+.sheet-kv b{font-size:20px;color:var(--ink);font-weight:800}
+.sheet-kv.full{display:block;line-height:1.7;border-bottom:0;text-align:center;color:var(--ink)}
+.sheet-kv.full.sub{font-size:14px;color:var(--ink-2);padding-top:0}
+.sheet-warn{background:var(--gold-lt);border-radius:12px;padding:13px;margin:14px 0 16px;
+  font-size:14px;color:#8A5510;line-height:1.65}
+.ok-ic{width:64px;height:64px;border-radius:50%;background:var(--green);color:#fff;
+  font-size:36px;display:flex;align-items:center;justify-content:center;margin:4px auto 12px}
+
+/* ===== 21. 身分切換（客戶 / 營業員） ===== */
+.roles{display:flex;gap:9px;justify-content:center;margin:0 auto 4px;max-width:900px}
+.role{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 20px;
+  font-family:inherit;font-size:15px;font-weight:700;color:var(--ink-2);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;line-height:1.35}
+.role span{font-size:12.5px;font-weight:600;opacity:.8}
+.role.on{background:var(--navy);border-color:var(--navy);color:#fff}
+
+/* ===== 22. 營業員視角：待辦與客戶卡 ===== */
+.hero.adv{background:linear-gradient(140deg,var(--navy-dk) 0%,#2C5F7A 100%)}
+
+.todo,.cl{background:var(--card);border-radius:var(--radius);padding:15px 16px;margin-bottom:11px;
+  border:2px solid var(--line);box-shadow:0 2px 10px rgba(15,76,117,.05)}
+.cl.me{border-color:var(--navy)}
+.todo-top{display:flex;align-items:center;justify-content:space-between;gap:9px}
+.todo-top b{font-size:18.5px;color:var(--ink)}
+.todo-x{font-size:14.5px;color:var(--ink-2);margin-top:7px}
+.todo-x b{color:var(--navy);font-size:17px}
+.todo-sig{font-size:13.5px;color:var(--ink-2);background:#F4F8FA;border-radius:10px;
+  padding:9px 12px;margin-top:9px;line-height:1.6}
+.todo-sig i,.cl-sig i{font-style:normal;color:#8496A3}
+
+.cl-head{display:flex;align-items:center;gap:12px}
+.cl-nm{font-size:18.5px;font-weight:700}
+.cl-sub{font-size:13.5px;color:var(--ink-2);margin-top:2px}
+.cl-head .pill{margin-left:auto}
+.avatar{width:46px;height:46px;border-radius:50%;background:var(--navy);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;flex:0 0 46px}
+.cl-sig{font-size:14px;color:var(--ink-2);background:#F4F8FA;border-radius:10px;
+  padding:10px 12px;margin-top:11px;line-height:1.6}
+.cl-gap{font-size:14.5px;color:var(--ink-2);margin-top:9px}
+.cl-gap b{color:var(--navy);font-size:17px}
+
+.pill.hot3{background:var(--red-lt);color:var(--red)}
+.pill.hot2{background:var(--gold-lt);color:var(--gold)}
+.pill.hot1{background:#E7EEF3;color:var(--ink-2)}
+
+.tl{padding:11px 0 11px 16px;border-left:3px solid var(--line);position:relative}
+.tl::before{content:"";position:absolute;left:-6.5px;top:16px;width:10px;height:10px;
+  border-radius:50%;background:var(--navy)}
+.tl:last-child{padding-bottom:0}
+.tl-t{font-size:12.5px;color:#8496A3;font-weight:700}
+.tl-x{font-size:14.5px;color:var(--ink);line-height:1.6;margin-top:2px}
+
+/* ===== 23. 右側簡報講稿 ===== */
+.notes{flex:1 1 330px;max-width:400px;padding-top:6px}
+.notes h2{font-size:20px;margin:0 0 4px;color:var(--navy)}
+.notes .kicker{font-size:13px;letter-spacing:2px;color:var(--gold);font-weight:700;margin-bottom:6px}
+.notes .lead{font-size:15.5px;color:var(--ink-2);line-height:1.75;margin:0 0 18px}
+.note{background:#fff;border-radius:14px;padding:15px 17px;margin-bottom:11px;
+  border-left:5px solid var(--navy);box-shadow:0 2px 7px rgba(15,76,117,.07)}
+.note b{display:block;font-size:15.5px;margin-bottom:5px;color:var(--navy-dk)}
+.note span{font-size:14.5px;color:var(--ink-2);line-height:1.7}
+.note.g{border-left-color:var(--green)}
+.note.o{border-left-color:var(--gold)}
+
+.foot{max-width:1180px;margin:34px auto 0;text-align:center;font-size:13.5px;color:#8496A3;line-height:1.8}
+
+/* ==========================================================================
+   24. 手機版 / PWA 全螢幕模式
+   在手機上開啟，或「加到主畫面」後開啟時，隱藏所有桌機說明元素，
+   讓 App 佔滿整個螢幕，看起來就像一個原生 App。
+   ========================================================================== */
+@media (max-width:860px){
+  body{padding:0;background:var(--navy)}
+  .page-head,.tabs,.notes,.foot,.roles{display:none}
+  .stage{gap:0}
+  .phone{width:100%;flex:1 1 100%;padding:0;border-radius:0;box-shadow:none;background:transparent}
+  .notch{display:none}
+  .screen{border-radius:0;height:100vh;height:100dvh}
+  .appbar{padding-top:calc(8px + env(safe-area-inset-top))}
+  .statusbar{display:none}
+  .nav{padding-bottom:calc(8px + env(safe-area-inset-bottom));flex-basis:auto}
+}
+
+/* PWA 獨立視窗模式（已加到主畫面） */
+@media (display-mode:standalone){
+  .page-head,.tabs,.notes,.foot,.roles,.statusbar,.notch{display:none}
+  body{padding:0}
+  .phone{width:100%;flex:1 1 100%;padding:0;border-radius:0;box-shadow:none}
+  .screen{border-radius:0;height:100vh;height:100dvh}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 桌機版：說明標題（手機全螢幕模式會自動隱藏） ===== -->
+<header class="page-head">
+  <h1>康和 <span>「好日子」</span>　—　銀髮退休現金流管家</h1>
+  <p>不看漲跌，只看「這個月我能領多少、能領多久」</p>
+  <div class="badge">互動原型 PROTOTYPE　·　康和證券實習專題</div>
+</header>
+
+<!-- ===== 桌機版：身分切換（客戶 / 營業員，看的是同一套資料） ===== -->
+<div class="roles" id="roles"><!-- 由 app.js 產生 --></div>
+
+<!-- ===== 桌機版：畫面切換頁籤 ===== -->
+<nav class="tabs" id="tabs"><!-- 由 app.js 產生 --></nav>
+
+<div class="stage">
+
+  <!-- ===== 手機外框 ===== -->
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen">
+      <div class="statusbar"><span>9:41</span><span>▮▮▮ ᯤ 100%</span></div>
+      <div class="appbar">
+        <div class="bar-top">
+          <div class="greet" id="greet">早安</div>
+          <button class="a11y" id="a11y" title="切換字級大小">
+            <span class="a11y-a">A</span><span id="a11yTx">標準</span>
+          </button>
+        </div>
+        <div class="title" id="scr-title">本月現金流</div>
+      </div>
+      <main class="body" id="body"><!-- 由 screens.js 產生 --></main>
+      <nav class="nav" id="nav"><!-- 由 app.js 產生 --></nav>
+      <div class="sheet" id="sheet"><!-- 二次確認用，由 app.js 產生 --></div>
+    </div>
+  </div>
+
+  <!-- ===== 桌機版：右側簡報講稿 ===== -->
+  <aside class="notes" id="notes"><!-- 由 notes.js 產生 --></aside>
+
+</div>
+
+<footer class="foot">
+  原型為模擬畫面，數據皆為示意，非真實帳戶資料。<br>
+  設計基準：內文字級 ≥ 18px、主要數字 ≥ 40px、按鈕高度 ≥ 56px、對比度符合 WCAG 2.1 AA。
+</footer>
+
+<script>
+/* ==========================================================================
+   data.js — 所有數字與內容都集中在這個檔案
+   --------------------------------------------------------------------------
+   ★ 這是你最常改的檔案。改這裡就好，不用碰其他 js 檔。
+   ========================================================================== */
+
+/* ===== 1. 基本設定：使用者、日期、試算參數 ===== */
+var CONFIG = {
+  userName:        "陳伯伯",     // 稱呼
+  currentAge:      68,           // 目前年齡（老本試算起算）
+  year:            2026,         // 月曆顯示年份
+  month:           7,            // 月曆顯示月份（1–12）
+
+  totalAssets:     7000000,      // 總資產（元）
+  annualReturn:    0.03,         // 假設年報酬率 3%
+  inflation:       0.02,         // 假設通膨率 2%
+  expenseDefault:  38000,        // 滑桿預設每月開銷
+  expenseMin:      20000,        // 滑桿最小值
+  expenseMax:      90000,        // 滑桿最大值
+  expenseStep:     1000,
+
+  riskProfile:     "穩健型",     // 客戶風險屬性（KYC 結果）
+  maxRR:           3             // 適合度可直接承作的最高風險等級
+};
+
+/* ===== 2. 本月入帳項目 =====
+   格式： 日期: [ { n:項目名稱, v:金額, d:補充說明 } ]
+   要新增一筆入帳，就在下面加一行，月曆會自動出現金色圓點。       */
+var PAYS = {
+  5:  [{ n:"勞保老年年金",                v:18200, d:"每月 5 日入帳" }],
+  10: [{ n:"元大高股息 0056 配息",        v:8400,  d:"持有 32,000 股" }],
+  16: [{ n:"國泰永續高股息 00878 配息",   v:6200,  d:"持有 40,000 股" }],
+  22: [{ n:"元大美債20年 00679B 配息",    v:4100,  d:"持有 26,000 股" }],
+  28: [{ n:"一年期定存到期利息",          v:5960,  d:"本金 96 萬・利率 1.72%" }]
+};
+
+/* 本月合計：自動加總，不用手動改 */
+var TOTAL = (function () {
+  var s = 0;
+  for (var d in PAYS) { PAYS[d].forEach(function (p) { s += p.v; }); }
+  return s;
+})();
+
+/* ===== 3. 未來月份預估 ===== */
+var FORECAST = [
+  { m:"8 月",  v:31300 },
+  { m:"9 月",  v:47120 },
+  { m:"10 月", v:29800 }
+];
+var FORECAST_TIP = "💡 8 月與 10 月入帳較少（00878 當月不配息）。到「月退俸」看看怎麼補平。";
+
+/* ==========================================================================
+   ===== 4. 我的月退俸：缺口 → 商品配對  ★ 全案的變現引擎 =====
+   --------------------------------------------------------------------------
+   邏輯：客戶設定想要的月退俸 → 減掉目前入帳 → 得到缺口
+        缺口 × 12 ÷ 年配息率 = 需投入本金 → 直接對應可承作的商品
+   ========================================================================== */
+var PENSION = {
+  targetDefault: 55000,
+  targetMin:     30000,
+  targetMax:     100000,
+  targetStep:    1000
+};
+
+/* 三個補足缺口的方案，分別對應康和的三條產品線
+   y    = 年配息率（用來反推需投入本金）
+   rr   = 風險等級 RR1–RR5（超過 CONFIG.maxRR 會自動標示「需加強評估」）
+   day  = 選定此方案後，模擬入帳會落在月曆的哪一天
+   freq = 配息頻率說明（非月配的商品，月曆上以月均值示意） */
+var SOLUTIONS = [
+  { k:"a", tag:"最穩",     nm:"投資級公司債",   cat:"固定收益型商品",
+    y:0.042, rr:2, day:20, freq:"每半年付息（月曆以月均值示意）",
+    d:"美元投資級公司債，持有到期領息，每半年付息一次。" },
+  { k:"b", tag:"最多人選", nm:"月配息債券基金", cat:"代銷國內外基金",
+    y:0.055, rr:3, day:15, freq:"每月配息",
+    d:"全球債券組合，每月配息入帳，可與勞保年金錯開發放日。" },
+  { k:"c", tag:"報酬最高", nm:"股權連結商品",   cat:"股權連結／利率連結商品",
+    y:0.085, rr:5, day:25, freq:"到期一次結算（月曆以月均值示意）",
+    d:"3 個月期，連結台積電。<b>不保本</b>，股價跌破履約價時將轉換為股票。" }
+];
+
+/* ==========================================================================
+   ===== 5. 投資商品：好日子精選 =====
+   --------------------------------------------------------------------------
+   分類完全對齊康和證券可承作的業務範圍。
+   y   = 年化配息／報酬（0 代表保障型商品，不顯示現金流換算）
+   min = 最低申購金額（文字）
+   ========================================================================== */
+var PRODUCT_CATS = [
+  { id:"all",  nm:"全部" },
+  { id:"fund", nm:"基金" },
+  { id:"sn",   nm:"股權／利率連結" },
+  { id:"fi",   nm:"固定收益" },
+  { id:"ins",  nm:"保險規劃" },
+  { id:"etc",  nm:"其他核准商品" }
+];
+
+var CAT_NAMES = {
+  fund: "代銷國內外基金",
+  sn:   "股權連結或利率連結商品",
+  fi:   "固定收益型商品",
+  ins:  "保險商品規劃",
+  etc:  "其他經主管機關核准之各式金融商品"
+};
+
+var PRODUCTS = [
+  /* ---- 代銷國內外基金 ---- */
+  { c:"fund", nm:"環球月配息債券基金",   rr:3, y:0.055, min:"3 萬", pay:"每月配息",
+    d:"以投資等級債為主的全球組合，配息穩定度高。" },
+  { c:"fund", nm:"亞太高股息平衡基金",   rr:4, y:0.062, min:"3 萬", pay:"每月配息",
+    d:"股債各半，配息較高但淨值波動也較大。" },
+  { c:"fund", nm:"全球收益多重資產基金", rr:4, y:0.058, min:"3 萬", pay:"每季配息",
+    d:"跨股、債、REITs 分散，適合長期持有。" },
+
+  /* ---- 股權連結或利率連結商品 ---- */
+  { c:"sn", nm:"台積電股權連結商品（3 個月期）", rr:5, y:0.085, min:"100 萬", pay:"到期一次結算",
+    d:"連結台積電。<b>不保本</b>，到期股價低於履約價將轉換為股票。", warn:true },
+  { c:"sn", nm:"利率連結型商品（6 個月期）",     rr:4, y:0.052, min:"100 萬", pay:"到期一次結算",
+    d:"連結美元短率區間。<b>不保本</b>，利率走出區間時收益歸零。", warn:true },
+
+  /* ---- 固定收益型商品 ---- */
+  { c:"fi", nm:"美元投資級公司債（2031 到期）", rr:2, y:0.042, min:"30 萬", pay:"每半年付息",
+    d:"信評 A- 以上，持有到期可領回本金，須留意匯率。" },
+  { c:"fi", nm:"國內公司債（2029 到期）",       rr:2, y:0.036, min:"10 萬", pay:"每年付息",
+    d:"新台幣計價，無匯率風險，門檻最低。" },
+
+  /* ---- 保險商品規劃 ---- */
+  { c:"ins", nm:"利率變動型年金險", rr:1, y:0, min:"100 萬", pay:"活到老領到老",
+    d:"躉繳後轉為終身給付，是唯一能對抗「活太久」風險的工具。" },
+  { c:"ins", nm:"長期照顧保險",     rr:1, y:0, min:"年繳 6 萬", pay:"保障型",
+    d:"符合長照狀態時按月給付，補起現金流最大的破口。" },
+
+  /* ---- 其他經主管機關核准之各式金融商品 ---- */
+  { c:"etc", nm:"定期定額 ETF（0056／00878）", rr:4, y:0.058, min:"每月 3,000", pay:"每季配息",
+    d:"小額起步，適合把定存到期的錢分批轉入。" },
+  { c:"etc", nm:"不動產投資信託 REITs",        rr:4, y:0.048, min:"10 萬", pay:"每半年配息",
+    d:"收租型不動產證券化，與股債相關性低。" }
+];
+
+/* 各分類的費用說明（顯示在申購試算裡） */
+var CAT_FEE = {
+  fund: { tx:"申購手續費 1.5%（可折扣）",     rate:0.015 },
+  sn:   { tx:"費用內含於商品報價",             rate:0     },
+  fi:   { tx:"費用內含於債券買賣價差",         rate:0     },
+  ins:  { tx:"不另收費，佣金由保險公司支付",   rate:0     },
+  etc:  { tx:"依個別商品公告",                 rate:0.01  }
+};
+
+/* 申購試算滑桿的範圍（元） */
+var ORDER = {
+  min:  100000,
+  max:  5000000,
+  step: 100000,
+  def:  1000000
+};
+
+var INVEST_DISCLAIMER =
+  "以上為模擬示意，非實際商品條件。投資均有風險，配息可能來自本金；" +
+  "結構型商品不保本，65 歲以上客戶承作前須完成加強版適合度評估與商品說明。";
+
+/* ==========================================================================
+   ===== 6. AI 小幫手 =====
+   --------------------------------------------------------------------------
+   要新增問答，在 AI_QUICK 加一句問題，再到 AI_ANSWERS 補上對應回答即可。
+   回答裡可以用 <button class="ai-go" data-go="畫面id">文字</button> 做導頁。
+   ========================================================================== */
+var AI_INTRO =
+  "早安，我是好日子小幫手。<br>您可以直接<b>按住下面的麥克風說話</b>，或點選常見問題。";
+
+var AI_QUICK = [
+  "我這個月有多少錢可以領？",
+  "8 月怎麼變少了？",
+  "我還差多少才能月領 5 萬 5？",
+  "什麼是股權連結商品？"
+];
+
+var AI_ANSWERS = {
+  "我這個月有多少錢可以領？":
+    "7 月您總共會收到 <b>NT$ 42,860</b>，分 5 筆入帳：<br>" +
+    "・5 日　勞保年金 18,200<br>" +
+    "・10 日 0056 配息 8,400<br>" +
+    "・16 日 00878 配息 6,200<br>" +
+    "・22 日 00679B 配息 4,100<br>" +
+    "・28 日 定存利息 5,960<br>" +
+    "比您設定的每月開銷 38,000 元<b>多出 4,860 元</b>，這個月很寬裕。" +
+    '<button class="ai-go" data-go="cash">看月曆明細</button>',
+
+  "8 月怎麼變少了？":
+    "8 月預計入帳 <b>NT$ 31,300</b>，比 7 月少了 11,560 元。<br>" +
+    "原因是 <b>00878 是季配息</b>，8 月沒有發，加上定存已於 7 月到期。<br>" +
+    "如果 8 月的開銷跟平常一樣，會短少約 6,700 元。要我幫您看看怎麼補平嗎？" +
+    '<button class="ai-go" data-go="pension">幫我補平缺口</button>',
+
+  "我還差多少才能月領 5 萬 5？":
+    "您目前每月入帳 42,860 元，距離 55,000 元<b>還差 12,140 元</b>，一年就是 145,680 元。<br>" +
+    "最接近您穩健型屬性的做法是<b>月配息債券基金</b>（年配約 5.5%），" +
+    "需投入約 <b>265 萬</b>；若改用投資級公司債（年配 4.2%），則需約 347 萬。" +
+    '<button class="ai-go" data-go="pension">看三個方案比較</button>',
+
+  "什麼是股權連結商品？":
+    "用白話講：您先把一筆錢放 3 個月，<b>年化可領 8.5%</b>，" +
+    "條件是綁定一檔股票（例如台積電）。<br>" +
+    "到期時股價沒跌破約定價位，您就領錢走人；" +
+    "<b>跌破了，您領到的會是股票而不是現金</b>，等於在相對高點接了股票。<br>" +
+    "所以它<b>不保本</b>，風險等級 RR5。您的風險屬性是穩健型，" +
+    "而且已滿 65 歲，承作前需要重新做一次適合度評估。" +
+    '<button class="ai-go" data-go="invest">看其他比較穩的商品</button>'
+};
+
+var AI_PUSH = {
+  t: "小幫手主動提醒",
+  x: "偵測到您 <b>8 月入帳會少 11,560 元</b>，主因是 00878 當月不配息。點下面看補平方案。"
+};
+
+var AI_DISCLAIMER =
+  "AI 回覆僅供參考，不構成投資建議或要約。實際商品條件、費用與風險以正式公開說明書及契約為準。";
+
+/* 語音辨識用：聽到哪些字，就對應到哪一題。
+   使用者說「我這個月可以領多少」也能對上第一題。 */
+var VOICE_MATCH = [
+  { kw:["多少錢","可以領","這個月","有多少"], q:AI_QUICK[0] },
+  { kw:["八月","8月","變少","少了","下個月"], q:AI_QUICK[1] },
+  { kw:["還差","五萬五","5萬5","月退俸","目標"], q:AI_QUICK[2] },
+  { kw:["股權連結","結構","什麼是","連結商品"], q:AI_QUICK[3] }
+];
+
+/* ==========================================================================
+   ===== 7. 營業員視角（同一套資料，換一個身分看）=====
+   --------------------------------------------------------------------------
+   客戶端的行為（問了什麼、試算了什麼、缺口多少）在這裡變成可行動的名單。
+   ========================================================================== */
+var ADVISOR = {
+  name:        "王專員",
+  branch:      "康和證券・城中分公司",
+  clientCount: 68,
+  signalsWeek: 23
+};
+
+/* hot：熱度 3 高 / 2 中 / 1 低　gap：每月現金流缺口（元） */
+var CLIENTS = [
+  { nm:"陳伯伯", age:68, aum:7000000,  gap:12140, rr:"穩健型", hot:3,
+    sig:"本週問了 3 次「月配息基金」",      when:"2 小時前" },
+  { nm:"吳太太", age:74, aum:20500000, gap:21500, rr:"穩健型", hot:3,
+    sig:"連續 5 天開啟現金流月曆",          when:"今天" },
+  { nm:"林女士", age:71, aum:12400000, gap:8600,  rr:"保守型", hot:3,
+    sig:"試算「老本撐多久」結果亮紅燈",     when:"昨天" },
+  { nm:"劉先生", age:67, aum:5800000,  gap:15800, rr:"穩健型", hot:2,
+    sig:"月退俸目標從 4 萬調高到 6 萬",     when:"2 天前" },
+  { nm:"張老師", age:70, aum:9600000,  gap:5300,  rr:"穩健型", hot:2,
+    sig:"定存 320 萬將於 8/12 到期",        when:"3 天前" },
+  { nm:"黃先生", age:65, aum:4300000,  gap:0,     rr:"積極型", hot:1,
+    sig:"月退俸已達標，昨日瀏覽年金險",     when:"昨天" }
+];
+
+/* 單一客戶詳情頁要顯示的意圖時間軸（以陳伯伯為例） */
+var CLIENT_TIMELINE = [
+  { t:"今天 09:12", x:"用語音問「我這個月有多少錢可以領」" },
+  { t:"今天 09:14", x:"把月退俸目標從 5 萬 5 拉到 7 萬（缺口 27,140）" },
+  { t:"昨天 21:40", x:"瀏覽「月配息債券基金」商品明細 3 分 20 秒" },
+  { t:"昨天 21:05", x:"問「什麼是股權連結商品」——已提示超過其風險屬性" },
+  { t:"7/24",      x:"老本試算：每月開銷拉到 7 萬，結果亮黃燈" }
+];
+
+/* 假設缺口全部以「月配息債券基金」承接時的換算基準 */
+var ADV_CONV = { yield:0.055, feeRate:0.015 };
+
+/* ===== 8. 兩種身分、各自的畫面 ===== */
+var ROLES = [
+  { id:"client",  nm:"客戶視角",   who:"陳伯伯" },
+  { id:"advisor", nm:"營業員視角", who:"王專員" }
+];
+
+var SCREENS_CLIENT = [
+  { id:"cash",    tab:"① 現金流月曆", nav:"現金流", title:"本月現金流"   },
+  { id:"pension", tab:"② 我的月退俸", nav:"月退俸", title:"我的月退俸"   },
+  { id:"calc",    tab:"③ 老本撐多久", nav:"試算",   title:"老本試算"     },
+  { id:"invest",  tab:"④ 投資商品",   nav:"投資",   title:"好日子精選"   },
+  { id:"ai",      tab:"⑤ AI 小幫手",  nav:"小幫手", title:"好日子小幫手" }
+];
+
+var SCREENS_ADVISOR = [
+  { id:"advToday",  tab:"⓵ 今日待辦",  nav:"待辦",   title:"今日待辦"     },
+  { id:"advList",   tab:"⓶ 我的客戶",  nav:"客戶",   title:"我的客戶"     },
+  { id:"advClient", tab:"⓷ 客戶詳情",  nav:"詳情",   title:"陳伯伯"       }
+];
+
+/* 底部導覽列圖示（SVG path，通常不用改） */
+var NAV_ICONS = {
+  cash:      '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  pension:   '<circle cx="12" cy="12" r="9"/><path d="M15 9H10.8a2.3 2.3 0 000 4.6h2.4a2.3 2.3 0 010 4.6H9M12 6.6v1.2M12 16.2v1.4"/>',
+  calc:      '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/>',
+  invest:    '<path d="M3 20h18"/><path d="M6 16l4.2-5 3.3 2.8L20 7.5"/><path d="M20 11.5v-4h-4"/>',
+  ai:        '<path d="M21 11.5a7.5 7.5 0 01-7.5 7.5H8l-4 3v-4.6A7.5 7.5 0 0111.5 4h2A7.5 7.5 0 0121 11.5z"/><path d="M12.2 8.4l.85 2.05 2.05.85-2.05.85-.85 2.05-.85-2.05-2.05-.85 2.05-.85z"/>',
+  advToday:  '<path d="M4 6.5h16M4 12h16M4 17.5h10"/><path d="M17.5 17.5l1.6 1.6 3-3.4"/>',
+  advList:   '<circle cx="8.5" cy="8" r="3"/><path d="M2.5 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16.5 8h5M16.5 12h5M16.5 16h3"/>',
+  advClient: '<circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/>'
+};
+
+/* ===== 9. 無障礙：字級三段（zoom 倍率） ===== */
+var FONT_STEPS = [
+  { k:"標準", z:1    },
+  { k:"大",   z:1.15 },
+  { k:"特大", z:1.32 }
+];
+
+/* ==========================================================================
+   ===== 10. 執行期狀態（程式會自行改寫，不用手動設定）=====
+   ========================================================================== */
+var PLAN = null;   // 使用者在 ② 選定的補缺口方案，選了之後 ① 月曆會跟著變
+
+
+/* ==========================================================================
+   screens.js — 五個畫面的版型
+   --------------------------------------------------------------------------
+   每個畫面都是一個函式，回傳 HTML 字串。
+   ★ 想改「版面長相」改這裡；想改「數字內容」請改 data.js
+   ★ 想新增第六個畫面：在 data.js 的 SCREENS 加一筆，再到這裡加一個函式
+   ========================================================================== */
+
+var S = {};
+
+/* ---------- 畫面 ①：現金流月曆 ----------
+   若使用者在 ② 選過方案（PLAN 有值），這一頁會切換成「模擬後」的樣子：
+   總額補到目標、月曆多一顆虛線金點、明細多一列。                       */
+S.cash = function () {
+  var on  = !!PLAN;
+  var sum = TOTAL + (on ? PLAN.add : 0);
+
+  return '' +
+  '<div class="hero' + (on ? ' sim' : '') + '">' +
+    '<div class="lbl">' + CONFIG.year + ' 年 ' + CONFIG.month + ' 月　' +
+      (on ? '模擬後預計入帳' : '預計入帳') + '</div>' +
+    '<div class="amt"><small>NT$</small>' + sum.toLocaleString() + '</div>' +
+    (on
+      ? '<div class="note">✦ 已含模擬方案：' + PLAN.nm + '　+' + PLAN.add.toLocaleString() + '</div>'
+      : '<div class="note">✓ 已超過您設定的每月開銷 ' +
+          CONFIG.expenseDefault.toLocaleString() + ' 元</div>') +
+  '</div>' +
+
+  (on
+    ? '<div class="alert md"><div class="ic">✦</div><div>' +
+        '<div class="t">這是模擬畫面</div>' +
+        '<div class="x">投入 <b>' + PLAN.needTx + '</b> 於「' + PLAN.nm + '」之後，' +
+          '您的月曆就會長成這樣，每月剛好領到 <b>' + PLAN.target.toLocaleString() + ' 元</b>。' +
+          '<br>' + PLAN.freq + '</div>' +
+        '<button class="ai-go" data-go="invest">請營業員幫我辦</button>' +
+        '<button class="ai-go" id="planOff">取消模擬，看回原本的樣子</button>' +
+      '</div></div>'
+    : '') +
+
+  '<div class="card">' +
+    '<div class="cal-head"><span>‹</span><b>' + CONFIG.year + ' 年 ' + CONFIG.month + ' 月</b><span>›</span></div>' +
+    '<div class="cal" id="cal"></div>' +
+    '<div class="pay-list" id="paylist"></div>' +
+  '</div>' +
+
+  '<div class="card">' +
+    '<h3>接下來三個月</h3>' +
+    FORECAST.map(function (f) {
+      return '<div class="pay-row"><span class="n">' + f.m + '</span>' +
+             '<span class="v">NT$ ' + (f.v + (on ? PLAN.add : 0)).toLocaleString() + '</span></div>';
+    }).join('') +
+    '<div class="sub" style="margin-top:10px">' +
+      (on ? '💡 加入方案後，原本入帳較少的 8 月與 10 月也一併補平了。' : FORECAST_TIP) +
+    '</div>' +
+  '</div>' +
+
+  (on ? '' : '<button class="bigbtn o" data-go="pension">我想每個月領更多 →</button>');
+};
+
+/* ---------- 畫面 ②：我的月退俸（缺口 → 商品配對）----------
+   滑桿與結果由 app.js 的 pension() 動態填入 #gapbox 與 #solbox        */
+S.pension = function () {
+  return '' +
+  '<div class="card">' +
+    '<h3>我想要的月退俸</h3>' +
+    '<div class="sub">拉動下面的圓球，設定您希望每個月能領到多少錢。</div>' +
+    '<div class="slider-wrap">' +
+      '<div class="slider-val" id="tgtVal">NT$ ' + PENSION.targetDefault.toLocaleString() + '</div>' +
+      '<input type="range" id="tgt" min="' + PENSION.targetMin + '" max="' + PENSION.targetMax +
+        '" step="' + PENSION.targetStep + '" value="' + PENSION.targetDefault + '">' +
+      '<div class="range-ends"><span>' + (PENSION.targetMin / 10000) + ' 萬</span>' +
+        '<span>' + (PENSION.targetMax / 10000) + ' 萬</span></div>' +
+    '</div>' +
+    '<div class="kv-row"><span>目前每月入帳</span><b>NT$ ' + TOTAL.toLocaleString() + '</b></div>' +
+  '</div>' +
+
+  '<div class="result" id="gapbox"></div>' +
+
+  '<div id="solbox"></div>';
+};
+
+/* ---------- 畫面 ③：老本撐多久試算 ---------- */
+S.calc = function () {
+  return '' +
+  '<div class="card">' +
+    '<h3>我的老本可以撐多久？</h3>' +
+    '<div class="sub">拉動下面的圓球，設定您每月大約要花多少錢。</div>' +
+    '<div class="slider-wrap">' +
+      '<div class="slider-val" id="expVal">NT$ ' + CONFIG.expenseDefault.toLocaleString() + '</div>' +
+      '<input type="range" id="exp" min="' + CONFIG.expenseMin + '" max="' + CONFIG.expenseMax +
+        '" step="' + CONFIG.expenseStep + '" value="' + CONFIG.expenseDefault + '">' +
+      '<div class="range-ends"><span>' + (CONFIG.expenseMin / 10000) + ' 萬</span>' +
+        '<span>' + (CONFIG.expenseMax / 10000) + ' 萬</span></div>' +
+    '</div>' +
+  '</div>' +
+
+  '<div class="result" id="res">' +
+    '<div class="lbl">您的資產預計可支撐到</div>' +
+    '<div class="big" id="resAge">—</div>' +
+    '<div class="timeline"><div class="fill" id="resFill" style="width:0%">目前 ' + CONFIG.currentAge + ' 歲</div></div>' +
+    '<div class="tip" id="resTip"></div>' +
+  '</div>' +
+
+  '<div class="card"><h3>試算條件</h3>' +
+    '<div class="pay-row"><span class="n">目前總資產</span><span class="v">' +
+      (CONFIG.totalAssets / 10000) + ' 萬</span></div>' +
+    '<div class="pay-row"><span class="n">每月被動收入</span><span class="v">' +
+      TOTAL.toLocaleString() + '</span></div>' +
+    '<div class="pay-row"><span class="n">假設年報酬率</span><span class="n">' +
+      (CONFIG.annualReturn * 100).toFixed(1) + '%</span></div>' +
+    '<div class="pay-row"><span class="n">假設通膨率</span><span class="n">' +
+      (CONFIG.inflation * 100).toFixed(1) + '%</span></div>' +
+  '</div>' +
+
+  '<button class="bigbtn p">預約營業員視訊討論</button>' +
+  '<button class="bigbtn o" data-go="invest">看看能提高現金流的商品</button>';
+};
+
+/* ---------- 畫面 ④：投資商品（好日子精選）----------
+   商品清單由 app.js 的 paintProducts() 填入 #prodbox                  */
+S.invest = function () {
+  return '' +
+  '<div class="card kyc">' +
+    '<div class="kyc-l">您的風險屬性</div>' +
+    '<div class="kyc-v">' + CONFIG.riskProfile + '　<span class="pill rr' + CONFIG.maxRR + '">可承作至 RR' + CONFIG.maxRR + '</span></div>' +
+    '<div class="sub">年齡 ' + CONFIG.currentAge + ' 歲。超過 RR' + CONFIG.maxRR + ' 的商品會標示「需加強評估」，仍可承作但須由營業員完成高齡客戶適合度程序。</div>' +
+  '</div>' +
+
+  '<div class="chips" id="chips">' +
+    PRODUCT_CATS.map(function (c, i) {
+      return '<button class="chip' + (i === 0 ? ' on' : '') + '" data-c="' + c.id + '">' + c.nm + '</button>';
+    }).join('') +
+  '</div>' +
+
+  '<div id="prodbox"></div>' +
+
+  '<div class="disc">' + INVEST_DISCLAIMER + '</div>' +
+
+  '<button class="bigbtn p">預約營業員說明商品</button>';
+};
+
+/* ==========================================================================
+   營業員視角：三個畫面（看的是同一套客戶行為資料）
+   ========================================================================== */
+
+/* ---------- 營⓵：今日待辦 ---------- */
+S.advToday = function () {
+  return '' +
+  '<div class="hero adv" id="advHero"></div>' +
+
+  '<div class="sec-h">今天該打的電話（依缺口大小排序）</div>' +
+  '<div id="advTodo"></div>' +
+
+  '<div class="disc">缺口換算以「月配息債券基金」年配 ' +
+    (ADV_CONV.yield * 100).toFixed(1) + '%、申購手續費 ' +
+    (ADV_CONV.feeRate * 100).toFixed(1) + '% 估算，僅供內部參考，非承諾業績。</div>';
+};
+
+/* ---------- 營⓶：我的客戶 ---------- */
+S.advList = function () {
+  return '' +
+  '<div class="card kyc">' +
+    '<div class="kyc-l">' + ADVISOR.branch + '</div>' +
+    '<div class="kyc-v">' + ADVISOR.name + '　<span class="pill rr3">管理 ' +
+      ADVISOR.clientCount + ' 位</span></div>' +
+    '<div class="sub">本週收到 <b>' + ADVISOR.signalsWeek +
+      '</b> 則客戶意圖訊號。訊號來自客戶在 App 裡的實際行為，不是問卷、也不是推測。</div>' +
+  '</div>' +
+
+  '<div class="sec-h">意圖訊號（熱度由高到低）</div>' +
+  '<div id="advClients"></div>';
+};
+
+/* ---------- 營⓷：客戶詳情 ---------- */
+S.advClient = function () {
+  return '' +
+  '<div class="card">' +
+    '<div class="cl-head">' +
+      '<div class="avatar">陳</div>' +
+      '<div><div class="cl-nm">陳伯伯</div>' +
+      '<div class="cl-sub">68 歲　·　穩健型　·　AUM 700 萬</div></div>' +
+      '<span class="pill hot3">熱度高</span>' +
+    '</div>' +
+    '<div class="kv-row"><span>每月現金流缺口</span><b>12,140 元</b></div>' +
+    '<div class="kv-row"><span>換算可承接規模</span><b>265 萬</b></div>' +
+    '<div class="kv-row"><span>預估手續費收入</span><b>39,750 元</b></div>' +
+  '</div>' +
+
+  '<div class="sec-h">他在 App 裡做了什麼</div>' +
+  '<div class="card">' +
+    CLIENT_TIMELINE.map(function (e) {
+      return '<div class="tl"><div class="tl-t">' + e.t + '</div>' +
+             '<div class="tl-x">' + e.x + '</div></div>';
+    }).join('') +
+  '</div>' +
+
+  '<div class="alert ok"><div class="ic">✓</div><div>' +
+    '<div class="t">系統建議的切入點</div>' +
+    '<div class="x">他昨晚看了「月配息債券基金」3 分鐘卻沒有下一步，' +
+      '今天又把目標從 5.5 萬拉到 7 萬——<b>是在比較、不是在猶豫</b>。' +
+      '建議直接談這一檔，並主動說明手續費折扣。</div>' +
+  '</div></div>' +
+
+  '<button class="bigbtn p">撥打電話　0912-XXX-XXX</button>' +
+  '<button class="bigbtn o">排一場視訊說明</button>';
+};
+
+/* ---------- 畫面 ⑤：AI 小幫手 ---------- */
+S.ai = function () {
+  return '' +
+  '<div class="alert md"><div class="ic">✦</div><div>' +
+    '<div class="t">' + AI_PUSH.t + '</div>' +
+    '<div class="x">' + AI_PUSH.x + '</div>' +
+    '<button class="ai-go" data-go="pension">看補平方案</button>' +
+  '</div></div>' +
+
+  '<div class="chat" id="chat">' +
+    '<div class="bb ai">' + AI_INTRO + '</div>' +
+  '</div>' +
+
+  '<div class="quick" id="quick">' +
+    '<div class="list-title">常見問題（點一下就問）</div>' +
+    AI_QUICK.map(function (q) {
+      return '<button class="qbtn" data-q="' + q + '">' + q + '</button>';
+    }).join('') +
+  '</div>' +
+
+  '<button class="mic" id="mic">' +
+    '<svg class="mic-ic" viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="11" rx="3"/>' +
+    '<path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21M8.5 21h7"/></svg>' +
+    '<span id="micTx">按住說話</span></button>' +
+
+  '<div class="disc">' + AI_DISCLAIMER + '</div>';
+};
+
+
+/* ==========================================================================
+   notes.js — 右側簡報講稿（只在電腦上顯示，手機版會自動隱藏）
+   --------------------------------------------------------------------------
+   格式： 畫面id: { k:標籤, h:標題, lead:導言, n:[ [小標, 內容, 顏色] ] }
+   顏色： "g" = 綠色, "o" = 金色, "" = 藍色（預設）
+   ========================================================================== */
+
+var NOTES = {
+
+  cash: {
+    k: "功能 ① ‧ 入口",
+    h: "現金流月曆",
+    lead: "這是 App 的主畫面，也是整個產品最核心的差異化。所有券商 App 打開都是報價與 K 線；這裡打開是「這個月你會收到多少錢」。",
+    n: [
+      ["把資產淨值換成現金流", "退休族的真實問題不是「我賺了幾%」，而是「這個月夠不夠花」。第一眼就回答這件事。", "g"],
+      ["月曆是長輩最熟悉的介面", "不需要學習成本。金色圓點＝有錢入帳，點下去看明細。", "o"],
+      ["第六條收入線：資產移入", "月曆要好看，客戶就有動機把外部券商的部位搬進康和，好「看到完整全貌」。這一頁不賣商品，但會長 AUM。", ""],
+      ["漏斗起點", "底部按鈕「我想每個月領更多」直接把客戶推到功能 ②，需求從這裡開始被製造出來。", ""]
+    ]
+  },
+
+  pension: {
+    k: "功能 ② ‧ 變現引擎",
+    h: "我的月退俸（現金流缺口）",
+    lead: "取代原本的三桶水。三桶水只「描述」客戶現在長什麼樣子，看完不會產生任何一筆交易；這一頁把配置問題改寫成一個具體的缺口數字——而缺口就是訂單。",
+    n: [
+      ["把配置問題變成缺口問題", "長輩不在意 60/40，他在意「我想月領 5 萬 5，現在只有 4 萬 2」。12,140 元這個痛，是他自己算出來的，不是業務講的。", "g"],
+      ["缺口自動換算成本金", "缺口 × 12 ÷ 年配息率 ＝ 需投入本金。三個方案分別對應固定收益、代銷基金、股權連結——都是康和可承作的業務。", "o"],
+      ["滑桿拉高，客單價跟著上升", "目標從 5.5 萬拉到 7 萬，「月配息債券基金」這一案的需投入本金就從 265 萬變成 592 萬。demo 現場拉這一下，商業模式不必解釋。", ""],
+      ["適合度不是阻礙，是賣點", "第三個方案（RR5）主動標示「超過您的風險屬性」，符合高齡投資人適合度規範，同時把「敢講風險」變成信任資產。", ""]
+    ]
+  },
+
+  calc: {
+    k: "功能 ③ ‧ 焦慮轉介",
+    h: "老本撐多久試算",
+    lead: "回答退休族最深層的焦慮。功能 ② 管的是「這個月」，這一頁管的是「一輩子」——兩個時間尺度，兩種成交理由。",
+    n: [
+      ["一根滑桿，一個答案", "刻意不提供多重參數。複雜的試算工具長輩不會用，簡單的才會天天打開。", "g"],
+      ["結果用顏色分級", "綠（安全）／黃（勉強）／紅（不足），不必看懂數字也知道狀況。", "o"],
+      ["天然的服務轉介點", "結果偏黃或紅時引導「預約營業員視訊」與「提高現金流的商品」——把數位工具接回 15 家分公司的人力優勢。", ""],
+      ["簡報 demo 建議", "現場把滑桿從 3.8 萬拉到 7 萬，畫面由綠轉紅，這一秒最有說服力。", ""]
+    ]
+  },
+
+  invest: {
+    k: "功能 ④ ‧ 收銀台",
+    h: "好日子精選（投資商品）",
+    lead: "完全對齊康和證券可承作的業務範圍：代銷國內外基金、股權連結或利率連結商品、固定收益型商品、保險商品規劃，以及其他經主管機關核准之各式金融商品。",
+    n: [
+      ["全站用同一種語言：現金流", "不寫「年化配息 5.5%」，寫「每投入 100 萬，每月約領 4,583 元」。這是退休族唯一聽得懂、也唯一在意的單位。", "g"],
+      ["五大類＝五條收入線", "基金收申購手續費與經理費分成、結構型與債券賺銷售價差、保險收佣金。一頁涵蓋券商財管的全部收入來源。", "o"],
+      ["高齡適合度標籤", "每張卡標示 RR 等級與「適合您／需加強評估」。RR4 以上不隱藏、但主動提示，降低日後客訴與裁罰風險。", ""],
+      ["成交仍回到人", "App 負責養出需求與教育客戶，最後一哩交給營業員。數位不取代通路，是替通路篩出已經想買的人。", ""]
+    ]
+  },
+
+  ai: {
+    k: "功能 ⑤ ‧ 新增",
+    h: "AI 小幫手",
+    lead: "取代原本的防詐守門員與家庭共管。不是拿 AI 來聊天，而是讓它做三件明確的事：查現金流、把術語翻成人話、主動提醒缺口。",
+    n: [
+      ["語音優先，不用打字", "「我這個月有多少錢」按住就能問。長輩打字慢、視力差，語音是無障礙的必要條件，不是加分項。", "g"],
+      ["把金融術語翻成人話", "「股權連結商品」→「綁一檔台積電放三個月領 8.5%，但跌破價位你拿到的會是股票」。翻譯本身就是導購。", "o"],
+      ["主動出擊而非被動問答", "偵測到 8 月入帳少 11,560 元就主動提醒，並附上補平方案——一個 24 小時不休息的營業員助理。", ""],
+      ["真正的商業價值在資料", "客戶問了什麼＝最真實的意圖訊號。切到「營業員視角」就能看到這些訊號變成名單。", ""]
+    ]
+  },
+
+  /* ===== 以下是營業員視角的講稿 ===== */
+
+  advToday: {
+    k: "營業員視角 ⓵",
+    h: "今日待辦",
+    lead: "同一套資料，換一個身分看。客戶端的每一次拉滑桿、每一次提問，在這裡都變成一個帶著金額的待辦事項。",
+    n: [
+      ["把行為換算成營收", "5 位客戶的月缺口加總 63,340 元，換算成可承接規模約 1,382 萬、預估手續費 20.7 萬。這是 App 對康和的直接貢獻，不是估算。", "g"],
+      ["依缺口大小排序", "營業員一天只打得完幾通電話。系統直接告訴他先打誰、談多少錢、用什麼開場。", "o"],
+      ["這一頁回答評審最想問的事", "「這個 App 對康和到底賺什麼？」——不用講，指這一頁就好。", ""],
+      ["法遵提醒", "頁尾標明換算基準與「非承諾業績」。內部管理工具的數字若被當成保證，會有裁罰風險。", ""]
+    ]
+  },
+
+  advList: {
+    k: "營業員視角 ⓶",
+    h: "我的客戶（意圖訊號）",
+    lead: "傳統名單是「年齡 65 歲以上、AUM 500 萬以上」——那是猜的。這裡的名單是「他昨晚看了月配息基金 3 分鐘」——那是事實。",
+    n: [
+      ["訊號來自行為，不是問卷", "連續 5 天開月曆、把目標從 4 萬調高到 6 萬、試算亮紅燈——每一個都是可以直接開口的理由。", "g"],
+      ["熱度分級決定順序", "高熱度＝近期有明確金錢意圖。營業員的時間有限，排序本身就是價值。", "o"],
+      ["也接得住沉睡客戶", "黃先生已達標、劉先生 30 天未登入——前者談年金險與傳承，後者是流失預警。名單不是只有要成交的人。", ""],
+      ["跨世代的延伸", "同一套訊號未來可延伸到「子女何時該被接觸」，但那需要信託或授權架構，屬第二期。", ""]
+    ]
+  },
+
+  advClient: {
+    k: "營業員視角 ⓷",
+    h: "客戶詳情：陳伯伯",
+    lead: "把陳伯伯在 App 裡的每一步攤開來看。營業員在撥電話之前，就已經知道要談什麼、談多少、以及他卡在哪裡。",
+    n: [
+      ["時間軸就是銷售腳本", "昨晚看了 3 分鐘沒下一步、今天把目標拉高——這是在比較，不是在猶豫。開場白該講什麼，資料自己會說。", "g"],
+      ["金額先算好", "缺口 12,140 → 可承接 265 萬 → 預估手續費 39,750。營業員不必自己算，也不會算錯。", "o"],
+      ["AI 已經先做完衛教", "客戶問「什麼是股權連結商品」時，系統已經提示過超出其風險屬性。營業員接手時面對的是懂了的客戶，不是零基礎。", ""],
+      ["這才是 AI 小幫手真正的產出", "對話紀錄本身不值錢，把它變成「該打給誰、談什麼」才值錢。", ""]
+    ]
+  }
+
+};
+
+
+/* ==========================================================================
+   app.js — 程式邏輯
+   --------------------------------------------------------------------------
+   一般情況下不用改這個檔案。
+   要改數字 → data.js ／ 要改版型 → screens.js ／ 要改講稿 → notes.js
+   ========================================================================== */
+
+(function () {
+  'use strict';
+
+  var ROLE    = 'client';   // client | advisor
+  var current = 'cash';
+  var fontIdx = 0;          // 目前字級（對應 FONT_STEPS）
+  var orderKey = null;      // 投資頁展開中的申購試算是哪一檔商品
+
+  function screens() { return ROLE === 'advisor' ? SCREENS_ADVISOR : SCREENS_CLIENT; }
+
+  /* ---------- 啟動 ---------- */
+  function init() {
+    buildRoles();
+    bindOnce();
+    paintChrome();
+    render(screens()[0].id);
+    registerServiceWorker();
+  }
+
+  /* 只綁一次的事件（元素本身不會被換掉，只換 innerHTML） */
+  function bindOnce() {
+    document.getElementById('roles').addEventListener('click', function (e) {
+      var b = e.target.closest('button');
+      if (b) setRole(b.dataset.r);
+    });
+    document.getElementById('tabs').addEventListener('click', function (e) {
+      var b = e.target.closest('button');
+      if (b) render(b.dataset.s);
+    });
+    document.getElementById('nav').addEventListener('click', function (e) {
+      var b = e.target.closest('button');
+      if (b) render(b.dataset.s);
+    });
+    /* 畫面內任何 [data-go] 按鈕都能跳頁 */
+    document.getElementById('body').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-go]');
+      if (b) render(b.dataset.go);
+    });
+    document.getElementById('a11y').addEventListener('click', stepFont);
+  }
+
+  /* ---------- 身分切換 ---------- */
+  function buildRoles() {
+    document.getElementById('roles').innerHTML = ROLES.map(function (r) {
+      return '<button class="role' + (r.id === ROLE ? ' on' : '') + '" data-r="' + r.id + '">' +
+        r.nm + '<span>' + r.who + '</span></button>';
+    }).join('');
+  }
+
+  function setRole(r) {
+    if (r === ROLE) return;
+    ROLE = r;
+    setActive('#roles .role', r, 'r');
+    paintChrome();
+    render(screens()[0].id);
+  }
+
+  /* 重繪頁籤、底部導覽、問候語 */
+  function paintChrome() {
+    document.getElementById('greet').textContent =
+      (ROLE === 'advisor' ? ADVISOR.name : CONFIG.userName) + '，早安';
+
+    document.getElementById('tabs').innerHTML = screens().map(function (s) {
+      return '<button class="tab" data-s="' + s.id + '">' + s.tab + '</button>';
+    }).join('');
+
+    document.getElementById('nav').innerHTML = screens().map(function (s) {
+      return '<button data-s="' + s.id + '">' +
+        '<svg viewBox="0 0 24 24">' + NAV_ICONS[s.id] + '</svg>' + s.nav + '</button>';
+    }).join('');
+  }
+
+  /* ---------- 切換並繪製畫面 ---------- */
+  function render(key) {
+    if (!S[key]) return;
+    current = key;
+    closeSheet();
+
+    var meta = screens().filter(function (s) { return s.id === key; })[0];
+    if (!meta) return;
+    document.getElementById('scr-title').textContent = meta.title;
+
+    var body = document.getElementById('body');
+    body.innerHTML = S[key]();
+    body.scrollTop = 0;
+
+    setActive('#tabs .tab', key, 's');
+    setActive('#nav button', key, 's');
+    renderNotes(key);
+
+    if (key === 'cash')      initCalendar();
+    if (key === 'pension')   initPension();
+    if (key === 'calc')      initCalc();
+    if (key === 'invest')    initInvest();
+    if (key === 'ai')        initAI();
+    if (key === 'advToday')  initAdvToday();
+    if (key === 'advList')   initAdvList();
+  }
+
+  function setActive(sel, key, attr) {
+    document.querySelectorAll(sel).forEach(function (el) {
+      el.classList.toggle('on', el.dataset[attr] === key);
+    });
+  }
+
+  /* ---------- 右側講稿 ---------- */
+  function renderNotes(key) {
+    var N = NOTES[key];
+    if (!N) return;
+    document.getElementById('notes').innerHTML =
+      '<div class="kicker">' + N.k + '</div>' +
+      '<h2>' + N.h + '</h2>' +
+      '<p class="lead">' + N.lead + '</p>' +
+      N.n.map(function (x) {
+        return '<div class="note ' + x[2] + '"><b>' + x[0] + '</b><span>' + x[1] + '</span></div>';
+      }).join('');
+  }
+
+  /* ======================================================================
+     無障礙：字級三段切換
+     ====================================================================== */
+  function stepFont() {
+    fontIdx = (fontIdx + 1) % FONT_STEPS.length;
+    var f = FONT_STEPS[fontIdx];
+    ['body', 'nav'].forEach(function (id) {
+      document.getElementById(id).style.zoom = f.z;
+    });
+    document.getElementById('a11yTx').textContent = f.k;
+  }
+
+  /* ---------- 共用小工具 ---------- */
+  function paintTrack(sl) {
+    var p = (sl.value - sl.min) / (sl.max - sl.min) * 100;
+    sl.style.background = 'linear-gradient(90deg,var(--teal) 0%,var(--teal) ' + p +
+                          '%,#DCE6EC ' + p + '%,#DCE6EC 100%)';
+  }
+
+  /* 把「元」換算成「X 萬」 */
+  function wan(v) { return Math.round(v / 10000).toLocaleString() + ' 萬'; }
+  function nt(v)  { return 'NT$ ' + Math.round(v).toLocaleString(); }
+
+  /* ======================================================================
+     畫面 ①：現金流月曆（含 PLAN 模擬）
+     ====================================================================== */
+  function initCalendar() {
+    var cal = document.getElementById('cal');
+    if (!cal) return;
+
+    var off = document.getElementById('planOff');
+    if (off) off.addEventListener('click', function () { PLAN = null; render('cash'); });
+
+    /* 自動計算當月 1 號是星期幾、當月共幾天 */
+    var firstDay    = new Date(CONFIG.year, CONFIG.month - 1, 1).getDay();
+    var daysInMonth = new Date(CONFIG.year, CONFIG.month, 0).getDate();
+
+    var html = ['日','一','二','三','四','五','六'].map(function (d) {
+      return '<div class="dow">' + d + '</div>';
+    }).join('');
+
+    for (var i = 0; i < firstDay; i++) html += '<div class="day blank"></div>';
+
+    for (var d = 1; d <= daysInMonth; d++) {
+      var isPay  = !!PAYS[d];
+      var isPlan = !!PLAN && PLAN.day === d;
+      var cls    = isPlan ? ' pay plan' : (isPay ? ' pay' : '');
+      html += '<div class="day' + cls + '" data-d="' + d + '">' +
+              d + (isPay || isPlan ? '<span class="dot"></span>' : '') + '</div>';
+    }
+    cal.innerHTML = html;
+
+    cal.querySelectorAll('.day.pay').forEach(function (el) {
+      el.addEventListener('click', function () { showPay(+el.dataset.d); });
+    });
+    showPay(0);
+  }
+
+  function showPay(day) {
+    document.querySelectorAll('.day.pay').forEach(function (e) {
+      e.classList.toggle('sel', +e.dataset.d === day);
+    });
+
+    var box = document.getElementById('paylist');
+    if (!box) return;
+
+    /* 點到模擬方案那一天 */
+    if (PLAN && day === PLAN.day) {
+      box.innerHTML =
+        '<div class="list-title">' + CONFIG.month + ' 月 ' + day + ' 日 入帳（模擬）</div>' +
+        '<div class="pay-row sim"><div><span class="n">' + PLAN.nm + '</span>' +
+        '<div class="d">' + PLAN.freq + '</div></div>' +
+        '<span class="v">+' + PLAN.add.toLocaleString() + '</span></div>' +
+        '<button class="bigbtn o sm" id="backAll">← 看本月全部</button>';
+      bindBack();
+      return;
+    }
+
+    if (!day) {
+      var rows = '';
+      Object.keys(PAYS).forEach(function (k) {
+        PAYS[k].forEach(function (p) {
+          rows += '<div class="pay-row"><div><span class="n">' + p.n + '</span>' +
+                  '<div class="d">' + CONFIG.month + ' 月 ' + k + ' 日</div></div>' +
+                  '<span class="v">+' + p.v.toLocaleString() + '</span></div>';
+        });
+      });
+      if (PLAN) {
+        rows += '<div class="pay-row sim"><div><span class="n">' + PLAN.nm + '（模擬）</span>' +
+                '<div class="d">' + CONFIG.month + ' 月 ' + PLAN.day + ' 日　' + PLAN.freq + '</div></div>' +
+                '<span class="v">+' + PLAN.add.toLocaleString() + '</span></div>';
+      }
+      box.innerHTML =
+        '<div class="list-title">本月入帳明細（點月曆金點看細節）</div>' + rows +
+        '<div class="pay-row pay-total"><span class="n">合計</span>' +
+        '<span class="v">+' + (TOTAL + (PLAN ? PLAN.add : 0)).toLocaleString() + '</span></div>';
+    } else {
+      box.innerHTML =
+        '<div class="list-title">' + CONFIG.month + ' 月 ' + day + ' 日 入帳</div>' +
+        PAYS[day].map(function (p) {
+          return '<div class="pay-row"><div><span class="n">' + p.n + '</span>' +
+                 '<div class="d">' + p.d + '</div></div>' +
+                 '<span class="v">+' + p.v.toLocaleString() + '</span></div>';
+        }).join('') +
+        '<button class="bigbtn o sm" id="backAll">← 看本月全部</button>';
+      bindBack();
+    }
+  }
+
+  function bindBack() {
+    var back = document.getElementById('backAll');
+    if (back) back.addEventListener('click', function () { showPay(0); });
+  }
+
+  /* ======================================================================
+     畫面 ②：我的月退俸 —— 把缺口換算成本金，再配對可承作的商品
+     ====================================================================== */
+  function initPension() {
+    var sl = document.getElementById('tgt');
+    if (!sl) return;
+    sl.addEventListener('input', function () { pension(+sl.value); paintTrack(sl); });
+    paintTrack(sl);
+    pension(+sl.value);
+
+    document.getElementById('solbox').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-plan]');
+      if (b) choosePlan(b.dataset.plan, +sl.value);
+    });
+  }
+
+  function pension(target) {
+    document.getElementById('tgtVal').textContent = 'NT$ ' + target.toLocaleString();
+
+    var gap = target - TOTAL;
+    var box = document.getElementById('gapbox');
+    var sol = document.getElementById('solbox');
+
+    /* 已達標：不製造假需求，改推「把多出來的錢鎖成終身給付」 */
+    if (gap <= 0) {
+      box.className = 'result';
+      box.innerHTML =
+        '<div class="lbl">您目前的月現金流</div>' +
+        '<div class="big">已達標</div>' +
+        '<div class="tip">每月入帳 NT$ ' + TOTAL.toLocaleString() +
+        '，比目標多 <b>' + (-gap).toLocaleString() + ' 元</b>。' +
+        '多出來的部分可以規劃旅遊、孫子的教育金，或轉入年金險鎖住終身給付。</div>';
+      sol.innerHTML = '<button class="bigbtn o" data-go="invest">看看有什麼可以放的商品</button>';
+      return;
+    }
+
+    box.className = 'result warn';
+    box.innerHTML =
+      '<div class="lbl">距離每月 ' + target.toLocaleString() + ' 元，還差</div>' +
+      '<div class="big">' + gap.toLocaleString() + ' 元</div>' +
+      '<div class="tip">一年就是 <b>' + (gap * 12).toLocaleString() +
+      ' 元</b>。下面三個方法都可以把這個缺口補起來。</div>';
+
+    sol.innerHTML =
+      '<div class="sec-h">補足缺口的三個方法</div>' +
+      SOLUTIONS.map(function (s) {
+        var need   = Math.round(gap * 12 / s.y);        // 需投入本金
+        var per100 = Math.round(1000000 * s.y / 12);    // 每 100 萬每月可領
+        var fit    = s.rr <= CONFIG.maxRR;
+        return '<div class="sol s-' + s.k + '">' +
+          '<div class="sol-top">' +
+            '<span class="sol-tag">' + s.tag + '</span>' +
+            '<span class="pill rr' + s.rr + '">RR' + s.rr + '</span>' +
+          '</div>' +
+          '<div class="sol-nm">' + s.nm + '</div>' +
+          '<div class="sol-cat">' + s.cat + '</div>' +
+          '<div class="sol-need"><span>需投入本金</span><b>' + wan(need) + '</b></div>' +
+          '<div class="sol-d">年配息約 ' + (s.y * 100).toFixed(1) + '%　·　每 100 萬每月約領 ' +
+            per100.toLocaleString() + ' 元</div>' +
+          '<div class="sol-d">' + s.d + '</div>' +
+          '<div class="sol-fit ' + (fit ? 'ok' : 'no') + '">' +
+            (fit ? '✓ 符合您的' + CONFIG.riskProfile + '風險屬性'
+                 : '⚠ 超過您的風險屬性，65 歲以上須完成加強版適合度評估') +
+          '</div>' +
+          '<button class="pick" data-plan="' + s.k + '">選這個 → 看月曆會變怎樣</button>' +
+        '</div>';
+      }).join('') +
+      '<button class="bigbtn p" data-go="invest">看完整商品清單</button>' +
+      '<button class="bigbtn o">請營業員幫我試算</button>';
+  }
+
+  /* 選定方案 → 寫入 PLAN → 跳回月曆看「補完之後長什麼樣」 */
+  function choosePlan(k, target) {
+    var s   = SOLUTIONS.filter(function (x) { return x.k === k; })[0];
+    var gap = target - TOTAL;
+    if (!s || gap <= 0) return;
+    var need = Math.round(gap * 12 / s.y);
+    PLAN = {
+      k: s.k, nm: s.nm, cat: s.cat, day: s.day, freq: s.freq,
+      add: gap, need: need, needTx: wan(need), target: target
+    };
+    render('cash');
+  }
+
+  /* ======================================================================
+     畫面 ③：老本撐多久試算
+     ====================================================================== */
+  function initCalc() {
+    var sl = document.getElementById('exp');
+    if (!sl) return;
+    sl.addEventListener('input', function () { calc(+sl.value); paintTrack(sl); });
+    paintTrack(sl);
+    calc(+sl.value);
+  }
+
+  /**
+   * 逐月模擬資產耗損
+   * 每月：餘額 × (1+月報酬) + 被動收入 − 開銷；開銷隨通膨遞增
+   */
+  function calc(expense) {
+    document.getElementById('expVal').textContent = 'NT$ ' + expense.toLocaleString();
+
+    var bal  = CONFIG.totalAssets;
+    var age  = CONFIG.currentAge;
+    var exp  = expense;
+    var inc  = TOTAL;
+    var rM   = Math.pow(1 + CONFIG.annualReturn, 1 / 12) - 1;
+    var infM = Math.pow(1 + CONFIG.inflation, 1 / 12) - 1;
+    var months = 0;
+    var CAP = 111;
+
+    while (bal > 0 && age < CAP) {
+      bal = bal * (1 + rM) + inc - exp;
+      exp *= (1 + infM);
+      months++;
+      if (months % 12 === 0) age++;
+    }
+
+    var safe = age >= CAP;
+    var res  = document.getElementById('res');
+
+    document.getElementById('resAge').textContent = safe ? '100 歲以上' : age + ' 歲';
+
+    var pct = Math.max(6, Math.min(100,
+      (Math.min(age, 105) - CONFIG.currentAge) / (105 - CONFIG.currentAge) * 100));
+    document.getElementById('resFill').style.width = pct + '%';
+
+    res.className = 'result' + (safe || age >= 90 ? '' : (age >= 82 ? ' warn' : ' bad'));
+
+    document.getElementById('resTip').innerHTML =
+      (safe || age >= 90) ? '很安全，還有餘裕可以規劃旅遊或給孫子的教育金。'
+      : (age >= 82)       ? '大致足夠，但建議提高每月配息收入，減緩動用本金的速度。'
+                          : '資產可能提早用完。<b>建議與康和營業員討論調整方案。</b>';
+  }
+
+  /* ======================================================================
+     畫面 ④：投資商品（含申購試算與二次確認）
+     ====================================================================== */
+  function initInvest() {
+    var chips = document.getElementById('chips');
+    if (!chips) return;
+
+    chips.addEventListener('click', function (e) {
+      var b = e.target.closest('button');
+      if (!b) return;
+      chips.querySelectorAll('button').forEach(function (x) {
+        x.classList.toggle('on', x === b);
+      });
+      orderKey = null;
+      paintProducts(b.dataset.c);
+    });
+
+    document.getElementById('prodbox').addEventListener('click', function (e) {
+      var t = e.target.closest('[data-try]');
+      if (t) {
+        orderKey = (orderKey === t.dataset.try) ? null : t.dataset.try;
+        paintProducts(document.querySelector('#chips .on').dataset.c);
+        return;
+      }
+      if (e.target.closest('#ordNext')) openConfirm();
+    });
+
+    paintProducts('all');
+  }
+
+  function paintProducts(cat) {
+    var box  = document.getElementById('prodbox');
+    var list = (cat === 'all') ? PRODUCTS : PRODUCTS.filter(function (p) { return p.c === cat; });
+
+    var lastCat = '';
+    box.innerHTML = list.map(function (p) {
+      var head = '';
+      if (p.c !== lastCat) { head = '<div class="sec-h">' + CAT_NAMES[p.c] + '</div>'; lastCat = p.c; }
+
+      var fit    = p.rr <= CONFIG.maxRR;
+      var per100 = p.y ? Math.round(1000000 * p.y / 12) : 0;
+      var open   = orderKey === p.nm;
+
+      return head +
+        '<div class="prod' + (p.warn ? ' warn' : '') + (open ? ' open' : '') + '">' +
+          '<div class="prod-top">' +
+            '<div class="prod-nm">' + p.nm + '</div>' +
+            '<span class="pill rr' + p.rr + '">RR' + p.rr + '</span>' +
+          '</div>' +
+          (per100
+            ? '<div class="prod-cash">每投入 100 萬　每月約領 <b>' + per100.toLocaleString() + '</b> 元</div>'
+            : '<div class="prod-cash alt">' + p.pay + '　·　保障型商品，不以配息計算</div>') +
+          '<div class="prod-d">' + p.d + '</div>' +
+          '<div class="prod-meta"><span>最低 ' + p.min + '</span><span>' + p.pay + '</span></div>' +
+          '<div class="sol-fit ' + (fit ? 'ok' : 'no') + '">' +
+            (fit ? '✓ 適合您（' + CONFIG.riskProfile + '）' : '⚠ 需加強評估後方可承作') +
+          '</div>' +
+          '<button class="pick" data-try="' + p.nm + '">' +
+            (open ? '收起試算' : '試算並申購') + '</button>' +
+          (open ? orderPanel(p) : '') +
+        '</div>';
+    }).join('');
+
+    if (!list.length) {
+      box.innerHTML = '<div class="card"><div class="sub">此分類尚無示意商品。</div></div>';
+    }
+    if (orderKey) initOrder();
+  }
+
+  /* 申購試算面板 */
+  function orderPanel(p) {
+    return '<div class="order">' +
+      '<div class="ord-h">我要投入多少？</div>' +
+      '<div class="slider-val" id="ordVal">' + nt(ORDER.def) + '</div>' +
+      '<input type="range" id="ordSl" min="' + ORDER.min + '" max="' + ORDER.max +
+        '" step="' + ORDER.step + '" value="' + ORDER.def + '" data-p="' + p.nm + '">' +
+      '<div class="range-ends"><span>' + (ORDER.min / 10000) + ' 萬</span>' +
+        '<span>' + (ORDER.max / 10000) + ' 萬</span></div>' +
+      '<div class="ord-out" id="ordOut"></div>' +
+      '<div class="ord-fee" id="ordFee"></div>' +
+      '<button class="bigbtn p" id="ordNext">下一步</button>' +
+    '</div>';
+  }
+
+  function initOrder() {
+    var sl = document.getElementById('ordSl');
+    if (!sl) return;
+    sl.addEventListener('input', function () { order(+sl.value); paintTrack(sl); });
+    paintTrack(sl);
+    order(+sl.value);
+  }
+
+  function curProduct() {
+    return PRODUCTS.filter(function (p) { return p.nm === orderKey; })[0];
+  }
+
+  function order(amt) {
+    var p = curProduct();
+    if (!p) return;
+    var fee = CAT_FEE[p.c];
+
+    document.getElementById('ordVal').textContent = nt(amt);
+    document.getElementById('ordOut').innerHTML = p.y
+      ? '<div><span>每月約領</span><b>' + nt(amt * p.y / 12) + '</b></div>' +
+        '<div><span>一年約領</span><b>' + nt(amt * p.y) + '</b></div>'
+      : '<div class="alt">保障型商品，給付方式依契約條款，不以配息計算。</div>';
+    document.getElementById('ordFee').innerHTML =
+      '費用：' + fee.tx + (fee.rate ? '　約 <b>' + nt(amt * fee.rate) + '</b>' : '');
+  }
+
+  /* ---------- 二次確認（防誤觸） ---------- */
+  function openConfirm() {
+    var p   = curProduct();
+    var amt = +document.getElementById('ordSl').value;
+    var fee = CAT_FEE[p.c];
+    var fit = p.rr <= CONFIG.maxRR;
+
+    showSheet(
+      '<div class="sheet-t">請再確認一次</div>' +
+      '<div class="sheet-big">' + p.nm + '</div>' +
+      '<div class="sheet-kv"><span>投入金額</span><b>' + nt(amt) + '</b></div>' +
+      (p.y ? '<div class="sheet-kv"><span>每月約領</span><b>' + nt(amt * p.y / 12) + '</b></div>' : '') +
+      '<div class="sheet-kv"><span>費用</span><b>' +
+        (fee.rate ? nt(amt * fee.rate) : '內含') + '</b></div>' +
+      '<div class="sheet-warn">⚠ 本商品風險等級 RR' + p.rr + '，' +
+        (fit ? '符合您的' + CONFIG.riskProfile + '風險屬性。'
+             : '<b>超過您的風險屬性</b>，須由營業員完成高齡客戶加強版適合度評估後方可承作。') +
+        '<br>投資均有風險，配息可能來自本金，本金可能虧損。</div>' +
+      '<button class="bigbtn p" id="ordOk">確認送出</button>' +
+      '<button class="bigbtn o" id="ordCancel">再想一下</button>'
+    );
+
+    document.getElementById('ordOk').addEventListener('click', orderDone);
+    document.getElementById('ordCancel').addEventListener('click', closeSheet);
+  }
+
+  function orderDone() {
+    var p = curProduct();
+    showSheet(
+      '<div class="ok-ic">✓</div>' +
+      '<div class="sheet-big">已送出申購指示</div>' +
+      '<div class="sheet-kv full">' + ADVISOR.name + '將於 1 小時內與您電話確認，' +
+        '確認後才會正式扣款。您隨時可以反悔。</div>' +
+      '<div class="sheet-kv full sub">商品：' + p.nm + '</div>' +
+      '<button class="bigbtn p" id="ordDone">知道了</button>'
+    );
+    document.getElementById('ordDone').addEventListener('click', function () {
+      closeSheet();
+      orderKey = null;
+      paintProducts(document.querySelector('#chips .on').dataset.c);
+    });
+  }
+
+  function showSheet(html) {
+    var s = document.getElementById('sheet');
+    s.innerHTML = '<div class="sheet-box">' + html + '</div>';
+    s.classList.add('on');
+  }
+
+  function closeSheet() {
+    var s = document.getElementById('sheet');
+    if (s) { s.classList.remove('on'); s.innerHTML = ''; }
+  }
+
+  /* ======================================================================
+     畫面 ⑤：AI 小幫手（含語音輸入與朗讀）
+     ====================================================================== */
+  function initAI() {
+    var quick = document.getElementById('quick');
+    if (!quick) return;
+
+    quick.addEventListener('click', function (e) {
+      var b = e.target.closest('.qbtn');
+      if (b) ask(b.dataset.q);
+    });
+
+    document.getElementById('chat').addEventListener('click', function (e) {
+      var b = e.target.closest('.spk');
+      if (b) speak(b.parentNode.dataset.say);
+    });
+
+    document.getElementById('mic').addEventListener('click', startVoice);
+  }
+
+  /**
+   * key     用來查 AI_ANSWERS 的題目
+   * display 泡泡上要顯示的文字（語音輸入時是使用者實際說的話）
+   */
+  function ask(key, display) {
+    var chat = document.getElementById('chat');
+    if (!chat) return;
+
+    chat.insertAdjacentHTML('beforeend', '<div class="bb me">' + (display || key) + '</div>');
+    chat.insertAdjacentHTML('beforeend', '<div class="bb ai typing">小幫手正在查…</div>');
+
+    /* 把「問題」捲到最上方，回答就會完整出現在它下面 */
+    var asked = chat.lastElementChild.previousElementSibling;
+    scrollToEl(asked);
+
+    setTimeout(function () {
+      var t = chat.querySelector('.typing');
+      if (!t) return;
+      t.classList.remove('typing');
+      t.innerHTML = AI_ANSWERS[key] ||
+        '這個問題我還在學。要不要先<button class="ai-go" data-go="invest">看看商品清單</button>，' +
+        '或直接請' + ADVISOR.name + '為您說明？';
+      t.dataset.say = t.textContent;
+      t.insertAdjacentHTML('beforeend', '<button class="spk">🔊 念給我聽</button>');
+      scrollToEl(asked);
+    }, 700);
+  }
+
+  /* 捲動手機內容區，讓指定元素出現在頂端 */
+  function scrollToEl(el) {
+    var body = document.getElementById('body');
+    var d = el.getBoundingClientRect().top - body.getBoundingClientRect().top;
+    body.scrollTop += d - 14;
+  }
+
+  /* ---------- 語音輸入：優先用瀏覽器原生辨識，不支援時退回模擬 ---------- */
+  var voiceIdx = 0;
+
+  function startVoice() {
+    var mic = document.getElementById('mic');
+    if (mic.classList.contains('on')) return;
+
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR || location.protocol === 'file:') { simulateVoice(); return; }
+
+    var r = new SR();
+    r.lang = 'zh-TW';
+    r.interimResults = false;
+    r.maxAlternatives = 1;
+
+    var got = false;
+    micOn(true, '聆聽中…請說話');
+
+    r.onresult = function (e) {
+      got = true;
+      var said = e.results[0][0].transcript;
+      micOn(false);
+      ask(matchVoice(said), said);
+    };
+    r.onerror = function () { micOn(false); if (!got) simulateVoice(); };
+    r.onend   = function () { micOn(false); };
+
+    try { r.start(); } catch (err) { micOn(false); simulateVoice(); }
+  }
+
+  /* 沒有語音辨識（或用 file:// 開啟）時，依序問下一個常見問題 */
+  function simulateVoice() {
+    micOn(true, '聆聽中…');
+    setTimeout(function () {
+      micOn(false);
+      ask(AI_QUICK[voiceIdx % AI_QUICK.length]);
+      voiceIdx++;
+    }, 900);
+  }
+
+  function micOn(on, tx) {
+    var mic = document.getElementById('mic');
+    if (!mic) return;
+    mic.classList.toggle('on', on);
+    document.getElementById('micTx').textContent = on ? (tx || '聆聽中…') : '按住說話';
+  }
+
+  /* 聽到的話裡有哪個關鍵字，就對應到哪一題 */
+  function matchVoice(said) {
+    for (var i = 0; i < VOICE_MATCH.length; i++) {
+      for (var j = 0; j < VOICE_MATCH[i].kw.length; j++) {
+        if (said.indexOf(VOICE_MATCH[i].kw[j]) >= 0) return VOICE_MATCH[i].q;
+      }
+    }
+    return said;   // 沒對上就原文送進去，會走預設回覆
+  }
+
+  /* ---------- 朗讀回答 ---------- */
+  function speak(text) {
+    if (!text || !('speechSynthesis' in window)) return;
+    speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text.replace('🔊 念給我聽', ''));
+    u.lang = 'zh-TW';
+    u.rate = 0.9;
+    speechSynthesis.speak(u);
+  }
+
+  /* ======================================================================
+     營業員視角
+     ====================================================================== */
+  function initAdvToday() {
+    var withGap = CLIENTS.filter(function (c) { return c.gap > 0; })
+                         .sort(function (a, b) { return b.gap - a.gap; });
+
+    var totalGap = withGap.reduce(function (s, c) { return s + c.gap; }, 0);
+    var scale    = totalGap * 12 / ADV_CONV.yield;      // 可承接規模
+    var fee      = scale * ADV_CONV.feeRate;            // 預估手續費
+
+    document.getElementById('advHero').innerHTML =
+      '<div class="lbl">本月可轉換缺口（' + withGap.length + ' 位客戶）</div>' +
+      '<div class="amt"><small>NT$</small>' + wan(scale) + '</div>' +
+      '<div class="note">預估手續費收入 ' + nt(fee) + '　·　合計缺口 ' +
+        totalGap.toLocaleString() + ' 元／月</div>';
+
+    document.getElementById('advTodo').innerHTML = withGap.map(function (c) {
+      var need = c.gap * 12 / ADV_CONV.yield;
+      return '<div class="todo">' +
+        '<div class="todo-top"><b>' + c.nm + '</b>' +
+          '<span class="pill hot' + c.hot + '">缺口 ' + c.gap.toLocaleString() + '／月</span></div>' +
+        '<div class="todo-x">可承接 <b>' + wan(need) + '</b>　·　預估手續費 ' +
+          nt(need * ADV_CONV.feeRate) + '</div>' +
+        '<div class="todo-sig">' + c.sig + '　<i>' + c.when + '</i></div>' +
+        '<button class="pick">撥電話</button>' +
+      '</div>';
+    }).join('');
+  }
+
+  function initAdvList() {
+    var sorted = CLIENTS.slice().sort(function (a, b) {
+      return (b.hot - a.hot) || (b.gap - a.gap);
+    });
+    var hotTx = { 3:'熱度高', 2:'熱度中', 1:'熱度低' };
+
+    document.getElementById('advClients').innerHTML = sorted.map(function (c) {
+      return '<div class="cl' + (c.nm === '陳伯伯' ? ' me' : '') + '">' +
+        '<div class="cl-head">' +
+          '<div class="avatar">' + c.nm.charAt(0) + '</div>' +
+          '<div><div class="cl-nm">' + c.nm + '</div>' +
+          '<div class="cl-sub">' + c.age + ' 歲　·　' + c.rr + '　·　AUM ' + wan(c.aum) + '</div></div>' +
+          '<span class="pill hot' + c.hot + '">' + hotTx[c.hot] + '</span>' +
+        '</div>' +
+        '<div class="cl-sig">' + c.sig + '　<i>' + c.when + '</i></div>' +
+        '<div class="cl-gap">' +
+          (c.gap ? '每月缺口 <b>' + c.gap.toLocaleString() + ' 元</b>　→　可承接 ' +
+                   wan(c.gap * 12 / ADV_CONV.yield)
+                 : '月退俸已達標，適合談年金險與傳承規劃') +
+        '</div>' +
+        (c.nm === '陳伯伯' ? '<button class="pick" data-go="advClient">看詳情</button>' : '') +
+      '</div>';
+    }).join('');
+  }
+
+  /* ---------- PWA Service Worker ----------
+     只有透過 http/https 開啟時才註冊（雙擊本機檔案時會自動略過，不會報錯） */
+  function registerServiceWorker() {
+    if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+      navigator.serviceWorker.register('service-worker.js').catch(function () { /* 忽略 */ });
+    }
+  }
+
+  /* ---------- 開始 ---------- */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+# Streamlit 外觀設定：配色對齊 css/styles.css 的 :root
+[theme]
+base = "light"
+primaryColor = "#0F4C75"        # 康和品牌藍
+backgroundColor = "#EEF2F5"     # 與原型的 --bg 一致，避免邊緣露出白底
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#1C2B36"
+
+[browser]
+gatherUsageStats = false
+
+[client]
+toolbarMode = "minimal"

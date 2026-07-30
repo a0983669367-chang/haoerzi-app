@@ -1,0 +1,408 @@
+/* ==========================================================================
+   康和「好日子」App 樣式表
+   --------------------------------------------------------------------------
+   想改「顏色」→ 改下面第 1 區的 :root 變數，全站會一起變
+   想改「字級」→ 搜尋 font-size
+   想改「手機尺寸」→ 搜尋 .phone 的 width、.screen 的 height
+   ========================================================================== */
+
+/* ===== 1. 色彩與設計變數（改這裡就能換整套配色） ===== */
+:root{
+  --navy:#0F4C75;        /* 主色：康和品牌藍 */
+  --navy-dk:#0A3557;
+  --teal:#1B7B8C;        /* 輔色 */
+  --gold:#D98A1F;        /* 強調色：金額、入帳 */
+  --gold-lt:#FBF0DC;
+  --green:#2E7D5B;       /* 安全 / 正向 */
+  --green-lt:#E4F2EA;
+  --red:#C0392B;         /* 警告 / 詐騙 */
+  --red-lt:#FBE9E7;
+  --ink:#1C2B36;         /* 主要文字 */
+  --ink-2:#4A5D6B;       /* 次要文字 */
+  --line:#DDE5EB;
+  --bg:#EEF2F5;
+  --card:#FFFFFF;
+
+  --radius:18px;
+  --font:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+body{
+  margin:0;padding:32px 16px 60px;
+  background:var(--bg);
+  font-family:var(--font);
+  color:var(--ink);
+}
+
+/* ===== 2. 桌機版頁首 ===== */
+.page-head{max-width:1180px;margin:0 auto 26px;text-align:center}
+.page-head h1{font-size:27px;margin:0 0 8px;letter-spacing:.5px}
+.page-head h1 span{color:var(--navy)}
+.page-head p{margin:0;color:var(--ink-2);font-size:16px}
+.badge{display:inline-block;margin-top:12px;background:var(--navy);color:#fff;
+  font-size:13px;padding:5px 14px;border-radius:20px;letter-spacing:1px}
+
+/* ===== 3. 畫面切換頁籤 ===== */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:900px;margin:26px auto 24px}
+.tab{
+  background:#fff;border:2px solid var(--line);color:var(--ink-2);
+  padding:11px 18px;border-radius:30px;font-size:15px;font-weight:600;
+  cursor:pointer;transition:.15s;font-family:inherit;
+}
+.tab:hover{border-color:var(--navy)}
+.tab.on{background:var(--navy);border-color:var(--navy);color:#fff}
+
+/* ===== 4. 版面 ===== */
+.stage{display:flex;gap:38px;justify-content:center;align-items:flex-start;
+  max-width:1180px;margin:0 auto;flex-wrap:wrap}
+
+/* ===== 5. 手機外框 ===== */
+.phone{
+  width:392px;flex:0 0 392px;background:#0d1418;border-radius:44px;padding:13px;
+  box-shadow:0 26px 60px rgba(10,40,65,.30);position:relative;
+}
+.notch{position:absolute;top:13px;left:50%;transform:translateX(-50%);
+  width:132px;height:26px;background:#0d1418;border-radius:0 0 16px 16px;z-index:6}
+.screen{
+  background:#F5F8FA;border-radius:33px;overflow:hidden;height:768px;
+  display:flex;flex-direction:column;position:relative;
+}
+.statusbar{height:34px;flex:0 0 34px;background:var(--navy);color:#fff;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 20px 4px;font-size:13px;font-weight:600}
+.appbar{background:var(--navy);color:#fff;padding:8px 20px 16px}
+.appbar .bar-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.appbar .greet{font-size:15px;opacity:.85}
+.appbar .title{font-size:23px;font-weight:700;margin-top:3px}
+/* 無障礙：字級切換鈕（點一下循環 標準 → 大 → 特大） */
+.a11y{background:rgba(255,255,255,.18);border:0;border-radius:20px;color:#fff;
+  font-family:inherit;font-size:13px;font-weight:700;padding:7px 13px;cursor:pointer;
+  display:flex;align-items:center;gap:5px}
+.a11y .a11y-a{font-size:17px;font-weight:800;line-height:1}
+.body{flex:1;overflow-y:auto;padding:18px 16px 20px;-webkit-overflow-scrolling:touch}
+.body::-webkit-scrollbar{width:0}
+
+/* ===== 6. 底部導覽列 ===== */
+.nav{flex:0 0 76px;background:#fff;border-top:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-around;padding-bottom:8px}
+.nav button{background:none;border:0;font-family:inherit;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:#93A5B1;font-size:12px;font-weight:600;padding:6px 4px;flex:1}
+.nav button svg{width:25px;height:25px;stroke:currentColor;fill:none;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+.nav button.on{color:var(--navy)}
+
+/* ===== 7. 通用卡片 ===== */
+.card{background:var(--card);border-radius:var(--radius);padding:18px;margin-bottom:14px;
+  box-shadow:0 2px 8px rgba(15,76,117,.07)}
+.card h3{margin:0 0 12px;font-size:18px;font-weight:700}
+.sub{font-size:14px;color:var(--ink-2);line-height:1.6}
+
+/* ===== 8. 主要金額區塊 ===== */
+.hero{background:linear-gradient(140deg,var(--navy) 0%,var(--teal) 100%);
+  color:#fff;border-radius:20px;padding:22px 20px;margin-bottom:16px}
+.hero .lbl{font-size:16px;opacity:.9}
+.hero .amt{font-size:46px;font-weight:800;letter-spacing:-1px;margin:6px 0 2px;line-height:1.05}
+.hero .amt small{font-size:20px;font-weight:600;margin-right:4px;opacity:.9}
+.hero .note{font-size:14.5px;opacity:.9;margin-top:8px;
+  background:rgba(255,255,255,.16);padding:7px 12px;border-radius:10px;display:inline-block}
+/* 模擬狀態（使用者在 ② 選了補缺口方案之後） */
+.hero.sim{background:linear-gradient(140deg,var(--gold) 0%,#B4700F 100%)}
+
+/* ===== 9. 現金流月曆 ===== */
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-head b{font-size:18px}
+.cal-head span{color:var(--navy);font-size:22px;font-weight:700;padding:0 8px;cursor:pointer}
+/* minmax(0,1fr)：1fr 的隱含最小值是內容寬度，放大字級時 7 欄會壓不下去而溢出，
+   改成 minmax(0,1fr) 才能真的等分縮小 */
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.cal .dow{text-align:center;font-size:13px;color:var(--ink-2);font-weight:700;padding:4px 0}
+.cal .day{aspect-ratio:1/1.05;border-radius:10px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-size:15px;font-weight:600;
+  border:2px solid transparent;background:#F5F8FA;color:var(--ink)}
+.cal .day.blank{background:transparent}
+.cal .day.pay{background:var(--gold-lt);border-color:var(--gold);color:var(--navy-dk);cursor:pointer}
+.cal .day.pay .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);margin-top:3px}
+.cal .day.pay.sel{background:var(--gold);color:#fff}
+.cal .day.pay.sel .dot{background:#fff}
+/* 模擬方案的入帳日：虛線外框，跟真實入帳區隔開 */
+.cal .day.plan{background:#fff;border:2.5px dashed var(--gold);color:var(--gold)}
+.cal .day.plan .dot{background:var(--gold)}
+.cal .day.plan.sel{background:var(--gold);color:#fff;border-style:solid}
+
+.pay-list{margin-top:14px;border-top:2px dashed var(--line);padding-top:12px}
+.pay-row{display:flex;justify-content:space-between;align-items:center;
+  padding:11px 0;border-bottom:1px solid #F0F4F7;font-size:16px}
+.pay-row:last-child{border-bottom:0}
+.pay-row .d{color:var(--ink-2);font-size:14px}
+.pay-row .n{font-weight:600}
+.pay-row .v{color:var(--green);font-weight:800;font-size:18px}
+.pay-row.sim .n{color:var(--gold)}
+.pay-row.sim .v{color:var(--gold)}
+.pay-total{border-top:2px solid var(--line);margin-top:6px;padding-top:12px}
+.pay-total .n{font-size:17px}
+.pay-total .v{font-size:22px}
+.list-title{margin-bottom:8px;font-weight:600;color:var(--ink);font-size:14px}
+
+/* ===== 10. 區塊小標與鍵值列（月退俸／投資頁共用） ===== */
+.sec-h{font-size:16px;font-weight:700;color:var(--navy);margin:20px 0 10px;
+  padding-left:11px;border-left:5px solid var(--gold)}
+.kv-row{display:flex;justify-content:space-between;align-items:center;
+  padding-top:13px;margin-top:13px;border-top:1px dashed var(--line);font-size:15.5px;color:var(--ink-2)}
+.kv-row b{font-size:19px;color:var(--navy)}
+
+/* ===== 11. 試算滑桿 ===== */
+.slider-wrap{margin:16px 0 6px}
+.slider-val{font-size:32px;font-weight:800;color:var(--navy);text-align:center;margin-bottom:6px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:14px;border-radius:10px;
+  background:#DCE6EC;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:40px;height:40px;
+  border-radius:50%;background:#fff;border:5px solid var(--navy);cursor:pointer;
+  box-shadow:0 3px 8px rgba(0,0,0,.22)}
+input[type=range]::-moz-range-thumb{width:32px;height:32px;border-radius:50%;
+  background:#fff;border:5px solid var(--navy);cursor:pointer}
+.range-ends{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);margin-top:6px}
+
+.result{background:var(--green-lt);border-radius:16px;padding:18px;text-align:center;margin-top:16px;
+  border:2px solid #BFE0CE}
+.result.warn{background:var(--gold-lt);border-color:#EBCB94}
+.result.bad{background:var(--red-lt);border-color:#F0BDB6}
+.result .lbl{font-size:16px;color:var(--ink-2)}
+.result .big{font-size:44px;font-weight:800;color:var(--green);line-height:1.1;margin:4px 0}
+.result.warn .big{color:var(--gold)}
+.result.bad .big{color:var(--red)}
+.result .tip{font-size:14.5px;color:var(--ink-2);margin-top:6px;line-height:1.6}
+
+.timeline{height:26px;border-radius:13px;background:#DCE6EC;overflow:hidden;margin:14px 0 4px;position:relative}
+.timeline .fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--green));
+  transition:width .6s;display:flex;align-items:center;justify-content:flex-end;
+  padding-right:9px;color:#fff;font-size:12.5px;font-weight:700}
+
+/* ===== 12. 提示與警示卡 ===== */
+.alert{border-radius:16px;padding:16px;margin-bottom:13px;display:flex;gap:13px;align-items:flex-start}
+.alert .ic{flex:0 0 42px;height:42px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:22px}
+.alert.hi{background:var(--red-lt);border:2px solid #F0BDB6}
+.alert.hi .ic{background:var(--red);color:#fff}
+.alert.md{background:var(--gold-lt);border:2px solid #EBCB94}
+.alert.md .ic{background:var(--gold);color:#fff}
+.alert.ok{background:var(--green-lt);border:2px solid #BFE0CE}
+.alert.ok .ic{background:var(--green);color:#fff}
+.alert .t{font-size:16.5px;font-weight:700;margin-bottom:4px}
+.alert .x{font-size:14.5px;color:var(--ink-2);line-height:1.62}
+
+/* ===== 13. 大按鈕（樂齡設計：高度 ≥ 56px） ===== */
+.bigbtn{width:100%;border:0;border-radius:16px;padding:19px;font-size:19px;font-weight:700;
+  font-family:inherit;cursor:pointer;margin-bottom:11px;display:flex;
+  align-items:center;justify-content:center;gap:9px}
+.bigbtn.p{background:var(--navy);color:#fff}
+.bigbtn.r{background:var(--red);color:#fff}
+.bigbtn.o{background:#fff;color:var(--navy);border:2.5px solid var(--navy)}
+.bigbtn.sm{padding:14px;font-size:16px;margin-top:12px}
+
+/* ===== 14. 風險等級標籤 RR1–RR5 ===== */
+.pill{font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:20px;
+  background:var(--green-lt);color:var(--green);white-space:nowrap;flex:0 0 auto}
+.pill.rr1,.pill.rr2{background:var(--green-lt);color:var(--green)}
+.pill.rr3{background:#E2F0F3;color:var(--teal)}
+.pill.rr4{background:var(--gold-lt);color:var(--gold)}
+.pill.rr5{background:var(--red-lt);color:var(--red)}
+
+/* ===== 15. 月退俸：補足缺口的方案卡 ===== */
+.sol{background:var(--card);border-radius:var(--radius);padding:17px;margin-bottom:12px;
+  border:2px solid var(--line);box-shadow:0 2px 10px rgba(15,76,117,.05)}
+.sol.s-a{border-left:7px solid var(--green)}
+.sol.s-b{border-left:7px solid var(--teal)}
+.sol.s-c{border-left:7px solid var(--gold)}
+.sol-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px}
+.sol-tag{font-size:13px;font-weight:700;color:var(--ink-2);letter-spacing:1px}
+.sol-nm{font-size:20px;font-weight:800;color:var(--ink)}
+.sol-cat{font-size:13.5px;color:var(--ink-2);margin-top:2px}
+.sol-need{display:flex;align-items:baseline;justify-content:space-between;
+  background:#F4F8FA;border-radius:12px;padding:11px 14px;margin:11px 0 9px}
+.sol-need span{font-size:14.5px;color:var(--ink-2)}
+.sol-need b{font-size:27px;font-weight:800;color:var(--navy)}
+.sol-d{font-size:14px;color:var(--ink-2);line-height:1.62;margin-bottom:4px}
+.sol-fit{font-size:13.5px;font-weight:600;margin-top:9px;padding:8px 11px;border-radius:10px;line-height:1.55}
+.sol-fit.ok{background:var(--green-lt);color:var(--green)}
+.sol-fit.no{background:var(--gold-lt);color:#9A5F0C}
+
+/* ===== 16. 投資頁：風險屬性、分類籤、商品卡 ===== */
+.kyc{border-left:7px solid var(--navy)}
+.kyc-l{font-size:14px;color:var(--ink-2)}
+.kyc-v{font-size:21px;font-weight:800;color:var(--navy);margin:3px 0 8px;
+  display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+
+.chips{display:flex;gap:7px;overflow-x:auto;padding:2px 0 10px;margin-bottom:2px;
+  scrollbar-width:none}
+.chips::-webkit-scrollbar{height:0}
+.chip{flex:0 0 auto;border:2px solid var(--line);background:#fff;color:var(--ink-2);
+  border-radius:20px;padding:9px 15px;font-size:14.5px;font-weight:600;
+  font-family:inherit;cursor:pointer;white-space:nowrap}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+
+.prod{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px;
+  border:2px solid var(--line);box-shadow:0 2px 10px rgba(15,76,117,.05)}
+.prod.warn{border-color:#EBCB94}
+.prod-top{display:flex;align-items:flex-start;justify-content:space-between;gap:9px}
+.prod-nm{font-size:17.5px;font-weight:700;color:var(--ink);line-height:1.4}
+.prod-cash{background:var(--gold-lt);border-radius:11px;padding:10px 13px;margin:10px 0 8px;
+  font-size:15px;color:#8A5510;font-weight:600}
+.prod-cash b{font-size:23px;font-weight:800;color:var(--gold)}
+.prod-cash.alt{background:#EEF3F6;color:var(--navy)}
+.prod-d{font-size:14px;color:var(--ink-2);line-height:1.62}
+.prod-meta{display:flex;gap:14px;margin-top:8px;font-size:13px;color:var(--ink-2)}
+.prod-meta span{background:#F2F6F8;border-radius:8px;padding:4px 9px}
+
+/* ===== 17. AI 小幫手：對話、快捷問題、麥克風 ===== */
+.chat{display:flex;flex-direction:column;gap:11px;margin-bottom:16px}
+.bb{max-width:88%;padding:14px 16px;border-radius:18px;font-size:15.5px;line-height:1.68}
+.bb.ai{background:var(--card);border:2px solid var(--line);border-bottom-left-radius:5px;
+  align-self:flex-start;color:var(--ink)}
+.bb.me{background:var(--navy);color:#fff;border-bottom-right-radius:5px;
+  align-self:flex-end;font-weight:600}
+.bb.typing{color:var(--ink-2);font-style:italic}
+.ai-go{display:block;width:100%;margin-top:11px;background:#fff;color:var(--navy);
+  border:2px solid var(--navy);border-radius:12px;padding:11px;font-size:15px;
+  font-weight:700;font-family:inherit;cursor:pointer}
+.alert .ai-go{margin-top:10px}
+
+.quick{margin-bottom:14px}
+.qbtn{display:block;width:100%;text-align:left;background:#fff;border:2px solid var(--line);
+  border-radius:14px;padding:15px 16px;font-size:16px;font-family:inherit;color:var(--ink);
+  cursor:pointer;margin-bottom:9px;line-height:1.5}
+.qbtn:hover{border-color:var(--navy)}
+
+.mic{width:100%;border:0;border-radius:16px;padding:20px;font-size:20px;font-weight:700;
+  font-family:inherit;cursor:pointer;background:var(--navy);color:#fff;
+  display:flex;align-items:center;justify-content:center;gap:11px;margin-bottom:12px}
+.mic .mic-ic{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;flex:0 0 26px}
+.mic.on{background:var(--red)}
+
+.disc{font-size:12.5px;color:var(--ink-2);line-height:1.7;background:#E9EEF2;
+  border-radius:12px;padding:12px 14px;margin-bottom:12px}
+.spk{display:block;margin-top:10px;background:#EEF3F6;border:0;border-radius:10px;
+  padding:9px 13px;font-size:14px;font-family:inherit;color:var(--navy);
+  font-weight:600;cursor:pointer}
+
+/* ===== 18. 卡片內的次要動作鈕（選方案、試算並申購、撥電話） ===== */
+.pick{width:100%;margin-top:11px;background:var(--navy);color:#fff;border:0;
+  border-radius:12px;padding:14px;font-size:16px;font-weight:700;
+  font-family:inherit;cursor:pointer}
+.prod.open .pick{background:#fff;color:var(--navy);border:2px solid var(--navy)}
+
+/* ===== 19. 申購試算面板 ===== */
+.order{margin-top:14px;padding-top:15px;border-top:2px dashed var(--line)}
+.ord-h{font-size:16px;font-weight:700;margin-bottom:10px}
+.ord-out{display:flex;gap:10px;margin:14px 0 10px}
+.ord-out>div{flex:1;background:var(--green-lt);border-radius:12px;padding:11px 13px}
+.ord-out span{display:block;font-size:13px;color:var(--ink-2)}
+.ord-out b{font-size:20px;color:var(--green);font-weight:800}
+.ord-out .alt{flex:1;background:#EEF3F6;color:var(--navy);font-size:14px;line-height:1.6}
+.ord-fee{font-size:14px;color:var(--ink-2);background:#F4F8FA;border-radius:10px;
+  padding:10px 13px;margin-bottom:13px}
+.ord-fee b{color:var(--navy);font-size:16px}
+
+/* ===== 20. 二次確認浮層（防誤觸） ===== */
+.sheet{position:absolute;inset:0;background:rgba(10,32,50,.55);display:none;
+  align-items:flex-end;z-index:20}
+.sheet.on{display:flex}
+.sheet-box{width:100%;background:#fff;border-radius:22px 22px 0 0;padding:22px 18px 18px;
+  max-height:88%;overflow-y:auto}
+.sheet-t{font-size:15px;color:var(--ink-2);text-align:center}
+.sheet-big{font-size:23px;font-weight:800;color:var(--navy);text-align:center;margin:6px 0 16px;line-height:1.35}
+.sheet-kv{display:flex;justify-content:space-between;align-items:center;
+  padding:12px 0;border-bottom:1px solid #F0F4F7;font-size:15.5px;color:var(--ink-2)}
+.sheet-kv b{font-size:20px;color:var(--ink);font-weight:800}
+.sheet-kv.full{display:block;line-height:1.7;border-bottom:0;text-align:center;color:var(--ink)}
+.sheet-kv.full.sub{font-size:14px;color:var(--ink-2);padding-top:0}
+.sheet-warn{background:var(--gold-lt);border-radius:12px;padding:13px;margin:14px 0 16px;
+  font-size:14px;color:#8A5510;line-height:1.65}
+.ok-ic{width:64px;height:64px;border-radius:50%;background:var(--green);color:#fff;
+  font-size:36px;display:flex;align-items:center;justify-content:center;margin:4px auto 12px}
+
+/* ===== 21. 身分切換（客戶 / 營業員） ===== */
+.roles{display:flex;gap:9px;justify-content:center;margin:0 auto 4px;max-width:900px}
+.role{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 20px;
+  font-family:inherit;font-size:15px;font-weight:700;color:var(--ink-2);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;line-height:1.35}
+.role span{font-size:12.5px;font-weight:600;opacity:.8}
+.role.on{background:var(--navy);border-color:var(--navy);color:#fff}
+
+/* ===== 22. 營業員視角：待辦與客戶卡 ===== */
+.hero.adv{background:linear-gradient(140deg,var(--navy-dk) 0%,#2C5F7A 100%)}
+
+.todo,.cl{background:var(--card);border-radius:var(--radius);padding:15px 16px;margin-bottom:11px;
+  border:2px solid var(--line);box-shadow:0 2px 10px rgba(15,76,117,.05)}
+.cl.me{border-color:var(--navy)}
+.todo-top{display:flex;align-items:center;justify-content:space-between;gap:9px}
+.todo-top b{font-size:18.5px;color:var(--ink)}
+.todo-x{font-size:14.5px;color:var(--ink-2);margin-top:7px}
+.todo-x b{color:var(--navy);font-size:17px}
+.todo-sig{font-size:13.5px;color:var(--ink-2);background:#F4F8FA;border-radius:10px;
+  padding:9px 12px;margin-top:9px;line-height:1.6}
+.todo-sig i,.cl-sig i{font-style:normal;color:#8496A3}
+
+.cl-head{display:flex;align-items:center;gap:12px}
+.cl-nm{font-size:18.5px;font-weight:700}
+.cl-sub{font-size:13.5px;color:var(--ink-2);margin-top:2px}
+.cl-head .pill{margin-left:auto}
+.avatar{width:46px;height:46px;border-radius:50%;background:var(--navy);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;flex:0 0 46px}
+.cl-sig{font-size:14px;color:var(--ink-2);background:#F4F8FA;border-radius:10px;
+  padding:10px 12px;margin-top:11px;line-height:1.6}
+.cl-gap{font-size:14.5px;color:var(--ink-2);margin-top:9px}
+.cl-gap b{color:var(--navy);font-size:17px}
+
+.pill.hot3{background:var(--red-lt);color:var(--red)}
+.pill.hot2{background:var(--gold-lt);color:var(--gold)}
+.pill.hot1{background:#E7EEF3;color:var(--ink-2)}
+
+.tl{padding:11px 0 11px 16px;border-left:3px solid var(--line);position:relative}
+.tl::before{content:"";position:absolute;left:-6.5px;top:16px;width:10px;height:10px;
+  border-radius:50%;background:var(--navy)}
+.tl:last-child{padding-bottom:0}
+.tl-t{font-size:12.5px;color:#8496A3;font-weight:700}
+.tl-x{font-size:14.5px;color:var(--ink);line-height:1.6;margin-top:2px}
+
+/* ===== 23. 右側簡報講稿 ===== */
+.notes{flex:1 1 330px;max-width:400px;padding-top:6px}
+.notes h2{font-size:20px;margin:0 0 4px;color:var(--navy)}
+.notes .kicker{font-size:13px;letter-spacing:2px;color:var(--gold);font-weight:700;margin-bottom:6px}
+.notes .lead{font-size:15.5px;color:var(--ink-2);line-height:1.75;margin:0 0 18px}
+.note{background:#fff;border-radius:14px;padding:15px 17px;margin-bottom:11px;
+  border-left:5px solid var(--navy);box-shadow:0 2px 7px rgba(15,76,117,.07)}
+.note b{display:block;font-size:15.5px;margin-bottom:5px;color:var(--navy-dk)}
+.note span{font-size:14.5px;color:var(--ink-2);line-height:1.7}
+.note.g{border-left-color:var(--green)}
+.note.o{border-left-color:var(--gold)}
+
+.foot{max-width:1180px;margin:34px auto 0;text-align:center;font-size:13.5px;color:#8496A3;line-height:1.8}
+
+/* ==========================================================================
+   24. 手機版 / PWA 全螢幕模式
+   在手機上開啟，或「加到主畫面」後開啟時，隱藏所有桌機說明元素，
+   讓 App 佔滿整個螢幕，看起來就像一個原生 App。
+   ========================================================================== */
+@media (max-width:860px){
+  body{padding:0;background:var(--navy)}
+  .page-head,.tabs,.notes,.foot,.roles{display:none}
+  .stage{gap:0}
+  .phone{width:100%;flex:1 1 100%;padding:0;border-radius:0;box-shadow:none;background:transparent}
+  .notch{display:none}
+  .screen{border-radius:0;height:100vh;height:100dvh}
+  .appbar{padding-top:calc(8px + env(safe-area-inset-top))}
+  .statusbar{display:none}
+  .nav{padding-bottom:calc(8px + env(safe-area-inset-bottom));flex-basis:auto}
+}
+
+/* PWA 獨立視窗模式（已加到主畫面） */
+@media (display-mode:standalone){
+  .page-head,.tabs,.notes,.foot,.roles,.statusbar,.notch{display:none}
+  body{padding:0}
+  .phone{width:100%;flex:1 1 100%;padding:0;border-radius:0;box-shadow:none}
+  .screen{border-radius:0;height:100vh;height:100dvh}
+}

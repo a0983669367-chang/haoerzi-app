@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>康和「好日子」— 銀髮退休現金流管家</title>
+<meta name="description" content="康和證券銀髮理財 App 原型：現金流月曆、三桶水資產配置、老本試算、防詐守門員、家庭共管。">
+
+<!-- ===== PWA 設定（讓手機可以「加到主畫面」變成 App） ===== -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0F4C75">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="好日子">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<link rel="icon" type="image/png" href="assets/icons/icon-192.png">
+
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ===== 桌機版：說明標題（手機全螢幕模式會自動隱藏） ===== -->
+<header class="page-head">
+  <h1>康和 <span>「好日子」</span>　—　銀髮退休現金流管家</h1>
+  <p>不看漲跌，只看「這個月我能領多少、能領多久」</p>
+  <div class="badge">互動原型 PROTOTYPE　·　康和證券實習專題</div>
+</header>
+
+<!-- ===== 桌機版：身分切換（客戶 / 營業員，看的是同一套資料） ===== -->
+<div class="roles" id="roles"><!-- 由 app.js 產生 --></div>
+
+<!-- ===== 桌機版：畫面切換頁籤 ===== -->
+<nav class="tabs" id="tabs"><!-- 由 app.js 產生 --></nav>
+
+<div class="stage">
+
+  <!-- ===== 手機外框 ===== -->
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen">
+      <div class="statusbar"><span>9:41</span><span>▮▮▮ ᯤ 100%</span></div>
+      <div class="appbar">
+        <div class="bar-top">
+          <div class="greet" id="greet">早安</div>
+          <button class="a11y" id="a11y" title="切換字級大小">
+            <span class="a11y-a">A</span><span id="a11yTx">標準</span>
+          </button>
+        </div>
+        <div class="title" id="scr-title">本月現金流</div>
+      </div>
+      <main class="body" id="body"><!-- 由 screens.js 產生 --></main>
+      <nav class="nav" id="nav"><!-- 由 app.js 產生 --></nav>
+      <div class="sheet" id="sheet"><!-- 二次確認用，由 app.js 產生 --></div>
+    </div>
+  </div>
+
+  <!-- ===== 桌機版：右側簡報講稿 ===== -->
+  <aside class="notes" id="notes"><!-- 由 notes.js 產生 --></aside>
+
+</div>
+
+<footer class="foot">
+  原型為模擬畫面，數據皆為示意，非真實帳戶資料。<br>
+  設計基準：內文字級 ≥ 18px、主要數字 ≥ 40px、按鈕高度 ≥ 56px、對比度符合 WCAG 2.1 AA。
+</footer>
+
+<!-- ===== 程式碼（刻意使用傳統 script，確保雙擊 index.html 也能開） ===== -->
+<script src="js/data.js"></script>
+<script src="js/screens.js"></script>
+<script src="js/notes.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

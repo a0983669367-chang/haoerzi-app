@@ -21,6 +21,8 @@
 
 <!-- ===== 桌機版：說明標題（手機全螢幕模式會自動隱藏） ===== -->
 <header class="page-head">
+  <!-- 康和 logo（圖檔內嵌在 styles.css 的 .page-logo，單檔版本才不會有外部參照） -->
+  <div class="page-logo" role="img" aria-label="康和證券集團"></div>
   <h1>康和 <span>「好日子」</span>　—　銀髮退休現金流管家</h1>
   <p>不看漲跌，只看「這個月我能領多少、能領多久」</p>
   <div class="badge">互動原型 PROTOTYPE　·　康和證券實習專題</div>
@@ -46,7 +48,11 @@
             <span class="a11y-a">A</span><span id="a11yTx">標準</span>
           </button>
         </div>
-        <div class="title" id="scr-title">本月現金流</div>
+        <!-- 標題列右側放白色反白 logo，每一頁都看得到品牌 -->
+        <div class="title-row">
+          <div class="title" id="scr-title">本月現金流</div>
+          <div class="bar-logo" role="img" aria-label="康和證券"></div>
+        </div>
       </div>
       <main class="body" id="body"><!-- 由 screens.js 產生 --></main>
       <nav class="nav" id="nav"><!-- 由 app.js 產生 --></nav>

@@ -732,7 +732,10 @@
     if (!chat) return;
 
     chat.insertAdjacentHTML('beforeend', '<div class="bb me">' + (display || key) + '</div>');
-    chat.insertAdjacentHTML('beforeend', '<div class="bb ai typing">小幫手正在查…</div>');
+    /* 每則回答都掛上小方的臉，看起來是「有人在回」而不是系統訊息 */
+    chat.insertAdjacentHTML('beforeend',
+      '<div class="bbr">' + S.mk('mk-av') +
+      '<div class="bb ai typing">' + MASCOT.nm + '正在查…</div></div>');
 
     /* 把「問題」捲到最上方，回答就會完整出現在它下面 */
     var asked = chat.lastElementChild.previousElementSibling;

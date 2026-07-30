@@ -8,6 +8,65 @@
 
 var S = {};
 
+/* ==========================================================================
+   吉祥物「小方」——純 SVG，放大縮小都不會糊
+   --------------------------------------------------------------------------
+   S.mk(cls)    整隻小方，cls 決定大小（mk-lg / mk-md / mk-sm / mk-av）
+   S.mkSay(...) 小方 ＋ 對話泡泡（康和專區、AI 小幫手用）
+   動畫（浮動、揮手、眨眼）在 styles.css，且會尊重系統的「減少動態效果」。
+   台詞在 data.js 的 MASCOT。
+   ========================================================================== */
+S.mk = function (cls) {
+  return '' +
+  '<svg class="mk ' + (cls || 'mk-md') + '" viewBox="0 0 128 158" aria-hidden="true">' +
+    '<ellipse cx="64" cy="152" rx="29" ry="4.5" fill="#0F4C75" opacity=".13"/>' +
+    '<g class="mk-b">' +
+      /* 腳與鞋 */
+      '<path d="M50 122v13M78 122v13" stroke="#3F3229" stroke-width="7.5" stroke-linecap="round"/>' +
+      '<path d="M38 142q0-8 9-8t9 8q0 4-4 4H42q-4 0-4-4z" fill="var(--brand)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
+      '<path d="M72 142q0-8 9-8t9 8q0 4-4 4H76q-4 0-4-4z" fill="var(--brand)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
+      /* 左手 */
+      '<path d="M32 102q-13 4-19 12" stroke="#3F3229" stroke-width="7.5" stroke-linecap="round" fill="none"/>' +
+      '<path d="M13 112q-7 3-5 8t9 2 5-8-9-2z" fill="#fff" stroke="#3F3229" stroke-width="3.2"/>' +
+      /* 右手（揮手） */
+      '<g class="mk-h">' +
+        '<path d="M94 100q14-3 21-13" stroke="#3F3229" stroke-width="7.5" stroke-linecap="round" fill="none"/>' +
+        '<path d="M112 84q4-6 9-2t0 10-9 2-.5-6z" fill="#fff" stroke="#3F3229" stroke-width="3.2"/>' +
+      '</g>' +
+      /* 身體（康和品牌紅） */
+      '<path d="M32 88h62a5 5 0 015 5v22a9 9 0 01-9 9H36a9 9 0 01-9-9V93a5 5 0 015-5z" fill="var(--brand)" stroke="#3F3229" stroke-width="3.4"/>' +
+      '<path d="M63 92v30" stroke="var(--brand-dk)" stroke-width="2.4"/>' +
+      '<circle cx="70" cy="101" r="2" fill="#fff"/><circle cx="70" cy="111" r="2" fill="#fff"/>' +
+      /* 頭頂的金色愛心 */
+      '<path d="M70 20c-4-9 7-14 10-6 3-8 14-3 10 6-3 6-10 11-10 11s-7-5-10-11z" fill="var(--gold)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
+      /* 頭：立方體 */
+      '<path d="M26 34 40 21h68L94 34z" fill="#F4F7F9" stroke="#3F3229" stroke-width="3.4" stroke-linejoin="round"/>' +
+      '<path d="M94 34 108 21v55L94 89z" fill="#DCE4E9" stroke="#3F3229" stroke-width="3.4" stroke-linejoin="round"/>' +
+      '<rect x="26" y="34" width="68" height="55" rx="11" fill="#fff" stroke="#3F3229" stroke-width="3.4"/>' +
+      /* 螢幕臉 */
+      '<rect x="33" y="40" width="54" height="26" rx="10" fill="#EDF2F5" stroke="#3F3229" stroke-width="2.8"/>' +
+      '<g class="mk-e">' +
+        '<circle cx="48" cy="53" r="8" fill="#fff" stroke="#3F3229" stroke-width="2.6"/>' +
+        '<circle cx="72" cy="53" r="8" fill="#fff" stroke="#3F3229" stroke-width="2.6"/>' +
+        '<circle cx="49.5" cy="54" r="4.7" fill="#4A3B31"/><circle cx="73.5" cy="54" r="4.7" fill="#4A3B31"/>' +
+        '<circle cx="47.5" cy="51.6" r="1.6" fill="#fff"/><circle cx="71.5" cy="51.6" r="1.6" fill="#fff"/>' +
+      '</g>' +
+      /* 嘴與腮紅 */
+      '<path d="M51 72q10 12 21 0z" fill="#E39A66" stroke="#3F3229" stroke-width="2.8" stroke-linejoin="round"/>' +
+      '<ellipse cx="36" cy="76" rx="5.2" ry="3.2" fill="#F6C3C3"/>' +
+      '<ellipse cx="84" cy="76" rx="5.2" ry="3.2" fill="#F6C3C3"/>' +
+    '</g>' +
+  '</svg>';
+};
+
+/* 小方 ＋ 對話泡泡 */
+S.mkSay = function (html, cls) {
+  return '' +
+  '<div class="mk-row">' + S.mk(cls || 'mk-md') +
+    '<div class="mk-say">' + html + '</div>' +
+  '</div>';
+};
+
 /* ---------- 畫面 ①：現金流月曆 ＋ 老本試算（同一個分頁，上方左右切換）----------
    上面兩顆按鈕切換子頁，切換由 app.js 的 SUB 決定，標題與右側講稿會一起換。  */
 S.cash = function () {
@@ -25,8 +84,15 @@ S.cash = function () {
    若使用者在 ② 選過方案（PLAN 有值），這一頁會切換成「模擬後」的樣子：
    總額補到目標、月曆多一顆虛線金點、明細多一列。                       */
 S.cashCal = function () {
-  var on  = !!PLAN;
-  var sum = TOTAL + (on ? PLAN.add : 0);
+  var on   = !!PLAN;
+  var sum  = TOTAL + (on ? PLAN.add : 0);
+  var diff = sum - CONFIG.expenseDefault;
+
+  /* 小方的招呼語：金額卡下面那句話，會跟著實際金額變 */
+  var say = on ? MASCOT.cashSim
+    : (diff >= 0 ? MASCOT.cashOk : MASCOT.cashLow)
+        .replace('{a}', sum.toLocaleString())
+        .replace('{b}', Math.abs(diff).toLocaleString());
 
   return '' +
   '<div class="hero' + (on ? ' sim' : '') + '">' +
@@ -38,6 +104,9 @@ S.cashCal = function () {
       : '<div class="note">✓ 已超過您設定的每月開銷 ' +
           CONFIG.expenseDefault.toLocaleString() + ' 元</div>') +
   '</div>' +
+
+  /* 小方在金額卡下面說一句話（金額卡裡不放，會擠掉「已超過開銷」那一行） */
+  S.mkSay(say, 'mk-sm') +
 
   (on
     ? '<div class="alert md"><div class="ic">✦</div><div>' +
@@ -167,9 +236,9 @@ S.concords = function () {
   var C = CONCORDS, sn = C.senior, ad = C.advisor, sc = C.scam;
 
   return '' +
-  /* ===== 品牌與帳號 ===== */
+  /* ===== 小方帶路 ＋ 帳號狀態（logo 已移到標題列與桌機頁首，這裡不重複）===== */
   '<div class="card cz-head">' +
-    '<div class="cz-logo" role="img" aria-label="康和證券集團"></div>' +
+    S.mkSay(MASCOT.concords, 'mk-md') +
     '<div class="cz-bind">✓ ' + C.bind + '</div>' +
   '</div>' +
 
@@ -329,7 +398,7 @@ S.ai = function () {
   '</div></div>' +
 
   '<div class="chat" id="chat">' +
-    '<div class="bb ai">' + AI_INTRO + '</div>' +
+    '<div class="bbr">' + S.mk('mk-av') + '<div class="bb ai">' + MASCOT.ai + '</div></div>' +
   '</div>' +
 
   '<div class="quick" id="quick">' +

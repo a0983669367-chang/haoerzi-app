@@ -40,9 +40,16 @@
 
 營業員視角回答的是「這個 App 對康和賺什麼」：客戶的月缺口加總後換算成可承接規模與預估手續費，並依缺口大小排出今天該打的電話。
 
+## 品牌與吉祥物
+
+- 康和 logo 出現在三個位置：桌機頁首（彩色）、手機標題列右側（反白），圖檔內嵌在 `css/styles.css` 的 `.page-logo` 與 `.bar-logo`
+- 吉祥物「小方」是純 SVG（`screens.js` 的 `S.mk()`），放大不會糊，會浮動、揮手、眨眼；出現在 ① 金額卡下方、③ 康和專區、⑤ AI 小幫手的每則回答
+- 台詞在 `data.js` 的 `MASCOT`；身體顏色用官方 logo 取出的品牌紅 `--brand:#ED2F10`
+
 ## 無障礙
 
 - 手機標題列右上角「A 字級」可循環切換 **標準 / 大 / 特大**（`FONT_STEPS`）
+- 系統開啟「減少動態效果」時，吉祥物的動畫會全部停止（`prefers-reduced-motion`）
 - AI 小幫手的麥克風走瀏覽器原生語音辨識（`zh-TW`）；不支援或用 `file://` 開啟時自動退回模擬問答
 - 每則 AI 回答都有「念給我聽」，使用 SpeechSynthesis 朗讀
 - 內文 ≥ 18px、主要數字 ≥ 40px、按鈕 ≥ 56px、對比度符合 WCAG 2.1 AA
@@ -106,7 +113,9 @@ requirements.txt        Streamlit 部署要裝的套件
 | 防詐守門員的話術比對 | `data.js` → `CONCORDS.scam.flags`（`kw` 任一命中就列出該項） |
 | ① 兩個子頁的名稱與標題 | `data.js` → `CASH_SUBS` |
 | 底部導覽的五格 | `data.js` → `SCREENS_CLIENT`、`NAV_ICONS` |
-| 康和專區的 logo | `css/styles.css` → `.cz-logo`（內嵌 data URI，原檔在 `assets/logo-concords.png`） |
+| 康和 logo（桌機頁首／標題列） | `css/styles.css` → `.page-logo`、`.bar-logo`（內嵌 data URI，原檔在 `assets/`） |
+| 吉祥物台詞 | `data.js` → `MASCOT` |
+| 吉祥物長相 | `screens.js` → `S.mk()`（SVG）；動畫在 `styles.css` 的 9-3 區 |
 | 語音關鍵字對應 | `data.js` → `VOICE_MATCH` |
 | 客戶風險屬性 | `data.js` → `CONFIG.riskProfile`、`CONFIG.maxRR` |
 | 營業員的客戶名單 | `data.js` → `CLIENTS`、`ADVISOR` |

@@ -85,7 +85,11 @@ def main():
     )
 
     # 5. 檢查沒有殘留的外部參照
-    left = re.findall(r'(?:src|href)="(?!#|data:)([^"]+)"', html)
+    #    這裡要抓的是「還沒內嵌的檔案」。錨點（#）、已內嵌的 data URI，
+    #    以及 tel: / mailto: 這類動作連結都不是檔案，要排除掉。
+    #    連到康和網站的 http(s) 連結寫在 js/data.js 的字串裡（由程式填 href），
+    #    不會出現在這裡的靜態 HTML，所以不受影響。
+    left = re.findall(r'(?:src|href)="(?!#|data:|tel:|mailto:)([^"]+)"', html)
     if left:
         sys.exit(f"✗ 還有外部參照未內嵌：{left}")
 

@@ -160,16 +160,71 @@ S.invest = function () {
 };
 
 /* ---------- 畫面 ③：康和專區 ----------
-   標題不用文字，直接放康和 logo（logo 以 data URI 存在 styles.css 的 .cz-logo）。 */
+   把「離開好日子、連到康和真正的服務」全部收在這一頁，分四段：
+   ① 找專人（營業員名片＋樂齡專線）② 下單與研究 ③ 其他服務 ④ 防詐守門員／快訊
+   標題不用文字，直接放康和 logo（以 data URI 存在 styles.css 的 .cz-logo）。 */
 S.concords = function () {
+  var C = CONCORDS, sn = C.senior, ad = C.advisor, sc = C.scam;
+
   return '' +
+  /* ===== 品牌與帳號 ===== */
   '<div class="card cz-head">' +
-    '<div class="cz-logo" role="img" aria-label="康和證券"></div>' +
-    '<div class="sub">好日子裡看到的商品與試算都由康和證券提供。' +
-      '下面兩個入口會離開好日子，連到康和的下單 App 與投顧網站。</div>' +
+    '<div class="cz-logo" role="img" aria-label="康和證券集團"></div>' +
+    '<div class="cz-bind">✓ ' + C.bind + '</div>' +
   '</div>' +
 
+  /* ===== ① 找專人 ===== */
+  '<div class="sec-h">找專人</div>' +
+
+  '<div class="card cz-nc">' +
+    '<div class="cl-head">' +
+      '<div class="avatar">' + ADVISOR.name.charAt(0) + '</div>' +
+      /* 分兩行：一行放不完會在「服務人員」中間斷字，很難看 */
+      '<div><div class="cl-nm">' + ADVISOR.name + '</div>' +
+      '<div class="cl-sub">' + ad.sub + '<br>' + ADVISOR.branch + '</div></div>' +
+    '</div>' +
+    '<button class="pick" id="czCall">' + ad.call + '</button>' +
+  '</div>' +
+
+  '<a class="bigbtn t cz-b" id="czTel" data-tel="' + sn.tel + '">' +
+    '<svg class="cz-ic" viewBox="0 0 24 24">' + CZ_ICONS.phone + '</svg>' +
+    '<span class="cz-tx">' + sn.nm + '　' + sn.no + '<i>' + sn.sub + '</i></span>' +
+  '</a>' +
+
+  /* ===== ② 下單與研究 ===== */
+  '<div class="sec-h">下單與研究</div>' +
   S.concordsZone() +
+
+  /* ===== ③ 其他服務（兩欄格）===== */
+  '<div class="sec-h">康和其他服務</div>' +
+  '<div class="cz-grid">' +
+    CONCORDS.links.map(function (l, i) {
+      return '<a class="cz-t" data-cz="' + i + '"' +
+             (l.tel ? ' data-tel="' + l.tel + '"' : '') + '>' +
+        '<svg viewBox="0 0 24 24">' + CZ_ICONS[l.ic] + '</svg>' +
+        '<b>' + l.nm + '</b><i>' + l.sub + '</i></a>';
+    }).join('') +
+  '</div>' +
+
+  /* ===== ④ 防詐守門員 ===== */
+  '<div class="sec-h">' + sc.t + '</div>' +
+  '<div class="card">' +
+    '<div class="sub">' + sc.x + '</div>' +
+    '<textarea class="cz-in" id="czScamIn" rows="3" placeholder="' + sc.ph + '"></textarea>' +
+    '<button class="pick" id="czScamGo">' + sc.btn + '</button>' +
+    '<div id="czScamOut"></div>' +
+  '</div>' +
+
+  /* ===== ⑤ 康和快訊 ===== */
+  '<div class="sec-h">康和快訊</div>' +
+  '<div class="card">' +
+    CONCORDS.news.map(function (n, i) {
+      return '<div class="cz-nw' + (i ? ' bd' : '') + '">' +
+        '<div class="cz-nw-t">' + n.t + '</div>' +
+        '<div class="cz-nw-x">跟您的關係：' + n.x + '</div></div>';
+    }).join('') +
+    '<div class="sub" style="margin-top:12px">快訊內容為示意，實際版會接康和投顧的研究報告。</div>' +
+  '</div>' +
 
   '<div class="disc">' + GENERAL_DISCLAIMER + '</div>';
 };

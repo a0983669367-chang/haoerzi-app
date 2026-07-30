@@ -17,7 +17,7 @@
 |---|---|---|---|
 | ① | 現金流月曆 ／ 老本撐多久 | 同一個分頁，上方按鈕左右切換：左邊把資產淨值換成「本月入帳多少」，右邊一根滑桿試算資產可支撐年限 | 入口・養成習慣＋焦慮 |
 | ② | 我的月退俸 | 目標 − 現況 ＝ 缺口，缺口換算成需投入本金 | **需求生成器** |
-| ③ | 康和專區 | 跳到「康和掌先機」下單 App 與康和投顧網站 | 導流既有系統 |
+| ③ | 康和專區 | 樂齡專線與營業員、掌先機下單 App、投顧網站、線上開戶／風險屬性／反詐騙／據點／客服、防詐守門員、康和快訊 | 導流既有系統・防詐 |
 | ④ | 投資商品 | 五大類商品架，全部以「每月可領多少」呈現 | **收銀台** |
 | ⑤ | AI 小幫手 | 查現金流、翻譯商品術語、主動提醒缺口 | 24 小時導購入口 |
 
@@ -102,7 +102,8 @@ requirements.txt        Streamlit 部署要裝的套件
 | 申購試算的金額範圍 | `data.js` → `ORDER` |
 | AI 問答內容 | `data.js` → `AI_QUICK`、`AI_ANSWERS` |
 | 通用風險揭露文字 | `data.js` → `GENERAL_DISCLAIMER`（五個客戶畫面與桌機頁尾共用同一份） |
-| 康和專區的 App scheme、網址 | `data.js` → `CONCORDS`（★ `app.scheme` 待康和資訊確認） |
+| 康和專區的全部內容 | `data.js` → `CONCORDS`（電話、網址、防詐關鍵字、快訊）＋ `CZ_ICONS`（★ `app.scheme` 待康和資訊確認） |
+| 防詐守門員的話術比對 | `data.js` → `CONCORDS.scam.flags`（`kw` 任一命中就列出該項） |
 | ① 兩個子頁的名稱與標題 | `data.js` → `CASH_SUBS` |
 | 底部導覽的五格 | `data.js` → `SCREENS_CLIENT`、`NAV_ICONS` |
 | 康和專區的 logo | `css/styles.css` → `.cz-logo`（內嵌 data URI，原檔在 `assets/logo-concords.png`） |

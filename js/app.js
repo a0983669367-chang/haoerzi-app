@@ -444,6 +444,74 @@
     /* 網址從 data.js 填入，外部瀏覽器開新分頁 */
     var site = document.getElementById('czSite');
     if (site) site.setAttribute('href', CONCORDS.site.url);
+
+    /* 樂齡專線與客服：撥號連結（tel: 也不寫在版型裡，統一從 data.js 來） */
+    document.querySelectorAll('[data-tel]').forEach(function (el) {
+      el.setAttribute('href', 'tel:' + el.dataset.tel);
+    });
+
+    /* 兩欄服務格：有 url 的補上外部連結 */
+    document.querySelectorAll('[data-cz]').forEach(function (el) {
+      var l = CONCORDS.links[+el.dataset.cz];
+      if (l && l.url) {
+        el.setAttribute('href', l.url);
+        el.setAttribute('target', '_blank');
+        el.setAttribute('rel', 'noopener noreferrer');
+      }
+    });
+
+    var call = document.getElementById('czCall');
+    if (call) call.addEventListener('click', advisorCallback);
+
+    var go = document.getElementById('czScamGo');
+    if (go) go.addEventListener('click', checkScam);
+  }
+
+  /* 預約營業員回電（原型沒有真實分機，走預約流程而不是假撥號） */
+  function advisorCallback() {
+    var ad = CONCORDS.advisor, sn = CONCORDS.senior;
+    showSheet(
+      '<div class="ok-ic">✓</div>' +
+      '<div class="sheet-big">' + ad.okT + '</div>' +
+      '<div class="sheet-kv full">' + ad.okX + '</div>' +
+      '<a class="bigbtn t" href="tel:' + sn.tel + '">' + sn.nm + '　' + sn.no + '</a>' +
+      '<button class="bigbtn o" id="czCallOk">知道了</button>'
+    );
+    document.getElementById('czCallOk').addEventListener('click', closeSheet);
+  }
+
+  /* ---------- 防詐守門員：比對常見詐騙話術 ---------- */
+  function checkScam() {
+    var sc  = CONCORDS.scam;
+    var box = document.getElementById('czScamOut');
+    var tx  = (document.getElementById('czScamIn').value || '').toLowerCase();
+
+    if (!tx.trim()) { box.innerHTML = ''; return; }
+
+    var hits = sc.flags.filter(function (f) {
+      return f.kw.some(function (k) { return tx.indexOf(k.toLowerCase()) >= 0; });
+    });
+
+    if (!hits.length) {
+      box.innerHTML =
+        '<div class="alert ok czr"><div class="ic">✓</div><div>' +
+          '<div class="t">' + sc.safeT + '</div>' +
+          '<div class="x">' + sc.safeX + '</div>' +
+        '</div></div>';
+      return;
+    }
+
+    box.innerHTML =
+      '<div class="alert hi czr"><div class="ic">⚠</div><div>' +
+        '<div class="t">' + sc.warnT + '</div>' +
+        hits.map(function (f) {
+          return '<div class="cz-flag"><b>' + f.w + '</b>' + f.x + '</div>';
+        }).join('') +
+        '<div class="x">' + sc.warnX + '</div>' +
+      '</div></div>' +
+      '<a class="bigbtn t" href="tel:' + CONCORDS.senior.tel + '">' +
+        CONCORDS.senior.nm + '　' + CONCORDS.senior.no + '</a>' +
+      '<a class="bigbtn r" href="tel:165">' + sc.call165 + '</a>';
   }
 
   /* ----------------------------------------------------------------------

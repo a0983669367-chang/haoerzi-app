@@ -44,7 +44,7 @@
       '<div class="qr-img" aria-hidden="true"></div>' +
       '<div class="qr-tx"><b>' + DEPLOY.label + '</b>' +
       '<span>' + DEPLOY.url.replace(/^https?:\/\//, '') + '</span>' +
-      '<i>點一下放大，方便給大家掃 →</i></div>';
+      '<i>點一下放大</i></div>';
     card.addEventListener('click', openQrZoom);
 
     var zoom = document.getElementById('qrZoom');

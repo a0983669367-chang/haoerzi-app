@@ -624,9 +624,10 @@
         lastCat = p.c;
         lastSub = '';
       }
-      /* ETF 專用：換到新的小類再多印一層次標題（市值型／高股息…） */
+      /* ETF／基金都有小分類：換到新的小類再多印一層次標題
+         （ETF 是市值型／高股息…，基金是 KBI／寶盛…，兩份字典的 key 不會重複）。 */
       if (p.sub && p.sub !== lastSub) {
-        head += '<div class="sec-h2">' + ETF_SUBS[p.sub] + '</div>';
+        head += '<div class="sec-h2">' + (ETF_SUBS[p.sub] || FUND_SUBS[p.sub]) + '</div>';
         lastSub = p.sub;
       }
 

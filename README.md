@@ -42,9 +42,29 @@
 
 ## 品牌與吉祥物
 
-- 康和 logo 出現在三個位置：桌機頁首（彩色）、手機標題列右側（反白），圖檔內嵌在 `css/styles.css` 的 `.page-logo` 與 `.bar-logo`
+- 康和 logo 出現在三個位置：桌機頁首（彩色）、手機標題列右側（反白），圖檔內嵌在 `css/styles.css` 的 `.page-logo` 與 `.bar-logo`——**logo 圖檔完全沒有被改色**，一律用官方原檔
 - 吉祥物「小方」是純 SVG（`screens.js` 的 `S.mk()`），放大不會糊，會浮動、揮手、眨眼；出現在 ① 金額卡下方、③ 康和專區、⑤ AI 小幫手的每則回答
 - 台詞在 `data.js` 的 `MASCOT`；身體顏色用官方 logo 取出的品牌紅 `--brand:#ED2F10`
+
+### 主色調：康和紅
+
+`css/styles.css` 最上方 `:root` 的 `--navy`／`--navy-dk`（沿用舊變數名，實際顏色已換成品牌紅）
+是全站的主色，`--red` 是警示色。兩者刻意拉開色相（品牌紅偏橘、警示色偏紫的酒紅）並各自
+驗過對比度，長輩才不會把「這是按鈕」跟「這是警告」搞混：
+
+| 變數 | 顏色 | 用途 | 白字對比度 |
+|---|---|---|---|
+| `--navy` | `#C4210A` | 主色：頁首、按鈕、選中的頁籤 | 5.9:1 |
+| `--navy-dk` | `#8E1606` | 主色深階：漸層、hover | — |
+| `--red` | `#7A2233` | 警示色：詐騙警告、165 按鈕、RR5 | 9.97:1 |
+| `--teal` | `#1B7B8C` | 輔色：滑桿、次要強調（跟暖色主色互補，避免整頁都是紅）| — |
+
+改主色只要改 `--navy`／`--navy-dk` 這兩個值，全站會一起變；但如果直接套用 logo 最鮮豔的
+`--brand:#ED2F10`，白字對比度只有 4.2:1（不夠 WCAG AA 一般文字要求的 4.5:1），
+所以主色用的是壓深一階、logo 本來就有的深紅。
+
+想改網站背景那兩團很淡的裝飾光暈（桌機版才有，`body::before`／`::after`），
+搜尋 `--navy)` 跟 `--gold)` 那兩行即可。
 
 ## 無障礙
 
@@ -60,7 +80,7 @@
 
 | 商品類別 | 收益來源 |
 |---|---|
-| ETF（市值型／高股息／債券型／主題海外四小類） | 手續費 + 內扣經理費 |
+| ETF（市值型／高股息／債券型／主題海外／主動式五小類） | 手續費 + 內扣經理費 |
 | 代銷國內外基金 | 申購手續費 + 經理費分成 |
 | 股權連結或利率連結商品 | 銷售價差 |
 | 固定收益型商品 | 債券買賣價差 |
@@ -73,6 +93,14 @@
 
 每個分類標題下面都有一句白話解釋（`CAT_DESC`），每張商品卡下面還有「問小幫手」——
 點下去跳到 ⑤，答案由 `productAnswer()` 直接從商品資料組出來，不用手動幫每檔商品寫一組問答。
+
+**「代銷國內外基金」不是隨便取的示意名字。** `PRODUCTS` 裡的 KBI 環球基金、寶盛全球優選組合，
+是康和證券投資顧問真正擔任台灣總代理的境外基金公司（2006 年引進 KBI、2009 年引進瑞士寶盛）。
+`FUND_SUBS` 是這兩組基金公司的分類字典，用法跟 `ETF_SUBS` 一樣。
+
+**ETF 的「主動式」跟前四類不一樣。** 前四類（市值型／高股息／債券型／主題海外）都是追蹤
+固定指數的被動式 ETF；「主動式 ETF」是 2023 年金管會才核准的新商品類型，基金經理人會
+主動選股、主動調整持股比重，`PRODUCTS` 裡放的 00981A、00400A 都是真實存在的代號。
 
 ## 適合度（高齡投資人）
 
@@ -115,6 +143,7 @@ service-worker.js       離線快取（更新後記得改版本號）
 assets/icons/           App 圖示
 產生單檔.py              把整個 App 合併成一支 HTML（見下方「單檔版本」）
 產生QRcode.py           依 DEPLOY.url 重新產生 QR code，寫回 styles.css
+產生App圖示.py           重繪 PWA 圖示背景色，改主色後要跟著重跑一次
 streamlit_app.py        Streamlit 外殼（部署成一條可分享的網址用，不影響原型）
 requirements.txt        Streamlit 部署要裝的套件
 .streamlit/config.toml  Streamlit 配色設定
@@ -127,8 +156,11 @@ requirements.txt        Streamlit 部署要裝的套件
 | 入帳項目、金額 | `data.js` → `PAYS` |
 | 補缺口的三個方案 | `data.js` → `SOLUTIONS` |
 | 投資商品清單 | `data.js` → `PRODUCTS`、`PRODUCT_CATS` |
-| ETF 的四個小分類（市值型／高股息…） | `data.js` → `ETF_SUBS`（商品在 `PRODUCTS` 裡用 `sub` 欄位對應） |
+| ETF 的五個小分類（市值型／高股息…／主動式） | `data.js` → `ETF_SUBS`（商品在 `PRODUCTS` 裡用 `sub` 欄位對應） |
+| 代銷基金的兩個小分類（KBI／寶盛） | `data.js` → `FUND_SUBS`（用法跟 `ETF_SUBS` 一樣） |
 | 分類標題下的白話解釋 | `data.js` → `CAT_DESC` |
+| 主色調（品牌紅） | `css/styles.css` → `:root` 的 `--navy`／`--navy-dk` |
+| PWA 圖示、theme-color | 改完主色後跑 `python3 產生App圖示.py`，另外手動同步 `manifest.json`／`index.html` 的 theme-color |
 | RR1–RR5 的白話對照（④ 頁面卡片＋ AI 商品說明共用） | `data.js` → `RR_LEVELS` |
 | 手機掃描 QR code 的網址 | `data.js` → `DEPLOY.url`（改完要重跑 `產生QRcode.py`，見下方） |
 | 各類商品的費用 | `data.js` → `CAT_FEE` |

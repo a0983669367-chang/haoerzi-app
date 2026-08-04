@@ -19,7 +19,7 @@ var S = {};
 S.mk = function (cls) {
   return '' +
   '<svg class="mk ' + (cls || 'mk-md') + '" viewBox="0 0 128 158" aria-hidden="true">' +
-    '<ellipse cx="64" cy="152" rx="29" ry="4.5" fill="#0F4C75" opacity=".13"/>' +
+    '<ellipse cx="64" cy="152" rx="29" ry="4.5" fill="#C4210A" opacity=".13"/>' +
     '<g class="mk-b">' +
       /* 腳與鞋 */
       '<path d="M50 122v13M78 122v13" stroke="#3F3229" stroke-width="7.5" stroke-linecap="round"/>' +

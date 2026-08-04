@@ -5,7 +5,7 @@
   這支檔案是由 index.html + css/ + js/ 自動合併產生的，方便單獨寄送或
   雙擊開啟。要修改內容請改原始的 js/data.js，改完後執行 產生單檔.py
   重新產生一次，不要直接改這裡。
-  產生日期：2026-08-04　·　對應 service-worker 版本：v12
+  產生日期：2026-08-04　·　對應 service-worker 版本：v13
   ------------------------------------------------------------------
 -->
 <html lang="zh-Hant">
@@ -189,9 +189,13 @@ body{
    那樣就不亮了。改成亮金底＋深褐字，對比度 6.36～8.82:1，
    金色可以維持最亮的狀態——這也是康和「好康 fun 心投」官網
    那條黃色列的做法。 */
-.hero.sim{background:linear-gradient(140deg,#E3C572 0%,#CFA94E 100%);
-  border:2px solid #B8923C;border-left:7px solid #B8923C;color:#3A2A12;
-  box-shadow:0 6px 20px rgba(184,146,60,.34)}
+/* 五段漸層：46% 處放一道微亮的反光帶，金色才會像「金屬」而不是一塊平面的芥末色。
+   色相刻意壓在 39–43°（偏橘的暖金）——原本 44° 偏綠，看起來就會像芥末醬。
+   每一段都驗過對比度，最深的 #C99A42 配深褐字仍有 5.39:1。 */
+.hero.sim{background:linear-gradient(135deg,#F6E1AC 0%,#E7C67B 30%,#F0D293 46%,
+    #DCB35F 62%,#C99A42 100%);
+  border:2px solid #BE8E34;border-left:7px solid #BE8E34;color:#3A2A12;
+  box-shadow:0 6px 20px rgba(190,142,52,.32)}
 .hero.sim .lbl{color:#4A3410}
 .hero.sim .amt{color:#3A2A12}
 .hero.sim .amt small{color:#4A3410}
@@ -577,11 +581,13 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
    一眼就分得出「這是內部視角」，也不會又是一大塊紅 */
 /* 營業員視角的兩個數字（預估手續費、合計缺口）分兩格並排，
    擠在同一行會斷在奇怪的地方，也分不出主從。窄螢幕自動疊成上下。 */
-.kpi{display:flex;gap:9px;margin-top:10px;flex-wrap:wrap}
-.kpi>div{flex:1 1 140px;background:var(--tint);border-radius:11px;padding:9px 12px}
-.kpi span{display:block;font-size:12.5px;color:var(--ink-2);margin-bottom:2px}
-.kpi b{font-size:17px;color:var(--ink);font-weight:800}
-.kpi b i{font-style:normal;font-size:13px;font-weight:600;color:var(--ink-2)}
+.kpi{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap}
+/* flex-basis 給 104px（不是 140px）：手機寬度下兩格才並排得下，
+   140px 會因為差幾 px 而換行、變成上下兩排佔掉很多高度。 */
+.kpi>div{flex:1 1 104px;background:var(--tint);border-radius:10px;padding:7px 10px}
+.kpi span{display:block;font-size:11.5px;color:var(--ink-2);margin-bottom:1px}
+.kpi b{font-size:15px;color:var(--ink);font-weight:800;white-space:nowrap}
+.kpi b i{font-style:normal;font-size:12px;font-weight:600;color:var(--ink-2)}
 
 /* 營業員視角：標籤改深藍（比灰色好判讀），數字維持青色當作視角識別 */
 .hero.adv{border-left-color:var(--teal)}

@@ -936,8 +936,11 @@
     document.getElementById('advHero').innerHTML =
       '<div class="lbl">本月可轉換缺口（' + withGap.length + ' 位客戶）</div>' +
       '<div class="amt"><small>NT$</small>' + wan(scale) + '</div>' +
-      '<div class="note">預估手續費收入 ' + nt(fee) + '　·　合計缺口 ' +
-        totalGap.toLocaleString() + ' 元／月</div>';
+      /* 兩個數字分成兩格：擠在同一行會換行斷在奇怪的地方，也分不出主從 */
+      '<div class="kpi">' +
+        '<div><span>預估手續費收入</span><b>' + nt(fee) + '</b></div>' +
+        '<div><span>合計缺口</span><b>' + totalGap.toLocaleString() + ' 元<i>／月</i></b></div>' +
+      '</div>';
 
     document.getElementById('advTodo').innerHTML = withGap.map(function (c) {
       var need = c.gap * 12 / ADV_CONV.yield;

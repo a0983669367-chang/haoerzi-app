@@ -5,7 +5,7 @@
   這支檔案是由 index.html + css/ + js/ 自動合併產生的，方便單獨寄送或
   雙擊開啟。要修改內容請改原始的 js/data.js，改完後執行 產生單檔.py
   重新產生一次，不要直接改這裡。
-  產生日期：2026-08-04　·　對應 service-worker 版本：v11
+  產生日期：2026-08-04　·　對應 service-worker 版本：v12
   ------------------------------------------------------------------
 -->
 <html lang="zh-Hant">
@@ -42,7 +42,7 @@
   --ink-2:#5B6A7A;       /* 次要文字 */
   --line:#DDE2E8;        /* 卡片外框 */
   --line-2:#EDF0F3;      /* 更淡的分隔線（列與列之間） */
-  --bg:#E9ECEF;          /* 頁面底色：灰 */
+  --bg:#DFE4E9;          /* 頁面底色：灰（比卡片深兩階，白手機才浮得起來） */
   --tint:#F3F5F7;        /* 手機螢幕底色、卡片內的淺色填充 */
   --tint-2:#E4E8EC;      /* 手機標題列的灰 */
   --track:#DDE2E8;       /* 滑桿與進度條的軌道 */
@@ -189,15 +189,15 @@ body{
    那樣就不亮了。改成亮金底＋深褐字，對比度 6.36～8.82:1，
    金色可以維持最亮的狀態——這也是康和「好康 fun 心投」官網
    那條黃色列的做法。 */
-.hero.sim{background:linear-gradient(140deg,#F7C948 0%,#E9A227 100%);
-  border:2px solid #C8860D;border-left:7px solid #C8860D;color:#3A2A12;
-  box-shadow:0 6px 22px rgba(233,162,39,.42)}
+.hero.sim{background:linear-gradient(140deg,#E3C572 0%,#CFA94E 100%);
+  border:2px solid #B8923C;border-left:7px solid #B8923C;color:#3A2A12;
+  box-shadow:0 6px 20px rgba(184,146,60,.34)}
 .hero.sim .lbl{color:#4A3410}
 .hero.sim .amt{color:#3A2A12}
 .hero.sim .amt small{color:#4A3410}
 /* 說明列用「半透明白」提亮，讓中間比外框淺一階（之前用半透明黑，中間反而比旁邊深，
    看起來像凹陷）。 */
-.hero.sim .note{background:rgba(255,255,255,.45);color:#3A2A12}
+.hero.sim .note{background:rgba(255,255,255,.42);color:#3A2A12}
 
 /* ===== 9. 現金流月曆 ===== */
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
@@ -575,6 +575,14 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
    看起來更沉穩而不是壓迫 */
 /* 營業員的數字卡：跟客戶端一樣改成白底，但色條與數字用青色，
    一眼就分得出「這是內部視角」，也不會又是一大塊紅 */
+/* 營業員視角的兩個數字（預估手續費、合計缺口）分兩格並排，
+   擠在同一行會斷在奇怪的地方，也分不出主從。窄螢幕自動疊成上下。 */
+.kpi{display:flex;gap:9px;margin-top:10px;flex-wrap:wrap}
+.kpi>div{flex:1 1 140px;background:var(--tint);border-radius:11px;padding:9px 12px}
+.kpi span{display:block;font-size:12.5px;color:var(--ink-2);margin-bottom:2px}
+.kpi b{font-size:17px;color:var(--ink);font-weight:800}
+.kpi b i{font-style:normal;font-size:13px;font-weight:600;color:var(--ink-2)}
+
 /* 營業員視角：標籤改深藍（比灰色好判讀），數字維持青色當作視角識別 */
 .hero.adv{border-left-color:var(--teal)}
 .hero.adv .lbl{color:var(--head);font-weight:700}
@@ -2830,8 +2838,11 @@ var NOTES = {
     document.getElementById('advHero').innerHTML =
       '<div class="lbl">本月可轉換缺口（' + withGap.length + ' 位客戶）</div>' +
       '<div class="amt"><small>NT$</small>' + wan(scale) + '</div>' +
-      '<div class="note">預估手續費收入 ' + nt(fee) + '　·　合計缺口 ' +
-        totalGap.toLocaleString() + ' 元／月</div>';
+      /* 兩個數字分成兩格：擠在同一行會換行斷在奇怪的地方，也分不出主從 */
+      '<div class="kpi">' +
+        '<div><span>預估手續費收入</span><b>' + nt(fee) + '</b></div>' +
+        '<div><span>合計缺口</span><b>' + totalGap.toLocaleString() + ' 元<i>／月</i></b></div>' +
+      '</div>';
 
     document.getElementById('advTodo').innerHTML = withGap.map(function (c) {
       var need = c.gap * 12 / ADV_CONV.yield;

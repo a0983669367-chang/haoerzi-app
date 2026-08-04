@@ -147,11 +147,11 @@ body{
 /* 原本是整塊實色紅底＋白字，看起來像一大塊警示色。
    改成白底卡片＋左側色條＋數字本身用色，紅色變成點綴不是背景，
    跟康和「好康 fun 心投」官網的做法一致（白底配色塊點綴，不是滿版色底）。 */
-.hero{background:var(--card);border:2px solid var(--line);border-left:7px solid var(--navy);
+.hero{background:var(--card);border:2px solid var(--line);border-left:7px solid var(--gold);
   border-radius:20px;padding:22px 20px;margin-bottom:16px;color:var(--ink)}
 .hero .lbl{font-size:16px;color:var(--ink-2)}
 .hero .amt{font-size:46px;font-weight:800;letter-spacing:-1px;margin:6px 0 2px;
-  line-height:1.05;color:var(--head)}
+  line-height:1.05;color:var(--gold-tx)}
 .hero .amt small{font-size:20px;font-weight:600;margin-right:4px;color:var(--ink-2)}
 .hero .note{font-size:14.5px;color:var(--ink-2);margin-top:8px;
   background:var(--tint);padding:7px 12px;border-radius:10px;display:inline-block;font-weight:600}
@@ -386,7 +386,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .sol-need{display:flex;align-items:baseline;justify-content:space-between;
   background:var(--tint);border-radius:12px;padding:11px 14px;margin:11px 0 9px}
 .sol-need span{font-size:14.5px;color:var(--ink-2)}
-.sol-need b{font-size:27px;font-weight:800;color:var(--head)}
+.sol-need b{font-size:27px;font-weight:800;color:var(--gold-tx)}
 .sol-d{font-size:14px;color:var(--ink-2);line-height:1.62;margin-bottom:4px}
 .sol-fit{font-size:13.5px;font-weight:600;margin-top:9px;padding:8px 11px;border-radius:10px;line-height:1.55}
 .sol-fit.ok{background:var(--green-lt);color:var(--green)}
@@ -425,9 +425,9 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .prod.warn{border-color:#EBCB94}
 .prod-top{display:flex;align-items:flex-start;justify-content:space-between;gap:9px}
 .prod-nm{font-size:17.5px;font-weight:700;color:var(--ink);line-height:1.4}
-.prod-cash{background:var(--green-lt);border-radius:11px;padding:10px 13px;margin:10px 0 8px;
-  font-size:15px;color:#1F5C41;font-weight:600}
-.prod-cash b{font-size:23px;font-weight:800;color:var(--green)}
+.prod-cash{background:var(--gold-lt);border-radius:11px;padding:10px 13px;margin:10px 0 8px;
+  font-size:15px;color:#8A5510;font-weight:600}
+.prod-cash b{font-size:23px;font-weight:800;color:var(--gold-tx)}
 .prod-cash.alt{background:var(--tint);color:var(--ink-2);font-weight:600}
 .prod-d{font-size:14px;color:var(--ink-2);line-height:1.62}
 .prod-meta{display:flex;gap:14px;margin-top:8px;font-size:13px;color:var(--ink-2)}
@@ -493,9 +493,9 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .order{margin-top:14px;padding-top:15px;border-top:2px dashed var(--line)}
 .ord-h{font-size:16px;font-weight:700;margin-bottom:10px}
 .ord-out{display:flex;gap:10px;margin:14px 0 10px}
-.ord-out>div{flex:1;background:var(--green-lt);border-radius:12px;padding:11px 13px}
+.ord-out>div{flex:1;background:var(--gold-lt);border-radius:12px;padding:11px 13px}
 .ord-out span{display:block;font-size:13px;color:var(--ink-2)}
-.ord-out b{font-size:20px;color:var(--green);font-weight:800}
+.ord-out b{font-size:20px;color:var(--gold-tx);font-weight:800}
 .ord-out .alt{flex:1;background:var(--tint);color:var(--ink-2);font-size:14px;line-height:1.6}
 .ord-fee{font-size:14px;color:var(--ink-2);background:var(--tint);border-radius:10px;
   padding:10px 13px;margin-bottom:13px}

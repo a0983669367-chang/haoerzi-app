@@ -36,15 +36,37 @@
   /* 桌機版右側的「手機掃描開啟」QR code。
      只在啟動時畫一次——它跟右側講稿是兩個獨立的容器，切頁不會把它洗掉。
      QR 圖片本身是內嵌在 css 的 .qr-card .qr-img（data URI），
-     這裡只負責填文字；改網址、重產圖片請看 data.js 的 DEPLOY 註解。 */
+     這裡只負責填文字、綁點擊放大；改網址、重產圖片請看 data.js 的 DEPLOY 註解。 */
   function paintQR() {
-    var el = document.getElementById('qrCard');
-    if (!el) return;
-    el.innerHTML =
+    var card = document.getElementById('qrCard');
+    if (!card) return;
+    card.innerHTML =
       '<div class="qr-img" aria-hidden="true"></div>' +
       '<div class="qr-tx"><b>' + DEPLOY.label + '</b>' +
-      '<span>' + DEPLOY.url.replace(/^https?:\/\//, '') + '</span></div>';
+      '<span>' + DEPLOY.url.replace(/^https?:\/\//, '') + '</span>' +
+      '<i>點一下放大，方便給大家掃 →</i></div>';
+    card.addEventListener('click', openQrZoom);
+
+    var zoom = document.getElementById('qrZoom');
+    if (!zoom) return;
+    zoom.innerHTML =
+      '<div class="qr-zoom-box">' +
+        '<button class="qr-zoom-x" id="qrZoomX" aria-label="關閉">✕</button>' +
+        '<div class="qr-zoom-h">' + DEPLOY.label + '</div>' +
+        '<div class="qr-img-big" aria-hidden="true"></div>' +
+        '<div class="qr-zoom-u">' + DEPLOY.url.replace(/^https?:\/\//, '') + '</div>' +
+      '</div>';
+    document.getElementById('qrZoomX').addEventListener('click', closeQrZoom);
+    zoom.addEventListener('click', function (e) {
+      if (e.target === zoom) closeQrZoom();   // 點背景空白處也能關
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeQrZoom();
+    });
   }
+
+  function openQrZoom()  { document.getElementById('qrZoom').classList.add('on'); }
+  function closeQrZoom() { document.getElementById('qrZoom').classList.remove('on'); }
 
   /* 只綁一次的事件（元素本身不會被換掉，只換 innerHTML） */
   function bindOnce() {

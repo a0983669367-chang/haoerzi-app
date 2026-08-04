@@ -84,8 +84,10 @@
 
 ## 手機掃描開啟（QR code）
 
-桌機簡報畫面右側、講稿上方，有一張「手機掃描開啟 App」的小卡片，
-QR code 圖片內嵌在 `css/styles.css` 的 `.qr-card .qr-img`（data URI，做法跟 logo 一樣）。
+桌機簡報畫面右側、講稿上方，有一張「手機掃描開啟 App」的小卡片，**點一下會放大**
+成一個大 QR code 浮層（點背景空白處、按右上 ✕、或按 Esc 都能關），方便台下的人掃描。
+小卡與放大版共用同一張圖，內嵌在 `css/styles.css`，夾在 `QR:BEGIN` / `QR:END`
+兩行註解中間（data URI，做法跟 logo 一樣）。
 
 網址改變時（例如 Streamlit 重新部署換了網址）：
 

@@ -62,12 +62,16 @@
 
   <!-- ===== 桌機版：右側簡報講稿 ＋ 手機掃描 QR code ===== -->
   <aside class="notes-col">
-    <!-- QR code 圖片內嵌於 css/styles.css 的 .qr-card .qr-img（改網址見 js/data.js 的 DEPLOY 註解） -->
+    <!-- QR code 圖片內嵌於 css/styles.css（改網址見 js/data.js 的 DEPLOY 註解）。
+         點這張小卡會開啟下面的放大浮層，方便台下的人掃描。 -->
     <div class="qr-card" id="qrCard"><!-- 由 app.js 產生 --></div>
     <div class="notes" id="notes"><!-- 由 notes.js 產生 --></div>
   </aside>
 
 </div>
+
+<!-- ===== QR code 放大浮層：點左側小卡開啟，給台下的人掃描用 ===== -->
+<div class="qr-zoom" id="qrZoom"><!-- 由 app.js 產生 --></div>
 
 <footer class="foot">
   原型為模擬畫面，數據皆為示意，非真實帳戶資料。<br>

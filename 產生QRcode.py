@@ -4,9 +4,10 @@
 產生QRcode.py — 依 js/data.js 的 DEPLOY.url 重新產生 QR code，寫回 css/styles.css
 ==========================================================================
 用途：
-  桌機簡報畫面右側有一張「手機掃描開啟 App」的小卡片，QR code 圖片是
-  內嵌在 css/styles.css 裡的 base64 圖檔（跟康和 logo 的做法一樣，
-  這樣單檔版本才不會有外部參照）。
+  桌機簡報畫面右側有一張「手機掃描開啟 App」的小卡片，點下去會放大成
+  一個大 QR code 浮層，方便台下的人掃描。兩個尺寸共用同一張圖，內嵌在
+  css/styles.css 裡的 base64 圖檔（跟康和 logo 的做法一樣，這樣單檔版本
+  才不會有外部參照），夾在 `QR:BEGIN` / `QR:END` 兩行註解中間。
 
 網址改變時（例如 Streamlit 重新部署、換了網址），流程是：
   1. 改 js/data.js 的 DEPLOY.url
@@ -55,11 +56,14 @@ def get_url():
 def main():
     url = get_url()
 
+    # box_size 大一點（原本 8）是因為同一張圖現在有兩個用途：
+    # 右側小卡（84px）跟點開的放大浮層（最大到 280px）都用它，
+    # 圖片原生解析度不夠大，放大浮層裡的 QR 會糊、可能掃不出來。
     img = qrcode.make(
         url,
         error_correction=qrcode.constants.ERROR_CORRECT_M,
-        box_size=8,
-        border=2,
+        box_size=12,
+        border=3,
     ).convert("RGB")
 
     buf = io.BytesIO()
@@ -70,22 +74,24 @@ def main():
         sys.exit(f"✗ 找不到 {CSS}。")
     css = CSS.read_text(encoding="utf-8")
 
-    pattern = r"\.qr-card \.qr-img\{[^}]*\}"
+    pattern = r"(?<=QR:BEGIN —)([\s\S]*?)(?=/\* QR:END \*/)"
     if not re.search(pattern, css):
-        sys.exit("✗ 在 css/styles.css 找不到 .qr-card .qr-img，請確認樣式表沒有被改壞。")
+        sys.exit(
+            "✗ 在 css/styles.css 找不到 QR:BEGIN / QR:END 標記，"
+            "請確認樣式表的 QR 區塊沒有被改壞。"
+        )
 
-    new_rule = (
-        ".qr-card .qr-img{width:84px;height:84px;flex:0 0 84px;border-radius:8px;"
-        'background:#fff no-repeat center/contain url("data:image/png;base64,'
-        + b64
-        + '")}'
+    new_block = (
+        " 這個規則由 產生QRcode.py 自動改寫，不要手動編輯這裡面的內容 */\n"
+        ".qr-card .qr-img,.qr-zoom-box .qr-img-big{background:#fff no-repeat "
+        'center/contain url("data:image/png;base64,' + b64 + '")}\n'
     )
-    css = re.sub(pattern, new_rule, css, count=1)
+    css = re.sub(pattern, new_block, css, count=1)
     CSS.write_text(css, encoding="utf-8")
 
     kb = len(b64) * 3 / 4 / 1024
     print(f"✓ 已依網址 {url}")
-    print(f"  重新產生 QR code（約 {kb:.1f} KB），寫入 css/styles.css")
+    print(f"  重新產生 QR code（約 {kb:.1f} KB，含小卡與放大兩種尺寸共用），寫入 css/styles.css")
     print("  記得接著執行 python3 產生單檔.py 同步單檔版本。")
 
 

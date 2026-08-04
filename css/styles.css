@@ -350,8 +350,16 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .kyc-v{font-size:21px;font-weight:800;color:var(--navy);margin:3px 0 8px;
   display:flex;align-items:center;flex-wrap:wrap;gap:4px}
 
-/* RR1–RR5 白話對照卡：五行字，不用手風琴收合，簡報時就能整段唸完 */
-.rr-legend-h{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px}
+/* RR1–RR5 白話對照卡：預設收合的 <details>，不會把下面的商品清單往下推。
+   .card 原本的 18px padding 讓給 summary／rr-body 自己控制，避免雙重留白。 */
+.rr-legend{padding:0}
+.rr-legend summary{cursor:pointer;list-style:none;padding:16px 18px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px}
+.rr-legend summary::-webkit-details-marker{display:none}
+.rr-legend-h{font-size:15px;font-weight:700;color:var(--ink)}
+.rr-legend .rr-arrow{color:var(--ink-2);font-size:13px;flex:0 0 auto;transition:transform .2s}
+.rr-legend[open] .rr-arrow{transform:rotate(180deg)}
+.rr-body{padding:0 18px 14px}
 .rr-row{display:flex;align-items:center;gap:11px;padding:8px 0;font-size:13.5px;
   color:var(--ink-2);border-top:1px solid #F0F4F7}
 .rr-row:first-of-type{border-top:0}
@@ -511,13 +519,39 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .notes .kicker{font-size:13px;letter-spacing:2px;color:var(--gold);font-weight:700;margin-bottom:6px}
 .notes .lead{font-size:15.5px;color:var(--ink-2);line-height:1.75;margin:0 0 18px}
 
-/* 手機掃描 QR code：跟講稿是獨立容器，切換頁面不會被洗掉 */
+/* 手機掃描 QR code：跟講稿是獨立容器，切換頁面不會被洗掉。
+   點這張小卡會放大（見下方 24 區），方便台下的人掃描。 */
 .qr-card{background:#fff;border-radius:14px;padding:15px;margin-bottom:16px;
-  display:flex;gap:13px;align-items:center;box-shadow:0 2px 7px rgba(15,76,117,.07)}
-.qr-card .qr-img{width:84px;height:84px;flex:0 0 84px;border-radius:8px;background:#fff no-repeat center/contain url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQgAAAEICAIAAAAslP2oAAAENElEQVR42u3dQW4bMRBFwT+B739leZ2FFgOQ7m6yap3IsqwHGmqTfD6fT4D//fMSgDBAGCAMEAYIA4QBwgBhgDBAGCAMEAYIAxAGfPfz9j88zzPiG1u1z+Tt9/v26357/FWPs/t1O/X9YMUAYYAwQBggDBAGCAMyco6RzXODFM1VVs0TpswNvn3dVa/D9PeDFQOEAcIAYYAwQBggDMhRc4w02yfQ7XP93fs9puyLmPJ+sGKAMEAYIAwQBggDhAG5Yo4xxdvP17ud47RqvuHedysGCAOEAcIAYYAwQBgQc4wxus0Hpu/HsGKAMEAYIAwQBiAMEAak0Ryj29/3r9p3sXueMOV+8envBysGCAOEAcIAYYAwQBiQK+YY0/cDVO1z2D0nWfX4VfeRWzFAGCAMEAYIA4QBwoCrPe5D+Jt9C1X7OuIeDCsGCAOEAcIAYYAwQBiQe+YYUz7X77bfYNXzqToPasrztGKAMEAYIAwQBggDhAGxH6PgfKFVz7Nqn8OU/RjdzqGqehwrBggDhAHCAGGAMEAYkKPmGFM+d59+n8Pun9eU98Pu18eKAcIAYYAwQBggDBAGZOQ9393+br7qnKLp+w2m7KupmodYMUAYIAwQBggDhAHCgFx9P8b0+7Cn3LOx+3Gq5jyrvl8rBggDhAHCAGGAMEAYkCvmGPF5ect5y+6foxUDhAHCAIQBwgBhgDAgB96PUXXPdLf9HuYGPec8VgwQBggDhAHCAGGAMCBHzTGqzo/qtp+k2/laU+ZU3V5/KwYIA4QBwgBhgDBAGJCj7vlO0XlHu+8LX/V83n7dqnu7d9+zPmWfiRUDhAHCAGGAMEAYIAyIc6UGnF+0ew6TIedQ7b7PZPd+G+dKgV+lQBggDBAGCAOEAbl6P0a3z/t37xOYcv93t/O7prx/rBggDBAGCAOEAcIAYUBGzjGq9lHs/rv8t/9+9+swZR/IlH04VgwQBggDhAHCAGGAMCBXnCt16v3TVftSqh5/yrlYVa+DFQOEAcIAYYAwQBggDMgV+zFO3bdQNYdJ0Tzntu/XigHCAGGAMEAYIAwQBuSo+zG6eXse1O7P11edT7VqP0yK7t+Ysk/DigHCAGGAMEAYIAwQBmTkHCPN7j14+zn97jlA1X3hU/bDTLlnw4oBwgBhgDBAGCAMEAbkqDlGhpzjtHsOULUfY8p5UFWvsxUDhAHCAGGAMEAYIAyIOcYA3e4p3/08p5wDtmo+s+rnZcUAYYAwQBggDBAGCANijpE+92ak2XlZGbK/5dT7VawYIAwQBggDhAHCAGFArphjdJsDpNl+iVX7DarOa+p2zpVzpcCvUiAMEAYIA4QBwoCYY+Se84tSNJ9Z9Tl91blYU56nFQOEAcIAYYAwQBggDGjtOXW/BFgxQBggDBAGCAOEAcIAYYAwQBggDEAYIAwQBggDNvkFlFs8B/lhfEUAAAAASUVORK5CYII=")}
+  display:flex;gap:13px;align-items:center;box-shadow:0 2px 7px rgba(15,76,117,.07);
+  cursor:pointer}
+.qr-card:hover{box-shadow:0 4px 14px rgba(15,76,117,.14)}
+.qr-card .qr-img{width:84px;height:84px;flex:0 0 84px;border-radius:8px}
 .qr-card .qr-tx{min-width:0}
 .qr-card .qr-tx b{display:block;font-size:14.5px;color:var(--navy);margin-bottom:4px}
 .qr-card .qr-tx span{font-size:12.5px;color:var(--ink-2);line-height:1.5;word-break:break-all}
+.qr-card .qr-tx i{display:block;font-style:normal;font-size:12px;color:var(--teal);
+  font-weight:700;margin-top:5px}
+
+/* QR code 的圖片本身：base104 內嵌，卡片版與放大版共用同一張圖，只是顯示尺寸不同。
+   ------------------------------------------------------------------------
+   QR:BEGIN — 這個規則由 產生QRcode.py 自動改寫，不要手動編輯這裡面的內容 */
+.qr-card .qr-img,.qr-zoom-box .qr-img-big{background:#fff no-repeat center/contain url("data:image/png;base64,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")}
+/* QR:END */
+
+/* ===== 24. QR code 放大浮層（點小卡開啟，給台下的人掃描用） ===== */
+.qr-zoom{position:fixed;inset:0;background:rgba(10,30,48,.78);z-index:60;
+  display:none;align-items:center;justify-content:center;padding:24px}
+.qr-zoom.on{display:flex}
+.qr-zoom-box{background:#fff;border-radius:24px;padding:38px 34px 32px;
+  text-align:center;max-width:380px;width:100%;position:relative;
+  box-shadow:0 30px 70px rgba(0,0,0,.35)}
+.qr-zoom-x{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;
+  border:0;background:#F2F6F8;color:var(--ink-2);font-size:20px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-family:inherit}
+.qr-zoom-h{font-size:19px;font-weight:800;color:var(--navy);margin:0 0 20px}
+.qr-zoom-box .qr-img-big{width:100%;max-width:280px;aspect-ratio:1/1;margin:0 auto 20px;
+  border-radius:14px;border:1px solid var(--line)}
+.qr-zoom-u{font-size:16.5px;color:var(--ink-2);word-break:break-all}
 .note{background:#fff;border-radius:14px;padding:15px 17px;margin-bottom:11px;
   border-left:5px solid var(--navy);box-shadow:0 2px 7px rgba(15,76,117,.07)}
 .note b{display:block;font-size:15.5px;margin-bottom:5px;color:var(--navy-dk)}
@@ -532,7 +566,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
   text-align:left;font-size:12.5px;line-height:1.85;color:#7C8E9B}
 
 /* ==========================================================================
-   24. 手機版 / PWA 全螢幕模式
+   25. 手機版 / PWA 全螢幕模式
    在手機上開啟，或「加到主畫面」後開啟時，隱藏所有桌機說明元素，
    讓 App 佔滿整個螢幕，看起來就像一個原生 App。
    ========================================================================== */

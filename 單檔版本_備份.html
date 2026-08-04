@@ -5,7 +5,7 @@
   這支檔案是由 index.html + css/ + js/ 自動合併產生的，方便單獨寄送或
   雙擊開啟。要修改內容請改原始的 js/data.js，改完後執行 產生單檔.py
   重新產生一次，不要直接改這裡。
-  產生日期：2026-08-04　·　對應 service-worker 版本：v9
+  產生日期：2026-08-04　·　對應 service-worker 版本：v10
   ------------------------------------------------------------------
 -->
 <html lang="zh-Hant">
@@ -180,20 +180,24 @@ body{
    配上這裡的 border-radius 會在左邊畫出一條括號狀的弧線。 */
 .hero .note{font-size:14.5px;color:var(--ink-2);margin-top:8px;border:0;
   background:var(--tint);padding:7px 12px;border-radius:10px;display:inline-block;font-weight:600}
-/* 模擬狀態（在 ② 選了補缺口方案之後）：整張卡換成金色實底＋白字。
-   一般狀態是白卡藍字、模擬狀態是金卡白字，兩者一眼就分得出來，
-   在整頁白卡之中也最搶眼。
-   填色刻意用壓深的金（#A8680C→#8A5510）：亮金 #E9A227 配白字只有 2.17:1，
-   完全過不了 WCAG AA；壓深後 4.52:1 才安全。亮金移到外框，維持搶眼的感覺。 */
-.hero.sim{background:linear-gradient(140deg,#A8680C 0%,#8A5510 100%);
-  border:2px solid var(--gold);border-left:7px solid var(--gold);color:#fff;
-  box-shadow:0 6px 20px rgba(138,85,16,.28)}
-.hero.sim .lbl{color:#fff}
-.hero.sim .amt{color:#fff}
-.hero.sim .amt small{color:#fff}
-/* 說明列用「加深」的半透明黑，不要用半透明白——半透明白會把金底提亮，
-   反而讓白字更看不清楚。 */
-.hero.sim .note{background:rgba(0,0,0,.20);color:#fff}
+/* 模擬狀態（在 ② 選了補缺口方案之後）：整張卡換成亮金實底＋深褐字。
+   一般狀態是白卡藍字、模擬狀態是亮金卡，兩者一眼就分得出來，
+   在整頁白卡之中最搶眼。
+   ------------------------------------------------------------------
+   為什麼是「深褐字」不是白字：亮金 #E9A227 配白字只有 2.17:1，
+   完全過不了 WCAG AA。要用白字就得把金色一路壓深到 #A8680C 以下，
+   那樣就不亮了。改成亮金底＋深褐字，對比度 6.36～8.82:1，
+   金色可以維持最亮的狀態——這也是康和「好康 fun 心投」官網
+   那條黃色列的做法。 */
+.hero.sim{background:linear-gradient(140deg,#F7C948 0%,#E9A227 100%);
+  border:2px solid #C8860D;border-left:7px solid #C8860D;color:#3A2A12;
+  box-shadow:0 6px 22px rgba(233,162,39,.42)}
+.hero.sim .lbl{color:#4A3410}
+.hero.sim .amt{color:#3A2A12}
+.hero.sim .amt small{color:#4A3410}
+/* 說明列用「半透明白」提亮，讓中間比外框淺一階（之前用半透明黑，中間反而比旁邊深，
+   看起來像凹陷）。 */
+.hero.sim .note{background:rgba(255,255,255,.45);color:#3A2A12}
 
 /* ===== 9. 現金流月曆 ===== */
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}

@@ -147,17 +147,30 @@ body{
 /* 原本是整塊實色紅底＋白字，看起來像一大塊警示色。
    改成白底卡片＋左側色條＋數字本身用色，紅色變成點綴不是背景，
    跟康和「好康 fun 心投」官網的做法一致（白底配色塊點綴，不是滿版色底）。 */
-.hero{background:var(--card);border:2px solid var(--line);border-left:7px solid var(--gold);
+.hero{background:var(--card);border:2px solid var(--line);border-left:7px solid var(--navy);
   border-radius:20px;padding:22px 20px;margin-bottom:16px;color:var(--ink)}
 .hero .lbl{font-size:16px;color:var(--ink-2)}
 .hero .amt{font-size:46px;font-weight:800;letter-spacing:-1px;margin:6px 0 2px;
-  line-height:1.05;color:var(--gold-tx)}
+  line-height:1.05;color:var(--head)}
 .hero .amt small{font-size:20px;font-weight:600;margin-right:4px;color:var(--ink-2)}
-.hero .note{font-size:14.5px;color:var(--ink-2);margin-top:8px;
+/* border:0 是必要的：桌機右側講稿的卡片也叫 .note，它的 border-left:5px 會漏進來，
+   配上這裡的 border-radius 會在左邊畫出一條括號狀的弧線。 */
+.hero .note{font-size:14.5px;color:var(--ink-2);margin-top:8px;border:0;
   background:var(--tint);padding:7px 12px;border-radius:10px;display:inline-block;font-weight:600}
-/* 模擬狀態（使用者在 ② 選了補缺口方案之後）：色條與數字換成金色 */
-.hero.sim{border-left-color:var(--gold)}
-.hero.sim .amt{color:var(--gold-tx)}
+/* 模擬狀態（在 ② 選了補缺口方案之後）：整張卡換成金色實底＋白字。
+   一般狀態是白卡藍字、模擬狀態是金卡白字，兩者一眼就分得出來，
+   在整頁白卡之中也最搶眼。
+   填色刻意用壓深的金（#A8680C→#8A5510）：亮金 #E9A227 配白字只有 2.17:1，
+   完全過不了 WCAG AA；壓深後 4.52:1 才安全。亮金移到外框，維持搶眼的感覺。 */
+.hero.sim{background:linear-gradient(140deg,#A8680C 0%,#8A5510 100%);
+  border:2px solid var(--gold);border-left:7px solid var(--gold);color:#fff;
+  box-shadow:0 6px 20px rgba(138,85,16,.28)}
+.hero.sim .lbl{color:#fff}
+.hero.sim .amt{color:#fff}
+.hero.sim .amt small{color:#fff}
+/* 說明列用「加深」的半透明黑，不要用半透明白——半透明白會把金底提亮，
+   反而讓白字更看不清楚。 */
+.hero.sim .note{background:rgba(0,0,0,.20);color:#fff}
 
 /* ===== 9. 現金流月曆 ===== */
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
@@ -386,7 +399,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .sol-need{display:flex;align-items:baseline;justify-content:space-between;
   background:var(--tint);border-radius:12px;padding:11px 14px;margin:11px 0 9px}
 .sol-need span{font-size:14.5px;color:var(--ink-2)}
-.sol-need b{font-size:27px;font-weight:800;color:var(--gold-tx)}
+.sol-need b{font-size:27px;font-weight:800;color:var(--head)}
 .sol-d{font-size:14px;color:var(--ink-2);line-height:1.62;margin-bottom:4px}
 .sol-fit{font-size:13.5px;font-weight:600;margin-top:9px;padding:8px 11px;border-radius:10px;line-height:1.55}
 .sol-fit.ok{background:var(--green-lt);color:var(--green)}

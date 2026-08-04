@@ -5,7 +5,7 @@
   這支檔案是由 index.html + css/ + js/ 自動合併產生的，方便單獨寄送或
   雙擊開啟。要修改內容請改原始的 js/data.js，改完後執行 產生單檔.py
   重新產生一次，不要直接改這裡。
-  產生日期：2026-08-04　·　對應 service-worker 版本：v6
+  產生日期：2026-08-04　·　對應 service-worker 版本：v7
   ------------------------------------------------------------------
 -->
 <html lang="zh-Hant">
@@ -15,7 +15,7 @@
 <title>康和「好日子」— 銀髮退休現金流管家</title>
 <meta name="description" content="康和證券銀髮理財 App 原型：現金流月曆、三桶水資產配置、老本試算、防詐守門員、家庭共管。">
 
-<meta name="theme-color" content="#DB190E">
+<meta name="theme-color" content="#0F4C75">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="好日子">
@@ -31,36 +31,40 @@
 
 /* ===== 1. 色彩與設計變數（改這裡就能換整套配色） ===== */
 :root{
-  /* 主色：康和品牌紅。只用在「品牌識別與行動」——logo、選中的頁籤／導覽、
-     主要按鈕、金額卡左側色條。**不拿來當內文顏色**，滿頁紅字很刺眼。 */
-  --navy:#DB190E;
-  --navy-dk:#9E120A;
-
-  /* 標題與數字的顏色：深藍。這是這支原型最早用的主色，紅色改成只做品牌點綴之後，
-     標題、金額、重點數字回到深藍，畫面才不會整片紅。白底對比度 9.09:1。 */
-  --head:#0F4C75;
-
-  --teal:#1B7B8C;        /* 青色：滑桿、聯絡類按鈕、營業員視角 */
-  /* 金色分兩個：--gold 只填色、--gold-tx 只當文字（亮金當文字在白底只有 2.76:1，
-     過不了 WCAG AA）。 */
-  --gold:#E9A227;
-  --gold-tx:#8A5510;
-  --gold-lt:#FBF0DC;
-  --green:#2E7D5B;       /* 安全 / 正向 */
-  --green-lt:#E4F2EA;
-  /* 警示色：偏紫的酒紅，刻意跟品牌紅拉開色相，長輩才不會把「按鈕」跟「警告」搞混 */
-  --red:#7A2233;
-  --red-lt:#FBE9E7;
+  /* ===== 主色調：灰、白、深藍 =====
+     整體只用這三個色階，畫面才不會花。顏色只留給「有特殊意義」的東西
+     （見下方的語意色）。 */
+  --navy:#0F4C75;        /* 主色：主要按鈕、選中的頁籤／導覽、卡片色條 */
+  --navy-dk:#0A3557;     /* 主色深階：hover、需要更深的時候 */
+  --head:#0F4C75;        /* 標題、金額、重點數字（跟主色同一個藍，語意不同所以分開放） */
 
   --ink:#1F2A37;         /* 主要文字：深灰藍 */
   --ink-2:#5B6A7A;       /* 次要文字 */
-  --line:#E3E6EA;        /* 卡片外框 */
-  --line-2:#EFF1F4;      /* 更淡的分隔線（列與列之間） */
-  --tint:#F2F4F6;        /* 手機螢幕底色、卡片內的淺色填充 */
-  --tint-2:#E8EBEF;      /* 深一階的填充（分頁容器、免責聲明底） */
-  --track:#DFE3E8;       /* 滑桿與進度條的軌道 */
-  --bg:#FFFFFF;          /* 桌機頁面底色：全白 */
+  --line:#DDE2E8;        /* 卡片外框 */
+  --line-2:#EDF0F3;      /* 更淡的分隔線（列與列之間） */
+  --bg:#E9ECEF;          /* 頁面底色：灰 */
+  --tint:#F3F5F7;        /* 手機螢幕底色、卡片內的淺色填充 */
+  --tint-2:#E4E8EC;      /* 手機標題列的灰 */
+  --track:#DDE2E8;       /* 滑桿與進度條的軌道 */
   --card:#FFFFFF;        /* 卡片：白 */
+
+  /* ===== 語意色：只給「有特別意義」的東西用，不當裝飾 =====
+     金 → ① 月曆的入帳金點，以及「把選定商品加進月曆」的模擬狀態
+     綠 → 安全、適合您、每月可領的錢（正向）
+     琥珀→ 警示、RR4、需加強評估
+     酒紅→ 高風險、詐騙警告、RR5
+     青 → 聯絡真人（撥電話、預約回電）
+     品牌紅 → 只給吉祥物「小方」的領巾與鞋，跟官方角色一致；
+              介面本身不再用紅色（logo 是圖檔，本來就保留原本的紅黑配色） */
+  --gold:#E9A227;
+  --gold-tx:#8A5510;
+  --gold-lt:#FBF0DC;
+  --green:#2E7D5B;
+  --green-lt:#E4F2EA;
+  --red:#7A2233;
+  --red-lt:#FBE9E7;
+  --teal:#1B7B8C;
+  --brand-red:#DB190E;
 
   --radius:20px;
   --font:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
@@ -262,7 +266,7 @@ body{
 
 /* ===== 10. 區塊小標與鍵值列（月退俸／投資頁共用） ===== */
 .sec-h{font-size:16px;font-weight:700;color:var(--head);margin:20px 0 10px;
-  padding-left:11px;border-left:5px solid var(--gold)}
+  padding-left:11px;border-left:5px solid var(--navy)}
 /* 分類標題正下方的一句白話解釋（投資頁用），字級小、灰色，不搶標題的視覺重量 */
 .sec-d{font-size:13px;color:var(--ink-2);line-height:1.6;margin:-4px 0 12px;padding-left:11px}
 /* ETF 內部的小分類標題（市值型／高股息…），比 .sec-h 再輕一階 */
@@ -444,9 +448,9 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .prod.warn{border-color:#EBCB94}
 .prod-top{display:flex;align-items:flex-start;justify-content:space-between;gap:9px}
 .prod-nm{font-size:17.5px;font-weight:700;color:var(--ink);line-height:1.4}
-.prod-cash{background:var(--gold-lt);border-radius:11px;padding:10px 13px;margin:10px 0 8px;
-  font-size:15px;color:#8A5510;font-weight:600}
-.prod-cash b{font-size:23px;font-weight:800;color:var(--gold-tx)}
+.prod-cash{background:var(--green-lt);border-radius:11px;padding:10px 13px;margin:10px 0 8px;
+  font-size:15px;color:#1F5C41;font-weight:600}
+.prod-cash b{font-size:23px;font-weight:800;color:var(--green)}
 .prod-cash.alt{background:var(--tint);color:var(--ink-2);font-weight:600}
 .prod-d{font-size:14px;color:var(--ink-2);line-height:1.62}
 .prod-meta{display:flex;gap:14px;margin-top:8px;font-size:13px;color:var(--ink-2)}
@@ -502,11 +506,11 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
      .pick.t（青色）＝ 聯絡人：撥電話、預約回電
    真正會成交的動作（確認送出、預約營業員）才用紅色的 .bigbtn.p。
    這是照康和「好康 fun 心投」官網的做法：紅／金／青輪流用，紅色留給最重要的那一個。 */
-.pick{width:100%;margin-top:11px;background:var(--gold);color:var(--ink);border:0;
+.pick{width:100%;margin-top:11px;background:var(--navy);color:#fff;border:0;
   border-radius:12px;padding:14px;font-size:16px;font-weight:700;
   font-family:inherit;cursor:pointer}
 .pick.t{background:var(--teal);color:#fff}
-.prod.open .pick{background:#fff;color:var(--gold-tx);border:2px solid var(--gold)}
+.prod.open .pick{background:#fff;color:var(--navy);border:2px solid var(--navy)}
 
 /* ===== 19. 申購試算面板 ===== */
 .order{margin-top:14px;padding-top:15px;border-top:2px dashed var(--line)}
@@ -1327,12 +1331,12 @@ var S = {};
 S.mk = function (cls) {
   return '' +
   '<svg class="mk ' + (cls || 'mk-md') + '" viewBox="0 0 128 158" aria-hidden="true">' +
-    '<ellipse cx="64" cy="152" rx="29" ry="4.5" fill="var(--navy)" opacity=".13"/>' +
+    '<ellipse cx="64" cy="152" rx="29" ry="4.5" fill="var(--brand-red)" opacity=".13"/>' +
     '<g class="mk-b">' +
       /* 腳與鞋（品牌紅，跟脖子上的領巾呼應） */
       '<path d="M50 122v13M78 122v13" stroke="#3F3229" stroke-width="7.5" stroke-linecap="round"/>' +
-      '<path d="M38 142q0-8 9-8t9 8q0 4-4 4H42q-4 0-4-4z" fill="var(--navy)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
-      '<path d="M72 142q0-8 9-8t9 8q0 4-4 4H76q-4 0-4-4z" fill="var(--navy)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
+      '<path d="M38 142q0-8 9-8t9 8q0 4-4 4H42q-4 0-4-4z" fill="var(--brand-red)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
+      '<path d="M72 142q0-8 9-8t9 8q0 4-4 4H76q-4 0-4-4z" fill="var(--brand-red)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
       /* 左手 */
       '<path d="M32 102q-13 4-19 12" stroke="#3F3229" stroke-width="7.5" stroke-linecap="round" fill="none"/>' +
       '<path d="M13 112q-7 3-5 8t9 2 5-8-9-2z" fill="#fff" stroke="#3F3229" stroke-width="3.2"/>' +
@@ -1345,8 +1349,8 @@ S.mk = function (cls) {
          不是通體紅——這是照康和官網「好康 fun 心投」那隻方塊角色的配色調整的。 */
       '<path d="M32 88h62a5 5 0 015 5v22a9 9 0 01-9 9H36a9 9 0 01-9-9V93a5 5 0 015-5z" fill="#fff" stroke="#3F3229" stroke-width="3.4"/>' +
       /* 領巾：脖子下方一條紅色蝴蝶結，尾巴垂在胸前 */
-      '<path d="M39 86h50v5a3.5 3.5 0 01-3.5 3.5h-43A3.5 3.5 0 0139 91z" fill="var(--navy)" stroke="#3F3229" stroke-width="3" stroke-linejoin="round"/>' +
-      '<path d="M55 91.5l9 21 9-21z" fill="var(--navy)" stroke="#3F3229" stroke-width="3" stroke-linejoin="round"/>' +
+      '<path d="M39 86h50v5a3.5 3.5 0 01-3.5 3.5h-43A3.5 3.5 0 0139 91z" fill="var(--brand-red)" stroke="#3F3229" stroke-width="3" stroke-linejoin="round"/>' +
+      '<path d="M55 91.5l9 21 9-21z" fill="var(--brand-red)" stroke="#3F3229" stroke-width="3" stroke-linejoin="round"/>' +
       /* 頭頂的金色愛心 */
       '<path d="M70 20c-4-9 7-14 10-6 3-8 14-3 10 6-3 6-10 11-10 11s-7-5-10-11z" fill="var(--gold)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
       /* 頭：立方體 */

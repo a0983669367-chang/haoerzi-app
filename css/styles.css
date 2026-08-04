@@ -8,36 +8,40 @@
 
 /* ===== 1. 色彩與設計變數（改這裡就能換整套配色） ===== */
 :root{
-  /* 主色：康和品牌紅。只用在「品牌識別與行動」——logo、選中的頁籤／導覽、
-     主要按鈕、金額卡左側色條。**不拿來當內文顏色**，滿頁紅字很刺眼。 */
-  --navy:#DB190E;
-  --navy-dk:#9E120A;
-
-  /* 標題與數字的顏色：深藍。這是這支原型最早用的主色，紅色改成只做品牌點綴之後，
-     標題、金額、重點數字回到深藍，畫面才不會整片紅。白底對比度 9.09:1。 */
-  --head:#0F4C75;
-
-  --teal:#1B7B8C;        /* 青色：滑桿、聯絡類按鈕、營業員視角 */
-  /* 金色分兩個：--gold 只填色、--gold-tx 只當文字（亮金當文字在白底只有 2.76:1，
-     過不了 WCAG AA）。 */
-  --gold:#E9A227;
-  --gold-tx:#8A5510;
-  --gold-lt:#FBF0DC;
-  --green:#2E7D5B;       /* 安全 / 正向 */
-  --green-lt:#E4F2EA;
-  /* 警示色：偏紫的酒紅，刻意跟品牌紅拉開色相，長輩才不會把「按鈕」跟「警告」搞混 */
-  --red:#7A2233;
-  --red-lt:#FBE9E7;
+  /* ===== 主色調：灰、白、深藍 =====
+     整體只用這三個色階，畫面才不會花。顏色只留給「有特殊意義」的東西
+     （見下方的語意色）。 */
+  --navy:#0F4C75;        /* 主色：主要按鈕、選中的頁籤／導覽、卡片色條 */
+  --navy-dk:#0A3557;     /* 主色深階：hover、需要更深的時候 */
+  --head:#0F4C75;        /* 標題、金額、重點數字（跟主色同一個藍，語意不同所以分開放） */
 
   --ink:#1F2A37;         /* 主要文字：深灰藍 */
   --ink-2:#5B6A7A;       /* 次要文字 */
-  --line:#E3E6EA;        /* 卡片外框 */
-  --line-2:#EFF1F4;      /* 更淡的分隔線（列與列之間） */
-  --tint:#F2F4F6;        /* 手機螢幕底色、卡片內的淺色填充 */
-  --tint-2:#E8EBEF;      /* 深一階的填充（分頁容器、免責聲明底） */
-  --track:#DFE3E8;       /* 滑桿與進度條的軌道 */
-  --bg:#FFFFFF;          /* 桌機頁面底色：全白 */
+  --line:#DDE2E8;        /* 卡片外框 */
+  --line-2:#EDF0F3;      /* 更淡的分隔線（列與列之間） */
+  --bg:#E9ECEF;          /* 頁面底色：灰 */
+  --tint:#F3F5F7;        /* 手機螢幕底色、卡片內的淺色填充 */
+  --tint-2:#E4E8EC;      /* 手機標題列的灰 */
+  --track:#DDE2E8;       /* 滑桿與進度條的軌道 */
   --card:#FFFFFF;        /* 卡片：白 */
+
+  /* ===== 語意色：只給「有特別意義」的東西用，不當裝飾 =====
+     金 → ① 月曆的入帳金點，以及「把選定商品加進月曆」的模擬狀態
+     綠 → 安全、適合您、每月可領的錢（正向）
+     琥珀→ 警示、RR4、需加強評估
+     酒紅→ 高風險、詐騙警告、RR5
+     青 → 聯絡真人（撥電話、預約回電）
+     品牌紅 → 只給吉祥物「小方」的領巾與鞋，跟官方角色一致；
+              介面本身不再用紅色（logo 是圖檔，本來就保留原本的紅黑配色） */
+  --gold:#E9A227;
+  --gold-tx:#8A5510;
+  --gold-lt:#FBF0DC;
+  --green:#2E7D5B;
+  --green-lt:#E4F2EA;
+  --red:#7A2233;
+  --red-lt:#FBE9E7;
+  --teal:#1B7B8C;
+  --brand-red:#DB190E;
 
   --radius:20px;
   --font:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
@@ -239,7 +243,7 @@ body{
 
 /* ===== 10. 區塊小標與鍵值列（月退俸／投資頁共用） ===== */
 .sec-h{font-size:16px;font-weight:700;color:var(--head);margin:20px 0 10px;
-  padding-left:11px;border-left:5px solid var(--gold)}
+  padding-left:11px;border-left:5px solid var(--navy)}
 /* 分類標題正下方的一句白話解釋（投資頁用），字級小、灰色，不搶標題的視覺重量 */
 .sec-d{font-size:13px;color:var(--ink-2);line-height:1.6;margin:-4px 0 12px;padding-left:11px}
 /* ETF 內部的小分類標題（市值型／高股息…），比 .sec-h 再輕一階 */
@@ -421,9 +425,9 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .prod.warn{border-color:#EBCB94}
 .prod-top{display:flex;align-items:flex-start;justify-content:space-between;gap:9px}
 .prod-nm{font-size:17.5px;font-weight:700;color:var(--ink);line-height:1.4}
-.prod-cash{background:var(--gold-lt);border-radius:11px;padding:10px 13px;margin:10px 0 8px;
-  font-size:15px;color:#8A5510;font-weight:600}
-.prod-cash b{font-size:23px;font-weight:800;color:var(--gold-tx)}
+.prod-cash{background:var(--green-lt);border-radius:11px;padding:10px 13px;margin:10px 0 8px;
+  font-size:15px;color:#1F5C41;font-weight:600}
+.prod-cash b{font-size:23px;font-weight:800;color:var(--green)}
 .prod-cash.alt{background:var(--tint);color:var(--ink-2);font-weight:600}
 .prod-d{font-size:14px;color:var(--ink-2);line-height:1.62}
 .prod-meta{display:flex;gap:14px;margin-top:8px;font-size:13px;color:var(--ink-2)}
@@ -479,11 +483,11 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
      .pick.t（青色）＝ 聯絡人：撥電話、預約回電
    真正會成交的動作（確認送出、預約營業員）才用紅色的 .bigbtn.p。
    這是照康和「好康 fun 心投」官網的做法：紅／金／青輪流用，紅色留給最重要的那一個。 */
-.pick{width:100%;margin-top:11px;background:var(--gold);color:var(--ink);border:0;
+.pick{width:100%;margin-top:11px;background:var(--navy);color:#fff;border:0;
   border-radius:12px;padding:14px;font-size:16px;font-weight:700;
   font-family:inherit;cursor:pointer}
 .pick.t{background:var(--teal);color:#fff}
-.prod.open .pick{background:#fff;color:var(--gold-tx);border:2px solid var(--gold)}
+.prod.open .pick{background:#fff;color:var(--navy);border:2px solid var(--navy)}
 
 /* ===== 19. 申購試算面板 ===== */
 .order{margin-top:14px;padding-top:15px;border-top:2px dashed var(--line)}

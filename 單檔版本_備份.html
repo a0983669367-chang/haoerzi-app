@@ -5,7 +5,7 @@
   這支檔案是由 index.html + css/ + js/ 自動合併產生的，方便單獨寄送或
   雙擊開啟。要修改內容請改原始的 js/data.js，改完後執行 產生單檔.py
   重新產生一次，不要直接改這裡。
-  產生日期：2026-08-04　·　對應 service-worker 版本：v5
+  產生日期：2026-08-04　·　對應 service-worker 版本：v6
   ------------------------------------------------------------------
 -->
 <html lang="zh-Hant">
@@ -31,42 +31,38 @@
 
 /* ===== 1. 色彩與設計變數（改這裡就能換整套配色） ===== */
 :root{
-  /* 主色：沿用變數名稱 --navy（歷史命名，改動風險最低），但顏色已經換成康和紅。
-     指定色號 #DB190E（白字對比度 5.05:1，過 WCAG AA），--navy-dk 是同一色系
-     壓深一階，給漸層／hover 用。想再換色 → 改這兩個值，全站會一起變。 */
+  /* 主色：康和品牌紅。只用在「品牌識別與行動」——logo、選中的頁籤／導覽、
+     主要按鈕、金額卡左側色條。**不拿來當內文顏色**，滿頁紅字很刺眼。 */
   --navy:#DB190E;
   --navy-dk:#9E120A;
-  --teal:#1B7B8C;        /* 輔色：青色，用在滑桿、聯絡類按鈕、營業員視角 */
-  /* 金色刻意分成兩個：
-       --gold    亮金，只用在「填色」（按鈕底、月曆金點、色條、圖示底）
-       --gold-tx 深琥珀，只用在「文字」——亮金當文字放在白卡上只有 2.76:1，
-                 過不了 WCAG AA，這是原本就有的問題，這次一併修掉。
-     亮金配深褐字 6.79:1、深琥珀配白底 6.2:1，兩個都很安全。 */
+
+  /* 標題與數字的顏色：深藍。這是這支原型最早用的主色，紅色改成只做品牌點綴之後，
+     標題、金額、重點數字回到深藍，畫面才不會整片紅。白底對比度 9.09:1。 */
+  --head:#0F4C75;
+
+  --teal:#1B7B8C;        /* 青色：滑桿、聯絡類按鈕、營業員視角 */
+  /* 金色分兩個：--gold 只填色、--gold-tx 只當文字（亮金當文字在白底只有 2.76:1，
+     過不了 WCAG AA）。 */
   --gold:#E9A227;
   --gold-tx:#8A5510;
   --gold-lt:#FBF0DC;
   --green:#2E7D5B;       /* 安全 / 正向 */
   --green-lt:#E4F2EA;
-  /* 警示色：故意跟主色（品牌紅）錯開，改成偏紫的酒紅色。
-     主色已經是紅的之後，如果警示也用同一種紅，長輩會分不清「這是按鈕」
-     還是「這是警告」；色相拉開，對比度也比原本的 #C0392B 更高（9.97:1）。 */
+  /* 警示色：偏紫的酒紅，刻意跟品牌紅拉開色相，長輩才不會把「按鈕」跟「警告」搞混 */
   --red:#7A2233;
   --red-lt:#FBE9E7;
-  /* 文字與底色全部改成「暖」的色溫。
-     原本是冷色調的藍灰（文字 #1C2B36、底色 #EEF2F5），配上熱的品牌紅會互相打架，
-     這也是畫面看起來刺眼的主因之一。康和「好康 fun 心投」官網用的是
-     暖米底＋白卡＋紅／金／青三色輪流點綴，這裡照同樣的邏輯改。 */
-  --ink:#33251C;         /* 主要文字：暖褐黑，取自參考圖的線稿顏色 */
-  --ink-2:#6B5646;       /* 次要文字：暖灰褐 */
-  --line:#E5DCCB;        /* 卡片外框：暖米色邊 */
-  --line-2:#F1EAE0;      /* 更淡的分隔線（列與列之間） */
-  --tint:#FAF6EE;        /* 卡片內的淺色填充（原本的 #F4F8FA 那一類冷灰） */
-  --tint-2:#F0E9DC;      /* 深一階的填充（分頁容器、免責聲明底） */
-  --track:#E5DCCB;       /* 滑桿與進度條的軌道 */
-  --bg:#F8F3E9;          /* 頁面底色：暖米 */
-  --card:#FFFFFF;
 
-  --radius:20px;         /* 卡片圓角，比原本 18px 再軟一點，整體不那麼方正拘謹 */
+  --ink:#1F2A37;         /* 主要文字：深灰藍 */
+  --ink-2:#5B6A7A;       /* 次要文字 */
+  --line:#E3E6EA;        /* 卡片外框 */
+  --line-2:#EFF1F4;      /* 更淡的分隔線（列與列之間） */
+  --tint:#F2F4F6;        /* 手機螢幕底色、卡片內的淺色填充 */
+  --tint-2:#E8EBEF;      /* 深一階的填充（分頁容器、免責聲明底） */
+  --track:#DFE3E8;       /* 滑桿與進度條的軌道 */
+  --bg:#FFFFFF;          /* 桌機頁面底色：全白 */
+  --card:#FFFFFF;        /* 卡片：白 */
+
+  --radius:20px;
   --font:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
 }
 
@@ -88,31 +84,14 @@ body{
   background:var(--bg);
   font-family:var(--font);
   color:var(--ink);
-  position:relative;   /* 讓下面的裝飾色塊能用 fixed 定位鋪在整個畫面底層 */
 }
 
-/* 桌機簡報畫面背景的裝飾色塊：兩三團模糊的品牌紅／金色圓，
-   純粹視覺點綴，不影響任何版面（fixed + 負層級 + pointer-events:none）。
-   手機直接開啟時畫面本來就塞不下這些留白，用 min-width 限制只在夠寬的桌機才出現。 */
-@media (min-width:900px){
-  body::before,body::after{
-    content:"";position:fixed;z-index:-1;border-radius:50%;
-    filter:blur(70px);pointer-events:none;opacity:.10;
-  }
-  body::before{
-    width:520px;height:520px;top:-160px;right:-140px;
-    background:var(--navy);
-  }
-  body::after{
-    width:420px;height:420px;bottom:-140px;left:-120px;
-    background:var(--gold);
-  }
-}
+/* 背景保持全白，不加裝飾色塊——之前那兩團模糊光暈會把白色染成淡紅／淡黃。 */
 
 /* ===== 2. 桌機版頁首 ===== */
 .page-head{max-width:1180px;margin:0 auto 26px;text-align:center}
 .page-head h1{font-size:27px;margin:0 0 8px;letter-spacing:.5px}
-.page-head h1 span{color:var(--navy)}
+.page-head h1 span{color:var(--head)}
 .page-head p{margin:0;color:var(--ink-2);font-size:16px}
 .badge{display:inline-block;margin-top:12px;background:var(--navy);color:#fff;
   font-size:13px;padding:5px 14px;border-radius:20px;letter-spacing:1px}
@@ -134,9 +113,9 @@ body{
 /* ===== 5. 手機外框 ===== */
 .phone{
   width:392px;flex:0 0 392px;background:#0d1418;border-radius:44px;padding:13px;
-  /* 兩層陰影疊起來：一層一般的深色投影撐立體感，
-     一層淡淡的品牌紅暈染在外圍，手機看起來像「發著品牌色的光」，比純黑影子活潑一點 */
-  box-shadow:0 26px 60px rgba(10,40,65,.30), 0 0 90px -20px rgba(219,25,14,.28);
+  /* 背景改成純白之後，原本外圍那圈品牌紅暈光會在白底上變成一圈粉紅，很髒，
+     改回單純的中性深色投影。 */
+  box-shadow:0 22px 50px rgba(20,35,55,.22);
   position:relative;
 }
 .notch{position:absolute;top:13px;left:50%;transform:translateX(-50%);
@@ -151,14 +130,14 @@ body{
      2. logo 可以用官方原版配色，不必再做一張白色反白版
      3. 標題文字對比度從「白配紅 5.05:1」提高到「深褐配白 12:1 以上」
    底部留一條品牌紅細線當視覺錨點，仍看得出是康和的紅。 */
-.statusbar{height:34px;flex:0 0 34px;background:var(--card);color:var(--ink);
+.statusbar{height:34px;flex:0 0 34px;background:var(--tint-2);color:var(--ink);
   display:flex;align-items:flex-end;justify-content:space-between;
   padding:0 20px 4px;font-size:13px;font-weight:600}
-.appbar{background:var(--card);color:var(--ink);padding:8px 20px 14px;
+.appbar{background:var(--tint-2);color:var(--ink);padding:8px 20px 14px;
   border-bottom:3px solid var(--navy)}
 .appbar .bar-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .appbar .greet{font-size:15px;color:var(--ink-2)}
-.appbar .title{font-size:23px;font-weight:700;margin-top:3px;color:var(--navy)}
+.appbar .title{font-size:23px;font-weight:700;margin-top:3px;color:var(--head)}
 /* 無障礙：字級切換鈕（點一下循環 標準 → 大 → 特大） */
 .a11y{background:var(--tint-2);border:0;border-radius:20px;color:var(--ink-2);
   font-family:inherit;font-size:13px;font-weight:700;padding:7px 13px;cursor:pointer;
@@ -191,7 +170,7 @@ body{
   border-radius:20px;padding:22px 20px;margin-bottom:16px;color:var(--ink)}
 .hero .lbl{font-size:16px;color:var(--ink-2)}
 .hero .amt{font-size:46px;font-weight:800;letter-spacing:-1px;margin:6px 0 2px;
-  line-height:1.05;color:var(--navy)}
+  line-height:1.05;color:var(--head)}
 .hero .amt small{font-size:20px;font-weight:600;margin-right:4px;color:var(--ink-2)}
 .hero .note{font-size:14.5px;color:var(--ink-2);margin-top:8px;
   background:var(--tint);padding:7px 12px;border-radius:10px;display:inline-block;font-weight:600}
@@ -202,7 +181,7 @@ body{
 /* ===== 9. 現金流月曆 ===== */
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .cal-head b{font-size:18px}
-.cal-head span{color:var(--navy);font-size:22px;font-weight:700;padding:0 8px;cursor:pointer}
+.cal-head span{color:var(--head);font-size:22px;font-weight:700;padding:0 8px;cursor:pointer}
 /* minmax(0,1fr)：1fr 的隱含最小值是內容寬度，放大字級時 7 欄會壓不下去而溢出，
    改成 minmax(0,1fr) 才能真的等分縮小 */
 .cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
@@ -211,7 +190,7 @@ body{
   align-items:center;justify-content:center;font-size:15px;font-weight:600;
   border:2px solid transparent;background:var(--tint);color:var(--ink)}
 .cal .day.blank{background:transparent}
-.cal .day.pay{background:var(--gold-lt);border-color:var(--gold);color:var(--navy-dk);cursor:pointer}
+.cal .day.pay{background:var(--gold-lt);border-color:var(--gold);color:var(--head);cursor:pointer}
 .cal .day.pay .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);margin-top:3px}
 .cal .day.pay.sel{background:var(--gold);color:var(--ink)}
 .cal .day.pay.sel .dot{background:#fff}
@@ -240,7 +219,7 @@ body{
   font-family:inherit;font-size:16px;font-weight:700;color:var(--ink-2);
   padding:13px 6px;cursor:pointer;transition:.15s;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis}
-.subtab.on{background:#fff;color:var(--navy);box-shadow:0 1px 4px rgba(15,76,117,.16)}
+.subtab.on{background:#fff;color:var(--head);box-shadow:0 1px 4px rgba(15,76,117,.16)}
 
 /* ==========================================================================
    9-3. 吉祥物「小方」
@@ -260,7 +239,7 @@ body{
 .mk-say{position:relative;flex:1;min-width:0;background:#fff;border:2px solid var(--line);
   border-radius:16px;padding:13px 15px;font-size:15px;line-height:1.65;color:var(--ink);
   text-align:left}
-.mk-say b{color:var(--navy)}
+.mk-say b{color:var(--head)}
 /* 泡泡左邊的小尖角：旋轉 45° 的方塊，只留左下兩邊框線，接縫才不會露出來 */
 .mk-say::after{content:"";position:absolute;left:-7px;top:50%;margin-top:-6px;
   width:12px;height:12px;background:#fff;transform:rotate(45deg);
@@ -282,7 +261,7 @@ body{
 }
 
 /* ===== 10. 區塊小標與鍵值列（月退俸／投資頁共用） ===== */
-.sec-h{font-size:16px;font-weight:700;color:var(--navy);margin:20px 0 10px;
+.sec-h{font-size:16px;font-weight:700;color:var(--head);margin:20px 0 10px;
   padding-left:11px;border-left:5px solid var(--gold)}
 /* 分類標題正下方的一句白話解釋（投資頁用），字級小、灰色，不搶標題的視覺重量 */
 .sec-d{font-size:13px;color:var(--ink-2);line-height:1.6;margin:-4px 0 12px;padding-left:11px}
@@ -291,11 +270,11 @@ body{
   padding-left:11px;border-left:3px solid var(--teal)}
 .kv-row{display:flex;justify-content:space-between;align-items:center;
   padding-top:13px;margin-top:13px;border-top:1px dashed var(--line);font-size:15.5px;color:var(--ink-2)}
-.kv-row b{font-size:19px;color:var(--navy)}
+.kv-row b{font-size:19px;color:var(--head)}
 
 /* ===== 11. 試算滑桿 ===== */
 .slider-wrap{margin:16px 0 6px}
-.slider-val{font-size:32px;font-weight:800;color:var(--navy);text-align:center;margin-bottom:6px}
+.slider-val{font-size:32px;font-weight:800;color:var(--head);text-align:center;margin-bottom:6px}
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:14px;border-radius:10px;
   background:var(--track);outline:none}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:40px;height:40px;
@@ -426,7 +405,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .sol-need{display:flex;align-items:baseline;justify-content:space-between;
   background:var(--tint);border-radius:12px;padding:11px 14px;margin:11px 0 9px}
 .sol-need span{font-size:14.5px;color:var(--ink-2)}
-.sol-need b{font-size:27px;font-weight:800;color:var(--navy)}
+.sol-need b{font-size:27px;font-weight:800;color:var(--head)}
 .sol-d{font-size:14px;color:var(--ink-2);line-height:1.62;margin-bottom:4px}
 .sol-fit{font-size:13.5px;font-weight:600;margin-top:9px;padding:8px 11px;border-radius:10px;line-height:1.55}
 .sol-fit.ok{background:var(--green-lt);color:var(--green)}
@@ -435,7 +414,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 /* ===== 16. 投資頁：風險屬性、分類籤、商品卡 ===== */
 .kyc{border-left:7px solid var(--navy)}
 .kyc-l{font-size:14px;color:var(--ink-2)}
-.kyc-v{font-size:21px;font-weight:800;color:var(--navy);margin:3px 0 8px;
+.kyc-v{font-size:21px;font-weight:800;color:var(--head);margin:3px 0 8px;
   display:flex;align-items:center;flex-wrap:wrap;gap:4px}
 
 /* RR1–RR5 白話對照卡：預設收合的 <details>，不會把下面的商品清單往下推。
@@ -514,7 +493,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 /* 同一個揭露框裡的第二段（通用風險揭露），用細線跟上一段分開 */
 .disc-x{margin-top:9px;padding-top:9px;border-top:1px solid var(--line)}
 .spk{display:block;margin-top:10px;background:var(--tint);border:0;border-radius:10px;
-  padding:9px 13px;font-size:14px;font-family:inherit;color:var(--navy);
+  padding:9px 13px;font-size:14px;font-family:inherit;color:var(--head);
   font-weight:600;cursor:pointer}
 
 /* ===== 18. 卡片內的次要動作鈕（選方案、試算並申購、撥電話） =====
@@ -526,7 +505,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .pick{width:100%;margin-top:11px;background:var(--gold);color:var(--ink);border:0;
   border-radius:12px;padding:14px;font-size:16px;font-weight:700;
   font-family:inherit;cursor:pointer}
-.pick.t{background:var(--teal)}
+.pick.t{background:var(--teal);color:#fff}
 .prod.open .pick{background:#fff;color:var(--gold-tx);border:2px solid var(--gold)}
 
 /* ===== 19. 申購試算面板 ===== */
@@ -539,7 +518,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .ord-out .alt{flex:1;background:var(--tint);color:var(--ink-2);font-size:14px;line-height:1.6}
 .ord-fee{font-size:14px;color:var(--ink-2);background:var(--tint);border-radius:10px;
   padding:10px 13px;margin-bottom:13px}
-.ord-fee b{color:var(--navy);font-size:16px}
+.ord-fee b{color:var(--head);font-size:16px}
 
 /* ===== 20. 二次確認浮層（防誤觸） ===== */
 .sheet{position:absolute;inset:0;background:rgba(10,32,50,.55);display:none;
@@ -548,7 +527,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .sheet-box{width:100%;background:#fff;border-radius:22px 22px 0 0;padding:22px 18px 18px;
   max-height:88%;overflow-y:auto}
 .sheet-t{font-size:15px;color:var(--ink-2);text-align:center}
-.sheet-big{font-size:23px;font-weight:800;color:var(--navy);text-align:center;margin:6px 0 16px;line-height:1.35}
+.sheet-big{font-size:23px;font-weight:800;color:var(--head);text-align:center;margin:6px 0 16px;line-height:1.35}
 .sheet-kv{display:flex;justify-content:space-between;align-items:center;
   padding:12px 0;border-bottom:1px solid var(--line-2);font-size:15.5px;color:var(--ink-2)}
 .sheet-kv b{font-size:20px;color:var(--ink);font-weight:800}
@@ -558,7 +537,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
   font-size:14px;color:#8A5510;line-height:1.65}
 /* 對話框裡的大字說明（樂齡基準：內文 ≥ 18px） */
 .sheet-x{font-size:18px;line-height:1.8;color:var(--ink);margin:2px 0 18px}
-.sheet-x b{color:var(--navy)}
+.sheet-x b{color:var(--head)}
 .ok-ic{width:64px;height:64px;border-radius:50%;background:var(--green);color:#fff;
   font-size:36px;display:flex;align-items:center;justify-content:center;margin:4px auto 12px}
 
@@ -584,7 +563,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .todo-top{display:flex;align-items:center;justify-content:space-between;gap:9px}
 .todo-top b{font-size:18.5px;color:var(--ink)}
 .todo-x{font-size:14.5px;color:var(--ink-2);margin-top:7px}
-.todo-x b{color:var(--navy);font-size:17px}
+.todo-x b{color:var(--head);font-size:17px}
 .todo-sig{font-size:13.5px;color:var(--ink-2);background:var(--tint);border-radius:10px;
   padding:9px 12px;margin-top:9px;line-height:1.6}
 .todo-sig i,.cl-sig i{font-style:normal;color:#8496A3}
@@ -598,7 +577,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .cl-sig{font-size:14px;color:var(--ink-2);background:var(--tint);border-radius:10px;
   padding:10px 12px;margin-top:11px;line-height:1.6}
 .cl-gap{font-size:14.5px;color:var(--ink-2);margin-top:9px}
-.cl-gap b{color:var(--navy);font-size:17px}
+.cl-gap b{color:var(--head);font-size:17px}
 
 .pill.hot3{background:var(--red-lt);color:var(--red)}
 .pill.hot2{background:var(--gold-lt);color:var(--gold-tx)}
@@ -620,7 +599,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .notes{flex:1 1 auto;min-height:0;overflow-y:auto;padding:6px 6px 6px 0}
 .notes::-webkit-scrollbar{width:6px}
 .notes::-webkit-scrollbar-thumb{background:#D8CCB8;border-radius:3px}
-.notes h2{font-size:20px;margin:0 0 4px;color:var(--navy)}
+.notes h2{font-size:20px;margin:0 0 4px;color:var(--head)}
 .notes .kicker{font-size:13px;letter-spacing:2px;color:var(--gold-tx);font-weight:700;margin-bottom:6px}
 .notes .lead{font-size:15.5px;color:var(--ink-2);line-height:1.75;margin:0 0 18px}
 
@@ -632,7 +611,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .qr-card:hover{box-shadow:0 4px 14px rgba(15,76,117,.14)}
 .qr-card .qr-img{width:84px;height:84px;flex:0 0 84px;border-radius:8px}
 .qr-card .qr-tx{min-width:0}
-.qr-card .qr-tx b{display:block;font-size:14.5px;color:var(--navy);margin-bottom:4px}
+.qr-card .qr-tx b{display:block;font-size:14.5px;color:var(--head);margin-bottom:4px}
 .qr-card .qr-tx span{font-size:12.5px;color:var(--ink-2);line-height:1.5;word-break:break-all}
 .qr-card .qr-tx i{display:block;font-style:normal;font-size:12px;color:var(--teal);
   font-weight:700;margin-top:5px}
@@ -653,13 +632,13 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .qr-zoom-x{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;
   border:0;background:var(--tint);color:var(--ink-2);font-size:20px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;font-family:inherit}
-.qr-zoom-h{font-size:19px;font-weight:800;color:var(--navy);margin:0 0 20px}
+.qr-zoom-h{font-size:19px;font-weight:800;color:var(--head);margin:0 0 20px}
 .qr-zoom-box .qr-img-big{width:100%;max-width:280px;aspect-ratio:1/1;margin:0 auto 20px;
   border-radius:14px;border:1px solid var(--line)}
 .qr-zoom-u{font-size:16.5px;color:var(--ink-2);word-break:break-all}
 .note{background:#fff;border-radius:14px;padding:15px 17px;margin-bottom:11px;
   border-left:5px solid var(--navy);box-shadow:0 2px 7px rgba(15,76,117,.07)}
-.note b{display:block;font-size:15.5px;margin-bottom:5px;color:var(--navy-dk)}
+.note b{display:block;font-size:15.5px;margin-bottom:5px;color:var(--head)}
 .note span{font-size:14.5px;color:var(--ink-2);line-height:1.7}
 .note.g{border-left-color:var(--green)}
 .note.o{border-left-color:var(--gold)}

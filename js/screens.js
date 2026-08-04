@@ -19,12 +19,12 @@ var S = {};
 S.mk = function (cls) {
   return '' +
   '<svg class="mk ' + (cls || 'mk-md') + '" viewBox="0 0 128 158" aria-hidden="true">' +
-    '<ellipse cx="64" cy="152" rx="29" ry="4.5" fill="#C4210A" opacity=".13"/>' +
+    '<ellipse cx="64" cy="152" rx="29" ry="4.5" fill="var(--navy)" opacity=".13"/>' +
     '<g class="mk-b">' +
-      /* 腳與鞋 */
+      /* 腳與鞋（品牌紅，跟脖子上的領巾呼應） */
       '<path d="M50 122v13M78 122v13" stroke="#3F3229" stroke-width="7.5" stroke-linecap="round"/>' +
-      '<path d="M38 142q0-8 9-8t9 8q0 4-4 4H42q-4 0-4-4z" fill="var(--brand)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
-      '<path d="M72 142q0-8 9-8t9 8q0 4-4 4H76q-4 0-4-4z" fill="var(--brand)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
+      '<path d="M38 142q0-8 9-8t9 8q0 4-4 4H42q-4 0-4-4z" fill="var(--navy)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
+      '<path d="M72 142q0-8 9-8t9 8q0 4-4 4H76q-4 0-4-4z" fill="var(--navy)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
       /* 左手 */
       '<path d="M32 102q-13 4-19 12" stroke="#3F3229" stroke-width="7.5" stroke-linecap="round" fill="none"/>' +
       '<path d="M13 112q-7 3-5 8t9 2 5-8-9-2z" fill="#fff" stroke="#3F3229" stroke-width="3.2"/>' +
@@ -33,10 +33,12 @@ S.mk = function (cls) {
         '<path d="M94 100q14-3 21-13" stroke="#3F3229" stroke-width="7.5" stroke-linecap="round" fill="none"/>' +
         '<path d="M112 84q4-6 9-2t0 10-9 2-.5-6z" fill="#fff" stroke="#3F3229" stroke-width="3.2"/>' +
       '</g>' +
-      /* 身體（康和品牌紅） */
-      '<path d="M32 88h62a5 5 0 015 5v22a9 9 0 01-9 9H36a9 9 0 01-9-9V93a5 5 0 015-5z" fill="var(--brand)" stroke="#3F3229" stroke-width="3.4"/>' +
-      '<path d="M63 92v30" stroke="var(--brand-dk)" stroke-width="2.4"/>' +
-      '<circle cx="70" cy="101" r="2" fill="#fff"/><circle cx="70" cy="111" r="2" fill="#fff"/>' +
+      /* 身體：跟頭同一色米白，整隻角色像一個方塊；紅色留給下面的領巾點綴，
+         不是通體紅——這是照康和官網「好康 fun 心投」那隻方塊角色的配色調整的。 */
+      '<path d="M32 88h62a5 5 0 015 5v22a9 9 0 01-9 9H36a9 9 0 01-9-9V93a5 5 0 015-5z" fill="#fff" stroke="#3F3229" stroke-width="3.4"/>' +
+      /* 領巾：脖子下方一條紅色蝴蝶結，尾巴垂在胸前 */
+      '<path d="M39 86h50v5a3.5 3.5 0 01-3.5 3.5h-43A3.5 3.5 0 0139 91z" fill="var(--navy)" stroke="#3F3229" stroke-width="3" stroke-linejoin="round"/>' +
+      '<path d="M55 91.5l9 21 9-21z" fill="var(--navy)" stroke="#3F3229" stroke-width="3" stroke-linejoin="round"/>' +
       /* 頭頂的金色愛心 */
       '<path d="M70 20c-4-9 7-14 10-6 3-8 14-3 10 6-3 6-10 11-10 11s-7-5-10-11z" fill="var(--gold)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
       /* 頭：立方體 */
@@ -45,11 +47,12 @@ S.mk = function (cls) {
       '<rect x="26" y="34" width="68" height="55" rx="11" fill="#fff" stroke="#3F3229" stroke-width="3.4"/>' +
       /* 螢幕臉 */
       '<rect x="33" y="40" width="54" height="26" rx="10" fill="#EDF2F5" stroke="#3F3229" stroke-width="2.8"/>' +
+      /* 眼睛比原本再大一點、更圓，貼近官網那隻角色更討喜的比例 */
       '<g class="mk-e">' +
-        '<circle cx="48" cy="53" r="8" fill="#fff" stroke="#3F3229" stroke-width="2.6"/>' +
-        '<circle cx="72" cy="53" r="8" fill="#fff" stroke="#3F3229" stroke-width="2.6"/>' +
-        '<circle cx="49.5" cy="54" r="4.7" fill="#4A3B31"/><circle cx="73.5" cy="54" r="4.7" fill="#4A3B31"/>' +
-        '<circle cx="47.5" cy="51.6" r="1.6" fill="#fff"/><circle cx="71.5" cy="51.6" r="1.6" fill="#fff"/>' +
+        '<circle cx="48" cy="53" r="9" fill="#fff" stroke="#3F3229" stroke-width="2.6"/>' +
+        '<circle cx="72" cy="53" r="9" fill="#fff" stroke="#3F3229" stroke-width="2.6"/>' +
+        '<circle cx="49.5" cy="54.3" r="5.2" fill="#4A3B31"/><circle cx="73.5" cy="54.3" r="5.2" fill="#4A3B31"/>' +
+        '<circle cx="47" cy="51.4" r="1.9" fill="#fff"/><circle cx="71" cy="51.4" r="1.9" fill="#fff"/>' +
       '</g>' +
       /* 嘴與腮紅 */
       '<path d="M51 72q10 12 21 0z" fill="#E39A66" stroke="#3F3229" stroke-width="2.8" stroke-linejoin="round"/>' +

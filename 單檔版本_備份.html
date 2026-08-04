@@ -31,19 +31,11 @@
 
 /* ===== 1. 色彩與設計變數（改這裡就能換整套配色） ===== */
 :root{
-  /* 康和品牌紅：直接從官方 logo 取色。
-     --brand 是 logo 本身的鮮紅，用在吉祥物「小方」的身體與小面積點綴；
-     --brand-dk 是同一組色再壓深一階，白字疊上去對比度才夠（見下方 --navy 的說明）。 */
-  --brand:#ED2F10;
-  --brand-dk:#C4210A;
-
   /* 主色：沿用變數名稱 --navy（歷史命名，改動風險最低），但顏色已經換成康和紅。
-     直接用 logo 的鮮紅（--brand）當大面積底色＋白字，實測對比度只有 4.2:1，
-     不夠 WCAG AA 一般文字要求的 4.5:1；改用壓深一階的 --brand-dk 當主色，
-     對比度提高到 5.9:1，字級小也讀得清楚，長輩用起來才安全。
-     想再換色 → 改這兩個值，全站會一起變。 */
-  --navy:#C4210A;
-  --navy-dk:#8E1606;
+     指定色號 #DB190E（白字對比度 5.05:1，過 WCAG AA），--navy-dk 是同一色系
+     壓深一階，給漸層／hover 用。想再換色 → 改這兩個值，全站會一起變。 */
+  --navy:#DB190E;
+  --navy-dk:#9E120A;
   --teal:#1B7B8C;        /* 輔色：跟主色互補的冷色，用在滑桿、次要強調，避免整頁都是紅 */
   --gold:#D98A1F;        /* 強調色：金額、入帳 */
   --gold-lt:#FBF0DC;
@@ -91,7 +83,7 @@ body{
 @media (min-width:900px){
   body::before,body::after{
     content:"";position:fixed;z-index:-1;border-radius:50%;
-    filter:blur(70px);pointer-events:none;opacity:.16;
+    filter:blur(70px);pointer-events:none;opacity:.10;
   }
   body::before{
     width:520px;height:520px;top:-160px;right:-140px;
@@ -130,7 +122,7 @@ body{
   width:392px;flex:0 0 392px;background:#0d1418;border-radius:44px;padding:13px;
   /* 兩層陰影疊起來：一層一般的深色投影撐立體感，
      一層淡淡的品牌紅暈染在外圍，手機看起來像「發著品牌色的光」，比純黑影子活潑一點 */
-  box-shadow:0 26px 60px rgba(10,40,65,.30), 0 0 90px -20px rgba(196,33,10,.35);
+  box-shadow:0 26px 60px rgba(10,40,65,.30), 0 0 90px -20px rgba(219,25,14,.28);
   position:relative;
 }
 .notch{position:absolute;top:13px;left:50%;transform:translateX(-50%);
@@ -544,9 +536,9 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .role.on{background:var(--navy);border-color:var(--navy);color:#fff}
 
 /* ===== 22. 營業員視角：待辦與客戶卡 ===== */
-/* 原本是 navy→藍灰的漸層，跟客戶端的 hero 做區隔；主色改紅之後改用「更深一階的紅→近黑紅」，
-   一樣跟客戶端（紅→深紅）有區隔，但仍在同一個紅色家族裡，不會突然跳出一個不相干的藍色 */
-.hero.adv{background:linear-gradient(140deg,var(--navy-dk) 0%,#450C05 100%)}
+/* 跟客戶端的 hero（紅→深紅）做區隔，用深紅→暗棕紅，維持柔和不要接近全黑，
+   看起來更沉穩而不是壓迫 */
+.hero.adv{background:linear-gradient(140deg,var(--navy-dk) 0%,#6B1C12 100%)}
 
 .todo,.cl{background:var(--card);border-radius:var(--radius);padding:15px 16px;margin-bottom:11px;
   border:2px solid var(--line);box-shadow:0 2px 10px rgba(15,76,117,.05)}
@@ -1318,12 +1310,12 @@ var S = {};
 S.mk = function (cls) {
   return '' +
   '<svg class="mk ' + (cls || 'mk-md') + '" viewBox="0 0 128 158" aria-hidden="true">' +
-    '<ellipse cx="64" cy="152" rx="29" ry="4.5" fill="#C4210A" opacity=".13"/>' +
+    '<ellipse cx="64" cy="152" rx="29" ry="4.5" fill="var(--navy)" opacity=".13"/>' +
     '<g class="mk-b">' +
-      /* 腳與鞋 */
+      /* 腳與鞋（品牌紅，跟脖子上的領巾呼應） */
       '<path d="M50 122v13M78 122v13" stroke="#3F3229" stroke-width="7.5" stroke-linecap="round"/>' +
-      '<path d="M38 142q0-8 9-8t9 8q0 4-4 4H42q-4 0-4-4z" fill="var(--brand)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
-      '<path d="M72 142q0-8 9-8t9 8q0 4-4 4H76q-4 0-4-4z" fill="var(--brand)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
+      '<path d="M38 142q0-8 9-8t9 8q0 4-4 4H42q-4 0-4-4z" fill="var(--navy)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
+      '<path d="M72 142q0-8 9-8t9 8q0 4-4 4H76q-4 0-4-4z" fill="var(--navy)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
       /* 左手 */
       '<path d="M32 102q-13 4-19 12" stroke="#3F3229" stroke-width="7.5" stroke-linecap="round" fill="none"/>' +
       '<path d="M13 112q-7 3-5 8t9 2 5-8-9-2z" fill="#fff" stroke="#3F3229" stroke-width="3.2"/>' +
@@ -1332,10 +1324,12 @@ S.mk = function (cls) {
         '<path d="M94 100q14-3 21-13" stroke="#3F3229" stroke-width="7.5" stroke-linecap="round" fill="none"/>' +
         '<path d="M112 84q4-6 9-2t0 10-9 2-.5-6z" fill="#fff" stroke="#3F3229" stroke-width="3.2"/>' +
       '</g>' +
-      /* 身體（康和品牌紅） */
-      '<path d="M32 88h62a5 5 0 015 5v22a9 9 0 01-9 9H36a9 9 0 01-9-9V93a5 5 0 015-5z" fill="var(--brand)" stroke="#3F3229" stroke-width="3.4"/>' +
-      '<path d="M63 92v30" stroke="var(--brand-dk)" stroke-width="2.4"/>' +
-      '<circle cx="70" cy="101" r="2" fill="#fff"/><circle cx="70" cy="111" r="2" fill="#fff"/>' +
+      /* 身體：跟頭同一色米白，整隻角色像一個方塊；紅色留給下面的領巾點綴，
+         不是通體紅——這是照康和官網「好康 fun 心投」那隻方塊角色的配色調整的。 */
+      '<path d="M32 88h62a5 5 0 015 5v22a9 9 0 01-9 9H36a9 9 0 01-9-9V93a5 5 0 015-5z" fill="#fff" stroke="#3F3229" stroke-width="3.4"/>' +
+      /* 領巾：脖子下方一條紅色蝴蝶結，尾巴垂在胸前 */
+      '<path d="M39 86h50v5a3.5 3.5 0 01-3.5 3.5h-43A3.5 3.5 0 0139 91z" fill="var(--navy)" stroke="#3F3229" stroke-width="3" stroke-linejoin="round"/>' +
+      '<path d="M55 91.5l9 21 9-21z" fill="var(--navy)" stroke="#3F3229" stroke-width="3" stroke-linejoin="round"/>' +
       /* 頭頂的金色愛心 */
       '<path d="M70 20c-4-9 7-14 10-6 3-8 14-3 10 6-3 6-10 11-10 11s-7-5-10-11z" fill="var(--gold)" stroke="#3F3229" stroke-width="3.2" stroke-linejoin="round"/>' +
       /* 頭：立方體 */
@@ -1344,11 +1338,12 @@ S.mk = function (cls) {
       '<rect x="26" y="34" width="68" height="55" rx="11" fill="#fff" stroke="#3F3229" stroke-width="3.4"/>' +
       /* 螢幕臉 */
       '<rect x="33" y="40" width="54" height="26" rx="10" fill="#EDF2F5" stroke="#3F3229" stroke-width="2.8"/>' +
+      /* 眼睛比原本再大一點、更圓，貼近官網那隻角色更討喜的比例 */
       '<g class="mk-e">' +
-        '<circle cx="48" cy="53" r="8" fill="#fff" stroke="#3F3229" stroke-width="2.6"/>' +
-        '<circle cx="72" cy="53" r="8" fill="#fff" stroke="#3F3229" stroke-width="2.6"/>' +
-        '<circle cx="49.5" cy="54" r="4.7" fill="#4A3B31"/><circle cx="73.5" cy="54" r="4.7" fill="#4A3B31"/>' +
-        '<circle cx="47.5" cy="51.6" r="1.6" fill="#fff"/><circle cx="71.5" cy="51.6" r="1.6" fill="#fff"/>' +
+        '<circle cx="48" cy="53" r="9" fill="#fff" stroke="#3F3229" stroke-width="2.6"/>' +
+        '<circle cx="72" cy="53" r="9" fill="#fff" stroke="#3F3229" stroke-width="2.6"/>' +
+        '<circle cx="49.5" cy="54.3" r="5.2" fill="#4A3B31"/><circle cx="73.5" cy="54.3" r="5.2" fill="#4A3B31"/>' +
+        '<circle cx="47" cy="51.4" r="1.9" fill="#fff"/><circle cx="71" cy="51.4" r="1.9" fill="#fff"/>' +
       '</g>' +
       /* 嘴與腮紅 */
       '<path d="M51 72q10 12 21 0z" fill="#E39A66" stroke="#3F3229" stroke-width="2.8" stroke-linejoin="round"/>' +

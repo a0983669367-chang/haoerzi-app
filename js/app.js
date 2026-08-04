@@ -206,8 +206,9 @@
   /* ---------- 共用小工具 ---------- */
   function paintTrack(sl) {
     var p = (sl.value - sl.min) / (sl.max - sl.min) * 100;
+    /* 軌道未填滿的部分用 --track（暖米色），跟 styles.css 的色票一致，不要寫死顏色 */
     sl.style.background = 'linear-gradient(90deg,var(--teal) 0%,var(--teal) ' + p +
-                          '%,#DCE6EC ' + p + '%,#DCE6EC 100%)';
+                          '%,var(--track) ' + p + '%,var(--track) 100%)';
   }
 
   /* 把「元」換算成「X 萬」 */
@@ -946,7 +947,7 @@
         '<div class="todo-x">可承接 <b>' + wan(need) + '</b>　·　預估手續費 ' +
           nt(need * ADV_CONV.feeRate) + '</div>' +
         '<div class="todo-sig">' + c.sig + '　<i>' + c.when + '</i></div>' +
-        '<button class="pick">撥電話</button>' +
+        '<button class="pick t">撥電話</button>' +
       '</div>';
     }).join('');
   }

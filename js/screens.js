@@ -266,7 +266,7 @@ S.concords = function () {
       '<div><div class="cl-nm">' + ADVISOR.name + '</div>' +
       '<div class="cl-sub">' + ad.sub + '<br>' + ADVISOR.branch + '</div></div>' +
     '</div>' +
-    '<button class="pick" id="czCall">' + ad.call + '</button>' +
+    '<button class="pick t" id="czCall">' + ad.call + '</button>' +
   '</div>' +
 
   '<a class="bigbtn t cz-b" id="czTel" data-tel="' + sn.tel + '">' +

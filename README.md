@@ -60,6 +60,7 @@
 
 | 商品類別 | 收益來源 |
 |---|---|
+| ETF（市值型／高股息／債券型／主題海外四小類） | 手續費 + 內扣經理費 |
 | 代銷國內外基金 | 申購手續費 + 經理費分成 |
 | 股權連結或利率連結商品 | 銷售價差 |
 | 固定收益型商品 | 債券買賣價差 |
@@ -70,10 +71,27 @@
 
 全站統一話術：不講「年化配息 5.5%」，講「每投入 100 萬，每月約領 4,583 元」。
 
+每個分類標題下面都有一句白話解釋（`CAT_DESC`），每張商品卡下面還有「問小幫手」——
+點下去跳到 ⑤，答案由 `productAnswer()` 直接從商品資料組出來，不用手動幫每檔商品寫一組問答。
+
 ## 適合度（高齡投資人）
 
 `data.js` 的 `CONFIG.riskProfile` 與 `CONFIG.maxRR` 決定適合度判斷。
 超過 `maxRR` 的商品不隱藏，但會自動標示「⚠ 需加強評估後方可承作」。
+
+畫面 ④ 最上方另外放了一張 RR1–RR5 白話對照卡（`RR_LEVELS`），
+同一份文字也被 ⑤ AI 小幫手拿去組商品說明，只維護一份。
+
+## 手機掃描開啟（QR code）
+
+桌機簡報畫面右側、講稿上方，有一張「手機掃描開啟 App」的小卡片，
+QR code 圖片內嵌在 `css/styles.css` 的 `.qr-card .qr-img`（data URI，做法跟 logo 一樣）。
+
+網址改變時（例如 Streamlit 重新部署換了網址）：
+
+1. 改 `js/data.js` 的 `DEPLOY.url`
+2. 執行 `python3 產生QRcode.py`（第一次用要先 `pip3 install qrcode[pil]`）
+3. 執行 `python3 產生單檔.py` 同步單檔版本
 
 ## 技術
 
@@ -93,6 +111,8 @@ js/app.js               程式邏輯（缺口試算、商品篩選、AI 對話�
 manifest.json           PWA 設定
 service-worker.js       離線快取（更新後記得改版本號）
 assets/icons/           App 圖示
+產生單檔.py              把整個 App 合併成一支 HTML（見下方「單檔版本」）
+產生QRcode.py           依 DEPLOY.url 重新產生 QR code，寫回 styles.css
 streamlit_app.py        Streamlit 外殼（部署成一條可分享的網址用，不影響原型）
 requirements.txt        Streamlit 部署要裝的套件
 .streamlit/config.toml  Streamlit 配色設定
@@ -105,6 +125,10 @@ requirements.txt        Streamlit 部署要裝的套件
 | 入帳項目、金額 | `data.js` → `PAYS` |
 | 補缺口的三個方案 | `data.js` → `SOLUTIONS` |
 | 投資商品清單 | `data.js` → `PRODUCTS`、`PRODUCT_CATS` |
+| ETF 的四個小分類（市值型／高股息…） | `data.js` → `ETF_SUBS`（商品在 `PRODUCTS` 裡用 `sub` 欄位對應） |
+| 分類標題下的白話解釋 | `data.js` → `CAT_DESC` |
+| RR1–RR5 的白話對照（④ 頁面卡片＋ AI 商品說明共用） | `data.js` → `RR_LEVELS` |
+| 手機掃描 QR code 的網址 | `data.js` → `DEPLOY.url`（改完要重跑 `產生QRcode.py`，見下方） |
 | 各類商品的費用 | `data.js` → `CAT_FEE` |
 | 申購試算的金額範圍 | `data.js` → `ORDER` |
 | AI 問答內容 | `data.js` → `AI_QUICK`、`AI_ANSWERS` |

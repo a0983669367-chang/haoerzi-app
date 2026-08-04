@@ -5,7 +5,7 @@
   這支檔案是由 index.html + css/ + js/ 自動合併產生的，方便單獨寄送或
   雙擊開啟。要修改內容請改原始的 js/data.js，改完後執行 產生單檔.py
   重新產生一次，不要直接改這裡。
-  產生日期：2026-07-30　·　對應 service-worker 版本：v3
+  產生日期：2026-08-04　·　對應 service-worker 版本：v4
   ------------------------------------------------------------------
 -->
 <html lang="zh-Hant">
@@ -223,6 +223,11 @@ body{
 /* ===== 10. 區塊小標與鍵值列（月退俸／投資頁共用） ===== */
 .sec-h{font-size:16px;font-weight:700;color:var(--navy);margin:20px 0 10px;
   padding-left:11px;border-left:5px solid var(--gold)}
+/* 分類標題正下方的一句白話解釋（投資頁用），字級小、灰色，不搶標題的視覺重量 */
+.sec-d{font-size:13px;color:var(--ink-2);line-height:1.6;margin:-4px 0 12px;padding-left:11px}
+/* ETF 內部的小分類標題（市值型／高股息…），比 .sec-h 再輕一階 */
+.sec-h2{font-size:13.5px;font-weight:700;color:var(--teal);margin:14px 0 8px;
+  padding-left:11px;border-left:3px solid var(--teal)}
 .kv-row{display:flex;justify-content:space-between;align-items:center;
   padding-top:13px;margin-top:13px;border-top:1px dashed var(--line);font-size:15.5px;color:var(--ink-2)}
 .kv-row b{font-size:19px;color:var(--navy)}
@@ -368,6 +373,12 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .kyc-v{font-size:21px;font-weight:800;color:var(--navy);margin:3px 0 8px;
   display:flex;align-items:center;flex-wrap:wrap;gap:4px}
 
+/* RR1–RR5 白話對照卡：五行字，不用手風琴收合，簡報時就能整段唸完 */
+.rr-legend-h{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.rr-row{display:flex;align-items:center;gap:11px;padding:8px 0;font-size:13.5px;
+  color:var(--ink-2);border-top:1px solid #F0F4F7}
+.rr-row:first-of-type{border-top:0}
+
 .chips{display:flex;gap:7px;overflow-x:auto;padding:2px 0 10px;margin-bottom:2px;
   scrollbar-width:none}
 .chips::-webkit-scrollbar{height:0}
@@ -388,6 +399,13 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .prod-d{font-size:14px;color:var(--ink-2);line-height:1.62}
 .prod-meta{display:flex;gap:14px;margin-top:8px;font-size:13px;color:var(--ink-2)}
 .prod-meta span{background:#F2F6F8;border-radius:8px;padding:4px 9px}
+
+/* 「還不確定？問小幫手」——刻意做成小小的文字連結，不是按鈕，
+   份量要比下面的「試算並申購」CTA 輕，才不會兩個搶視覺。 */
+.prod-help{display:flex;justify-content:flex-end;margin-top:9px}
+.prod-help button{background:none;border:0;color:var(--teal);font-size:13.5px;font-weight:600;
+  font-family:inherit;cursor:pointer;padding:4px 2px}
+.prod-help button:hover{text-decoration:underline}
 
 /* ===== 17. AI 小幫手：對話、快捷問題、麥克風 ===== */
 .chat{display:flex;flex-direction:column;gap:11px;margin-bottom:16px}
@@ -509,11 +527,20 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .tl-t{font-size:12.5px;color:#8496A3;font-weight:700}
 .tl-x{font-size:14.5px;color:var(--ink);line-height:1.6;margin-top:2px}
 
-/* ===== 23. 右側簡報講稿 ===== */
-.notes{flex:1 1 330px;max-width:400px;padding-top:6px}
+/* ===== 23. 右側簡報講稿 ＋ QR code ===== */
+.notes-col{flex:1 1 330px;max-width:400px}
+.notes{padding-top:6px}
 .notes h2{font-size:20px;margin:0 0 4px;color:var(--navy)}
 .notes .kicker{font-size:13px;letter-spacing:2px;color:var(--gold);font-weight:700;margin-bottom:6px}
 .notes .lead{font-size:15.5px;color:var(--ink-2);line-height:1.75;margin:0 0 18px}
+
+/* 手機掃描 QR code：跟講稿是獨立容器，切換頁面不會被洗掉 */
+.qr-card{background:#fff;border-radius:14px;padding:15px;margin-bottom:16px;
+  display:flex;gap:13px;align-items:center;box-shadow:0 2px 7px rgba(15,76,117,.07)}
+.qr-card .qr-img{width:84px;height:84px;flex:0 0 84px;border-radius:8px;background:#fff no-repeat center/contain url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQgAAAEICAIAAAAslP2oAAAENElEQVR42u3dQW4bMRBFwT+B739leZ2FFgOQ7m6yap3IsqwHGmqTfD6fT4D//fMSgDBAGCAMEAYIA4QBwgBhgDBAGCAMEAYIAxAGfPfz9j88zzPiG1u1z+Tt9/v26357/FWPs/t1O/X9YMUAYYAwQBggDBAGCAMyco6RzXODFM1VVs0TpswNvn3dVa/D9PeDFQOEAcIAYYAwQBggDMhRc4w02yfQ7XP93fs9puyLmPJ+sGKAMEAYIAwQBggDhAG5Yo4xxdvP17ud47RqvuHedysGCAOEAcIAYYAwQBgQc4wxus0Hpu/HsGKAMEAYIAwQBiAMEAak0Ryj29/3r9p3sXueMOV+8envBysGCAOEAcIAYYAwQBiQK+YY0/cDVO1z2D0nWfX4VfeRWzFAGCAMEAYIA4QBwoCrPe5D+Jt9C1X7OuIeDCsGCAOEAcIAYYAwQBiQe+YYUz7X77bfYNXzqToPasrztGKAMEAYIAwQBggDhAGxH6PgfKFVz7Nqn8OU/RjdzqGqehwrBggDhAHCAGGAMEAYkKPmGFM+d59+n8Pun9eU98Pu18eKAcIAYYAwQBggDBAGZOQ9393+br7qnKLp+w2m7KupmodYMUAYIAwQBggDhAHCgFx9P8b0+7Cn3LOx+3Gq5jyrvl8rBggDhAHCAGGAMEAYkCvmGPF5ect5y+6foxUDhAHCAIQBwgBhgDAgB96PUXXPdLf9HuYGPec8VgwQBggDhAHCAGGAMCBHzTGqzo/qtp+k2/laU+ZU3V5/KwYIA4QBwgBhgDBAGJCj7vlO0XlHu+8LX/V83n7dqnu7d9+zPmWfiRUDhAHCAGGAMEAYIAyIc6UGnF+0ew6TIedQ7b7PZPd+G+dKgV+lQBggDBAGCAOEAbl6P0a3z/t37xOYcv93t/O7prx/rBggDBAGCAOEAcIAYUBGzjGq9lHs/rv8t/9+9+swZR/IlH04VgwQBggDhAHCAGGAMCBXnCt16v3TVftSqh5/yrlYVa+DFQOEAcIAYYAwQBggDMgV+zFO3bdQNYdJ0Tzntu/XigHCAGGAMEAYIAwQBuSo+zG6eXse1O7P11edT7VqP0yK7t+Ysk/DigHCAGGAMEAYIAwQBmTkHCPN7j14+zn97jlA1X3hU/bDTLlnw4oBwgBhgDBAGCAMEAbkqDlGhpzjtHsOULUfY8p5UFWvsxUDhAHCAGGAMEAYIAyIOcYA3e4p3/08p5wDtmo+s+rnZcUAYYAwQBggDBAGCANijpE+92ak2XlZGbK/5dT7VawYIAwQBggDhAHCAGFArphjdJsDpNl+iVX7DarOa+p2zpVzpcCvUiAMEAYIA4QBwoCYY+Se84tSNJ9Z9Tl91blYU56nFQOEAcIAYYAwQBggDGjtOXW/BFgxQBggDBAGCAOEAcIAYYAwQBggDEAYIAwQBggDNvkFlFs8B/lhfEUAAAAASUVORK5CYII=")}
+.qr-card .qr-tx{min-width:0}
+.qr-card .qr-tx b{display:block;font-size:14.5px;color:var(--navy);margin-bottom:4px}
+.qr-card .qr-tx span{font-size:12.5px;color:var(--ink-2);line-height:1.5;word-break:break-all}
 .note{background:#fff;border-radius:14px;padding:15px 17px;margin-bottom:11px;
   border-left:5px solid var(--navy);box-shadow:0 2px 7px rgba(15,76,117,.07)}
 .note b{display:block;font-size:15.5px;margin-bottom:5px;color:var(--navy-dk)}
@@ -534,7 +561,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
    ========================================================================== */
 @media (max-width:860px){
   body{padding:0;background:var(--navy)}
-  .page-head,.tabs,.notes,.foot,.roles{display:none}
+  .page-head,.tabs,.notes-col,.foot,.roles{display:none}
   .stage{gap:0}
   .phone{width:100%;flex:1 1 100%;padding:0;border-radius:0;box-shadow:none;background:transparent}
   .notch{display:none}
@@ -546,7 +573,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 
 /* PWA 獨立視窗模式（已加到主畫面） */
 @media (display-mode:standalone){
-  .page-head,.tabs,.notes,.foot,.roles,.statusbar,.notch{display:none}
+  .page-head,.tabs,.notes-col,.foot,.roles,.statusbar,.notch{display:none}
   body{padding:0}
   .phone{width:100%;flex:1 1 100%;padding:0;border-radius:0;box-shadow:none}
   .screen{border-radius:0;height:100vh;height:100dvh}
@@ -596,8 +623,12 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
     </div>
   </div>
 
-  <!-- ===== 桌機版：右側簡報講稿 ===== -->
-  <aside class="notes" id="notes"><!-- 由 notes.js 產生 --></aside>
+  <!-- ===== 桌機版：右側簡報講稿 ＋ 手機掃描 QR code ===== -->
+  <aside class="notes-col">
+    <!-- QR code 圖片內嵌於 css/styles.css 的 .qr-card .qr-img（改網址見 js/data.js 的 DEPLOY 註解） -->
+    <div class="qr-card" id="qrCard"><!-- 由 app.js 產生 --></div>
+    <div class="notes" id="notes"><!-- 由 notes.js 產生 --></div>
+  </aside>
 
 </div>
 
@@ -699,6 +730,7 @@ var SOLUTIONS = [
    ========================================================================== */
 var PRODUCT_CATS = [
   { id:"all",  nm:"全部" },
+  { id:"etf",  nm:"ETF" },
   { id:"fund", nm:"基金" },
   { id:"sn",   nm:"股權／利率連結" },
   { id:"fi",   nm:"固定收益" },
@@ -707,11 +739,32 @@ var PRODUCT_CATS = [
 ];
 
 var CAT_NAMES = {
+  etf:  "ETF（指數股票型基金）",
   fund: "代銷國內外基金",
   sn:   "股權連結或利率連結商品",
   fi:   "固定收益型商品",
   ins:  "保險商品規劃",
   etc:  "其他經主管機關核准之各式金融商品"
+};
+
+/* 每一類商品最上面的一句白話解釋，出現在分類標題正下方（灰色小字）。
+   目的：長輩看到「股權連結或利率連結商品」這種名稱不會懂，先給一句白話。 */
+var CAT_DESC = {
+  etf:  "在證交所像股票一樣買賣的一籃子指數，管理費通常比基金低，適合小額分批買進。",
+  fund: "把錢交給基金經理人，由他分散投資一整籃子標的。",
+  sn:   "一筆錢綁一檔股票或利率，通常報酬較高，但可能不保本。",
+  fi:   "借錢給政府或公司換利息，持有到期領回本金。",
+  ins:  "規劃長期保障或終身現金流，不是用來賺價差的。",
+  etc:  "其他經主管機關核准、適合分散配置的商品。"
+};
+
+/* ETF 內部再分四個主題小類，chips 選到「ETF」時會依此分組顯示小標題。
+   長輩最常見的困惑是「一堆代號到底差在哪」，先分好類再挑。 */
+var ETF_SUBS = {
+  cap:  "市值型 ETF",
+  div:  "高股息 ETF",
+  bond: "債券型 ETF",
+  th:   "主題／海外 ETF"
 };
 
 var PRODUCTS = [
@@ -722,6 +775,29 @@ var PRODUCTS = [
     d:"股債各半，配息較高但淨值波動也較大。" },
   { c:"fund", nm:"全球收益多重資產基金", rr:4, y:0.058, min:"3 萬", pay:"每季配息",
     d:"跨股、債、REITs 分散，適合長期持有。" },
+
+  /* ---- ETF：市值型 ---- */
+  { c:"etf", sub:"cap", nm:"元大台灣50（0050）", rr:3, y:0.032, min:"每月 3,000", pay:"每半年配息",
+    d:"追蹤台灣市值前 50 大公司，最具代表性的大盤型 ETF，波動跟大盤同步。" },
+  { c:"etf", sub:"cap", nm:"富邦台50（006208）", rr:3, y:0.030, min:"每月 3,000", pay:"每年配息",
+    d:"追蹤指數跟 0050 相同，內扣費用較低，適合長期定期定額。" },
+
+  /* ---- ETF：高股息 ---- */
+  { c:"etf", sub:"div", nm:"元大高股息（0056）", rr:4, y:0.058, min:"每月 3,000", pay:"每季配息",
+    d:"篩選未來股息殖利率較高的個股，是台灣最多人持有的高股息 ETF。" },
+  { c:"etf", sub:"div", nm:"國泰永續高股息（00878）", rr:4, y:0.056, min:"每月 3,000", pay:"每季配息",
+    d:"同時篩選 ESG 永續指標與高股息，成分股比 0056 更分散。" },
+
+  /* ---- ETF：債券型 ---- */
+  { c:"etf", sub:"bond", nm:"元大美債20年（00679B）", rr:3, y:0.041, min:"每月 3,000", pay:"每月配息",
+    d:"追蹤 20 年期以上美國公債，配息穩定，會隨美元利率變動而有淨值波動。" },
+  { c:"etf", sub:"bond", nm:"中信高評級公司債（00772B）", rr:3, y:0.044, min:"每月 3,000", pay:"每月配息",
+    d:"投資等級美元公司債組合，配息略高於美債，信用風險也略高一些。" },
+
+  /* ---- ETF：主題／海外（成長型，不配息，波動較大）---- */
+  { c:"etf", sub:"th", nm:"國泰智能電動車（00893）", rr:5, y:0, min:"每月 3,000", pay:"不配息",
+    altTx:"沒有固定配息，獲利來源是淨值上漲的價差，波動也比高股息型 ETF 大許多。",
+    d:"追蹤全球電動車供應鏈相關個股，屬成長題材，短期漲跌可能劇烈。" },
 
   /* ---- 股權連結或利率連結商品 ---- */
   { c:"sn", nm:"台積電股權連結商品（3 個月期）", rr:5, y:0.085, min:"100 萬", pay:"到期一次結算",
@@ -742,9 +818,7 @@ var PRODUCTS = [
     d:"符合長照狀態時按月給付，補起現金流最大的破口。" },
 
   /* ---- 其他經主管機關核准之各式金融商品 ---- */
-  { c:"etc", nm:"定期定額 ETF（0056／00878）", rr:4, y:0.058, min:"每月 3,000", pay:"每季配息",
-    d:"小額起步，適合把定存到期的錢分批轉入。" },
-  { c:"etc", nm:"不動產投資信託 REITs",        rr:4, y:0.048, min:"10 萬", pay:"每半年配息",
+  { c:"etc", nm:"不動產投資信託 REITs", rr:4, y:0.048, min:"10 萬", pay:"每半年配息",
     d:"收租型不動產證券化，與股債相關性低。" }
 ];
 
@@ -769,11 +843,38 @@ var INVEST_DISCLAIMER =
   "以上為模擬示意，非實際商品條件。投資均有風險，配息可能來自本金；" +
   "結構型商品不保本，65 歲以上客戶承作前須完成加強版適合度評估與商品說明。";
 
+/* 風險等級 RR1–RR5 的白話對照。
+   同一份資料兩處共用：④ 投資商品頁最上方的說明卡、AI 小幫手回答商品問題時。
+   n = 風險等級數字，tx = 一句話說明（刻意不用「波動度」「年化標準差」這種業界術語）。 */
+var RR_LEVELS = [
+  { n:1, tx:"保守：波動極小，本金穩定，是最安全的等級" },
+  { n:2, tx:"穩健：以領息為主，波動不大，退休族最常用" },
+  { n:3, tx:"中度：股債都有一些，長期穩定但會小幅波動" },
+  { n:4, tx:"積極：波動較大，長期報酬機會較高，短期可能小賠" },
+  { n:5, tx:"高風險：波動大，且可能不保本，只建議用閒錢嘗試" }
+];
+
 /* 全站通用風險揭露
    出現在客戶端五個畫面的最下方，以及桌機版頁尾。改這裡就會一起變。 */
 var GENERAL_DISCLAIMER =
   "以上內容僅為模擬範例，不代表實際投資報酬，投資均有風險，請於實際操作前詳閱相關商品說明書" +
   "及風險揭露事項，並依自身風險承受能力、財務狀況及投資目標，審慎評估並諮詢專業意見。";
+
+/* ==========================================================================
+   ===== 5-2. 部署網址與 QR code（簡報用，讓人掃描直接用手機打開）=====
+   --------------------------------------------------------------------------
+   ★ 這個網址是「唯一的真相來源」。改網址只改這裡一個地方：
+     1. 改下面的 url
+     2. 在這個資料夾執行一次：python3 產生QRcode.py
+        （它會自己讀這裡的 url，重新產生 QR code 圖片寫回 css/styles.css）
+     3. 再執行一次：python3 產生單檔.py（同步單檔版本）
+   只改網址、不重新產生 QR code 圖片的話，畫面上顯示的網址文字會跟
+   QR code 實際掃出來的網址對不上，簡報現場千萬別遇到這個狀況。
+   ========================================================================== */
+var DEPLOY = {
+  url:   "https://haoerzi.streamlit.app",
+  label: "手機掃描開啟 App"
+};
 
 /* ==========================================================================
    ===== 6. 康和專區（從原型跳出去，連到康和真正的服務）=====
@@ -1300,6 +1401,14 @@ S.invest = function () {
     '<div class="sub">年齡 ' + CONFIG.currentAge + ' 歲。超過 RR' + CONFIG.maxRR + ' 的商品會標示「需加強評估」，仍可承作但須由營業員完成高齡客戶適合度程序。</div>' +
   '</div>' +
 
+  /* RR1–RR5 白話對照：不占太多版面，一個卡片、五行字 */
+  '<div class="card rr-legend">' +
+    '<div class="rr-legend-h">風險等級 RR1–RR5 是什麼意思？</div>' +
+    RR_LEVELS.map(function (r) {
+      return '<div class="rr-row"><span class="pill rr' + r.n + '">RR' + r.n + '</span><span>' + r.tx + '</span></div>';
+    }).join('') +
+  '</div>' +
+
   '<div class="chips" id="chips">' +
     PRODUCT_CATS.map(function (c, i) {
       return '<button class="chip' + (i === 0 ? ' on' : '') + '" data-c="' + c.id + '">' + c.nm + '</button>';
@@ -1566,11 +1675,12 @@ var NOTES = {
   invest: {
     k: "功能 ④ ‧ 收銀台",
     h: "好日子精選（投資商品）",
-    lead: "完全對齊康和證券可承作的業務範圍：代銷國內外基金、股權連結或利率連結商品、固定收益型商品、保險商品規劃，以及其他經主管機關核准之各式金融商品。",
+    lead: "完全對齊康和證券可承作的業務範圍：代銷國內外基金、ETF、股權連結或利率連結商品、固定收益型商品、保險商品規劃，以及其他經主管機關核准之各式金融商品。",
     n: [
       ["全站用同一種語言：現金流", "不寫「年化配息 5.5%」，寫「每投入 100 萬，每月約領 4,583 元」。這是退休族唯一聽得懂、也唯一在意的單位。", "g"],
-      ["五大類＝五條收入線", "基金收申購手續費與經理費分成、結構型與債券賺銷售價差、保險收佣金。一頁涵蓋券商財管的全部收入來源。", "o"],
-      ["高齡適合度標籤", "每張卡標示 RR 等級與「適合您／需加強評估」。RR4 以上不隱藏、但主動提示，降低日後客訴與裁罰風險。", ""],
+      ["ETF 獨立一類，再依主題分四小類", "市值型、高股息、債券型、主題／海外——現在 ETF 很熱門，但長輩常搞不懂「一堆代號到底差在哪」，先分好類再挑。", "o"],
+      ["看不懂就問，不用自己猜", "分類標題下面先給一句白話解釋，每張商品卡下面還有「問小幫手」，點下去直接跳到 ⑤ 幫他把這一檔講白話。", "o"],
+      ["高齡適合度標籤＋白話 RR 對照", "每張卡標示 RR 等級與「適合您／需加強評估」；頁面最上方也放了 RR1–RR5 的白話說明卡，不用再自己猜「風險等級 4」是什麼意思。", ""],
       ["成交仍回到人", "App 負責養出需求與教育客戶，最後一哩交給營業員。數位不取代通路，是替通路篩出已經想買的人。", ""]
     ]
   },
@@ -1578,10 +1688,10 @@ var NOTES = {
   ai: {
     k: "功能 ⑤ ‧ 新增",
     h: "AI 小幫手",
-    lead: "取代原本的防詐守門員與家庭共管。不是拿 AI 來聊天，而是讓它做三件明確的事：查現金流、把術語翻成人話、主動提醒缺口。",
+    lead: "不是拿 AI 來聊天，而是讓它做四件明確的事：查現金流、把商品術語翻成人話、主動提醒缺口，以及在客戶從④投資商品點「問小幫手」過來時，針對那一檔給說明。話術比對式的防詐工具則獨立收在③康和專區，是不同的兩個功能。",
     n: [
       ["語音優先，不用打字", "「我這個月有多少錢」按住就能問。長輩打字慢、視力差，語音是無障礙的必要條件，不是加分項。", "g"],
-      ["把金融術語翻成人話", "「股權連結商品」→「綁一檔台積電放三個月領 8.5%，但跌破價位你拿到的會是股票」。翻譯本身就是導購。", "o"],
+      ["商品說明自動生成，不用手動寫", "④ 每張商品卡的「問小幫手」點過來，答案是即時從 data.js 的商品資料組出來的——新增一檔商品，說明就自動跟著有，不用另外寫一組問答。", "o"],
       ["主動出擊而非被動問答", "偵測到 8 月入帳少 11,560 元就主動提醒，並附上補平方案——一個 24 小時不休息的營業員助理。", ""],
       ["真正的商業價值在資料", "客戶問了什麼＝最真實的意圖訊號。切到「營業員視角」就能看到這些訊號變成名單。", ""]
     ]
@@ -1642,6 +1752,7 @@ var NOTES = {
   var current = 'cash';
   var fontIdx = 0;          // 目前字級（對應 FONT_STEPS）
   var orderKey = null;      // 投資頁展開中的申購試算是哪一檔商品
+  var PENDING_ASK = null;   // 從投資頁按「問小幫手」點過來時，要自動問的商品名稱
 
   function screens() { return ROLE === 'advisor' ? SCREENS_ADVISOR : SCREENS_CLIENT; }
 
@@ -1650,6 +1761,7 @@ var NOTES = {
     buildRoles();
     bindOnce();
     paintFooter();
+    paintQR();
     paintChrome();
     render(screens()[0].id);
     registerServiceWorker();
@@ -1659,6 +1771,19 @@ var NOTES = {
   function paintFooter() {
     var el = document.getElementById('footDisc');
     if (el) el.textContent = GENERAL_DISCLAIMER;
+  }
+
+  /* 桌機版右側的「手機掃描開啟」QR code。
+     只在啟動時畫一次——它跟右側講稿是兩個獨立的容器，切頁不會把它洗掉。
+     QR 圖片本身是內嵌在 css 的 .qr-card .qr-img（data URI），
+     這裡只負責填文字；改網址、重產圖片請看 data.js 的 DEPLOY 註解。 */
+  function paintQR() {
+    var el = document.getElementById('qrCard');
+    if (!el) return;
+    el.innerHTML =
+      '<div class="qr-img" aria-hidden="true"></div>' +
+      '<div class="qr-tx"><b>' + DEPLOY.label + '</b>' +
+      '<span>' + DEPLOY.url.replace(/^https?:\/\//, '') + '</span></div>';
   }
 
   /* 只綁一次的事件（元素本身不會被換掉，只換 innerHTML） */
@@ -2052,6 +2177,10 @@ var NOTES = {
     });
 
     document.getElementById('prodbox').addEventListener('click', function (e) {
+      /* 「還不確定？問小幫手」——跳去 ⑤，自動幫他問這一檔是什麼 */
+      var ask_btn = e.target.closest('[data-ask]');
+      if (ask_btn) { PENDING_ASK = ask_btn.dataset.ask; render('ai'); return; }
+
       var t = e.target.closest('[data-try]');
       if (t) {
         orderKey = (orderKey === t.dataset.try) ? null : t.dataset.try;
@@ -2203,10 +2332,21 @@ var NOTES = {
     var box  = document.getElementById('prodbox');
     var list = (cat === 'all') ? PRODUCTS : PRODUCTS.filter(function (p) { return p.c === cat; });
 
-    var lastCat = '';
+    var lastCat = '', lastSub = '';
     box.innerHTML = list.map(function (p) {
       var head = '';
-      if (p.c !== lastCat) { head = '<div class="sec-h">' + CAT_NAMES[p.c] + '</div>'; lastCat = p.c; }
+      /* 換到新的一大類：印分類標題 + 一句白話解釋，子類記憶重置 */
+      if (p.c !== lastCat) {
+        head += '<div class="sec-h">' + CAT_NAMES[p.c] + '</div>';
+        if (CAT_DESC[p.c]) head += '<div class="sec-d">' + CAT_DESC[p.c] + '</div>';
+        lastCat = p.c;
+        lastSub = '';
+      }
+      /* ETF 專用：換到新的小類再多印一層次標題（市值型／高股息…） */
+      if (p.sub && p.sub !== lastSub) {
+        head += '<div class="sec-h2">' + ETF_SUBS[p.sub] + '</div>';
+        lastSub = p.sub;
+      }
 
       var fit    = p.rr <= CONFIG.maxRR;
       var per100 = p.y ? Math.round(1000000 * p.y / 12) : 0;
@@ -2220,12 +2360,13 @@ var NOTES = {
           '</div>' +
           (per100
             ? '<div class="prod-cash">每投入 100 萬　每月約領 <b>' + per100.toLocaleString() + '</b> 元</div>'
-            : '<div class="prod-cash alt">' + p.pay + '　·　保障型商品，不以配息計算</div>') +
+            : '<div class="prod-cash alt">' + (p.altTx || '保障型商品，不以配息計算') + '</div>') +
           '<div class="prod-d">' + p.d + '</div>' +
           '<div class="prod-meta"><span>最低 ' + p.min + '</span><span>' + p.pay + '</span></div>' +
           '<div class="sol-fit ' + (fit ? 'ok' : 'no') + '">' +
             (fit ? '✓ 適合您（' + CONFIG.riskProfile + '）' : '⚠ 需加強評估後方可承作') +
           '</div>' +
+          '<div class="prod-help"><button data-ask="' + p.nm + '">❔ 還不確定？問小幫手</button></div>' +
           '<button class="pick" data-try="' + p.nm + '">' +
             (open ? '收起試算' : '試算並申購') + '</button>' +
           (open ? orderPanel(p) : '') +
@@ -2351,6 +2492,13 @@ var NOTES = {
     });
 
     document.getElementById('mic').addEventListener('click', startVoice);
+
+    /* 從投資頁「問小幫手」點過來的，這裡自動幫他問一次 */
+    if (PENDING_ASK) {
+      var nm = PENDING_ASK;
+      PENDING_ASK = null;
+      ask('什麼是「' + nm + '」？');
+    }
   }
 
   /**
@@ -2375,13 +2523,45 @@ var NOTES = {
       var t = chat.querySelector('.typing');
       if (!t) return;
       t.classList.remove('typing');
-      t.innerHTML = AI_ANSWERS[key] ||
+
+      /* 先查固定問答；查不到、且問句是「什麼是「XXX」？」這種格式，
+         就試著當成商品名稱，自動生成一則說明（見 productAnswer）。
+         這樣新增商品不用手動多寫一組 AI 問答，data.js 加一筆商品就自動有解說。 */
+      var ans = AI_ANSWERS[key];
+      if (!ans) {
+        var m = /「(.+?)」/.exec(key);
+        if (m) ans = productAnswer(m[1]);
+      }
+
+      t.innerHTML = ans ||
         '這個問題我還在學。要不要先<button class="ai-go" data-go="invest">看看商品清單</button>，' +
         '或直接請' + ADVISOR.name + '為您說明？';
       t.dataset.say = t.textContent;
       t.insertAdjacentHTML('beforeend', '<button class="spk">🔊 念給我聽</button>');
       scrollToEl(asked);
     }, 700);
+  }
+
+  /* 針對某一檔商品，自動組出一段白話說明（給④「問小幫手」用）。
+     資料完全來自 data.js 的 PRODUCTS／RR_LEVELS，商品新增或改內容時
+     這裡不用跟著改，說明會自動同步。 */
+  function productAnswer(nm) {
+    var p = PRODUCTS.filter(function (x) { return x.nm === nm; })[0];
+    if (!p) return null;
+
+    var rr     = RR_LEVELS.filter(function (r) { return r.n === p.rr; })[0];
+    var per100 = p.y ? Math.round(1000000 * p.y / 12) : 0;
+    var fit    = p.rr <= CONFIG.maxRR;
+
+    return '<b>' + p.nm + '</b>　屬於「' + CAT_NAMES[p.c] + '」。<br>' +
+      p.d + '<br>' +
+      (per100
+        ? '每投入 100 萬，每月約可領 <b>' + per100.toLocaleString() + '</b> 元。'
+        : (p.altTx || '不配息，不以現金流計算。')) +
+      '<br>風險等級 <b>RR' + p.rr + '</b>' + (rr ? '（' + rr.tx + '）' : '') + '。' +
+      (fit ? '　✓ 符合您目前的風險屬性。'
+           : '　⚠ 超過您目前的風險屬性，須完成加強版適合度評估後才能承作。') +
+      '<button class="ai-go" data-go="invest">回去看其他商品</button>';
   }
 
   /* 捲動手機內容區，讓指定元素出現在頂端 */

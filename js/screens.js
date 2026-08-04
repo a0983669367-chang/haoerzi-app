@@ -214,6 +214,14 @@ S.invest = function () {
     '<div class="sub">年齡 ' + CONFIG.currentAge + ' 歲。超過 RR' + CONFIG.maxRR + ' 的商品會標示「需加強評估」，仍可承作但須由營業員完成高齡客戶適合度程序。</div>' +
   '</div>' +
 
+  /* RR1–RR5 白話對照：不占太多版面，一個卡片、五行字 */
+  '<div class="card rr-legend">' +
+    '<div class="rr-legend-h">風險等級 RR1–RR5 是什麼意思？</div>' +
+    RR_LEVELS.map(function (r) {
+      return '<div class="rr-row"><span class="pill rr' + r.n + '">RR' + r.n + '</span><span>' + r.tx + '</span></div>';
+    }).join('') +
+  '</div>' +
+
   '<div class="chips" id="chips">' +
     PRODUCT_CATS.map(function (c, i) {
       return '<button class="chip' + (i === 0 ? ' on' : '') + '" data-c="' + c.id + '">' + c.nm + '</button>';

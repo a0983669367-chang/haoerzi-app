@@ -12,6 +12,7 @@
   var current = 'cash';
   var fontIdx = 0;          // 目前字級（對應 FONT_STEPS）
   var orderKey = null;      // 投資頁展開中的申購試算是哪一檔商品
+  var PENDING_ASK = null;   // 從投資頁按「問小幫手」點過來時，要自動問的商品名稱
 
   function screens() { return ROLE === 'advisor' ? SCREENS_ADVISOR : SCREENS_CLIENT; }
 
@@ -20,6 +21,7 @@
     buildRoles();
     bindOnce();
     paintFooter();
+    paintQR();
     paintChrome();
     render(screens()[0].id);
     registerServiceWorker();
@@ -29,6 +31,19 @@
   function paintFooter() {
     var el = document.getElementById('footDisc');
     if (el) el.textContent = GENERAL_DISCLAIMER;
+  }
+
+  /* 桌機版右側的「手機掃描開啟」QR code。
+     只在啟動時畫一次——它跟右側講稿是兩個獨立的容器，切頁不會把它洗掉。
+     QR 圖片本身是內嵌在 css 的 .qr-card .qr-img（data URI），
+     這裡只負責填文字；改網址、重產圖片請看 data.js 的 DEPLOY 註解。 */
+  function paintQR() {
+    var el = document.getElementById('qrCard');
+    if (!el) return;
+    el.innerHTML =
+      '<div class="qr-img" aria-hidden="true"></div>' +
+      '<div class="qr-tx"><b>' + DEPLOY.label + '</b>' +
+      '<span>' + DEPLOY.url.replace(/^https?:\/\//, '') + '</span></div>';
   }
 
   /* 只綁一次的事件（元素本身不會被換掉，只換 innerHTML） */
@@ -422,6 +437,10 @@
     });
 
     document.getElementById('prodbox').addEventListener('click', function (e) {
+      /* 「還不確定？問小幫手」——跳去 ⑤，自動幫他問這一檔是什麼 */
+      var ask_btn = e.target.closest('[data-ask]');
+      if (ask_btn) { PENDING_ASK = ask_btn.dataset.ask; render('ai'); return; }
+
       var t = e.target.closest('[data-try]');
       if (t) {
         orderKey = (orderKey === t.dataset.try) ? null : t.dataset.try;
@@ -573,10 +592,21 @@
     var box  = document.getElementById('prodbox');
     var list = (cat === 'all') ? PRODUCTS : PRODUCTS.filter(function (p) { return p.c === cat; });
 
-    var lastCat = '';
+    var lastCat = '', lastSub = '';
     box.innerHTML = list.map(function (p) {
       var head = '';
-      if (p.c !== lastCat) { head = '<div class="sec-h">' + CAT_NAMES[p.c] + '</div>'; lastCat = p.c; }
+      /* 換到新的一大類：印分類標題 + 一句白話解釋，子類記憶重置 */
+      if (p.c !== lastCat) {
+        head += '<div class="sec-h">' + CAT_NAMES[p.c] + '</div>';
+        if (CAT_DESC[p.c]) head += '<div class="sec-d">' + CAT_DESC[p.c] + '</div>';
+        lastCat = p.c;
+        lastSub = '';
+      }
+      /* ETF 專用：換到新的小類再多印一層次標題（市值型／高股息…） */
+      if (p.sub && p.sub !== lastSub) {
+        head += '<div class="sec-h2">' + ETF_SUBS[p.sub] + '</div>';
+        lastSub = p.sub;
+      }
 
       var fit    = p.rr <= CONFIG.maxRR;
       var per100 = p.y ? Math.round(1000000 * p.y / 12) : 0;
@@ -590,12 +620,13 @@
           '</div>' +
           (per100
             ? '<div class="prod-cash">每投入 100 萬　每月約領 <b>' + per100.toLocaleString() + '</b> 元</div>'
-            : '<div class="prod-cash alt">' + p.pay + '　·　保障型商品，不以配息計算</div>') +
+            : '<div class="prod-cash alt">' + (p.altTx || '保障型商品，不以配息計算') + '</div>') +
           '<div class="prod-d">' + p.d + '</div>' +
           '<div class="prod-meta"><span>最低 ' + p.min + '</span><span>' + p.pay + '</span></div>' +
           '<div class="sol-fit ' + (fit ? 'ok' : 'no') + '">' +
             (fit ? '✓ 適合您（' + CONFIG.riskProfile + '）' : '⚠ 需加強評估後方可承作') +
           '</div>' +
+          '<div class="prod-help"><button data-ask="' + p.nm + '">❔ 還不確定？問小幫手</button></div>' +
           '<button class="pick" data-try="' + p.nm + '">' +
             (open ? '收起試算' : '試算並申購') + '</button>' +
           (open ? orderPanel(p) : '') +
@@ -721,6 +752,13 @@
     });
 
     document.getElementById('mic').addEventListener('click', startVoice);
+
+    /* 從投資頁「問小幫手」點過來的，這裡自動幫他問一次 */
+    if (PENDING_ASK) {
+      var nm = PENDING_ASK;
+      PENDING_ASK = null;
+      ask('什麼是「' + nm + '」？');
+    }
   }
 
   /**
@@ -745,13 +783,45 @@
       var t = chat.querySelector('.typing');
       if (!t) return;
       t.classList.remove('typing');
-      t.innerHTML = AI_ANSWERS[key] ||
+
+      /* 先查固定問答；查不到、且問句是「什麼是「XXX」？」這種格式，
+         就試著當成商品名稱，自動生成一則說明（見 productAnswer）。
+         這樣新增商品不用手動多寫一組 AI 問答，data.js 加一筆商品就自動有解說。 */
+      var ans = AI_ANSWERS[key];
+      if (!ans) {
+        var m = /「(.+?)」/.exec(key);
+        if (m) ans = productAnswer(m[1]);
+      }
+
+      t.innerHTML = ans ||
         '這個問題我還在學。要不要先<button class="ai-go" data-go="invest">看看商品清單</button>，' +
         '或直接請' + ADVISOR.name + '為您說明？';
       t.dataset.say = t.textContent;
       t.insertAdjacentHTML('beforeend', '<button class="spk">🔊 念給我聽</button>');
       scrollToEl(asked);
     }, 700);
+  }
+
+  /* 針對某一檔商品，自動組出一段白話說明（給④「問小幫手」用）。
+     資料完全來自 data.js 的 PRODUCTS／RR_LEVELS，商品新增或改內容時
+     這裡不用跟著改，說明會自動同步。 */
+  function productAnswer(nm) {
+    var p = PRODUCTS.filter(function (x) { return x.nm === nm; })[0];
+    if (!p) return null;
+
+    var rr     = RR_LEVELS.filter(function (r) { return r.n === p.rr; })[0];
+    var per100 = p.y ? Math.round(1000000 * p.y / 12) : 0;
+    var fit    = p.rr <= CONFIG.maxRR;
+
+    return '<b>' + p.nm + '</b>　屬於「' + CAT_NAMES[p.c] + '」。<br>' +
+      p.d + '<br>' +
+      (per100
+        ? '每投入 100 萬，每月約可領 <b>' + per100.toLocaleString() + '</b> 元。'
+        : (p.altTx || '不配息，不以現金流計算。')) +
+      '<br>風險等級 <b>RR' + p.rr + '</b>' + (rr ? '（' + rr.tx + '）' : '') + '。' +
+      (fit ? '　✓ 符合您目前的風險屬性。'
+           : '　⚠ 超過您目前的風險屬性，須完成加強版適合度評估後才能承作。') +
+      '<button class="ai-go" data-go="invest">回去看其他商品</button>';
   }
 
   /* 捲動手機內容區，讓指定元素出現在頂端 */

@@ -5,7 +5,7 @@
   這支檔案是由 index.html + css/ + js/ 自動合併產生的，方便單獨寄送或
   雙擊開啟。要修改內容請改原始的 js/data.js，改完後執行 產生單檔.py
   重新產生一次，不要直接改這裡。
-  產生日期：2026-08-04　·　對應 service-worker 版本：v10
+  產生日期：2026-08-04　·　對應 service-worker 版本：v11
   ------------------------------------------------------------------
 -->
 <html lang="zh-Hant">
@@ -134,13 +134,13 @@ body{
      2. logo 可以用官方原版配色，不必再做一張白色反白版
      3. 標題文字對比度從「白配紅 5.05:1」提高到「深褐配白 12:1 以上」
    底部留一條品牌紅細線當視覺錨點，仍看得出是康和的紅。 */
-.statusbar{height:34px;flex:0 0 34px;background:var(--tint-2);color:var(--ink);
+.statusbar{height:34px;flex:0 0 34px;background:var(--bar);color:var(--ink);
   display:flex;align-items:flex-end;justify-content:space-between;
   padding:0 20px 4px;font-size:13px;font-weight:600}
-.appbar{background:var(--tint-2);color:var(--ink);padding:8px 20px 14px;
+.appbar{background:var(--bar);color:var(--ink);padding:8px 20px 14px;
   border-bottom:3px solid var(--navy)}
 .appbar .bar-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.appbar .greet{font-size:15px;color:var(--ink-2)}
+.appbar .greet{font-size:15px;color:#4A5866}
 .appbar .title{font-size:23px;font-weight:700;margin-top:3px;color:var(--head)}
 /* 無障礙：字級切換鈕（點一下循環 標準 → 大 → 特大） */
 .a11y{background:var(--tint-2);border:0;border-radius:20px;color:var(--ink-2);
@@ -575,7 +575,9 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
    看起來更沉穩而不是壓迫 */
 /* 營業員的數字卡：跟客戶端一樣改成白底，但色條與數字用青色，
    一眼就分得出「這是內部視角」，也不會又是一大塊紅 */
+/* 營業員視角：標籤改深藍（比灰色好判讀），數字維持青色當作視角識別 */
 .hero.adv{border-left-color:var(--teal)}
+.hero.adv .lbl{color:var(--head);font-weight:700}
 .hero.adv .amt{color:var(--teal)}
 
 .todo,.cl{background:var(--card);border-radius:var(--radius);padding:15px 16px;margin-bottom:11px;
@@ -583,22 +585,25 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .cl.me{border-color:var(--navy)}
 .todo-top{display:flex;align-items:center;justify-content:space-between;gap:9px}
 .todo-top b{font-size:18.5px;color:var(--ink)}
-.todo-x{font-size:14.5px;color:var(--ink-2);margin-top:7px}
+.todo-x{font-size:14.5px;color:var(--ink);margin-top:7px}
 .todo-x b{color:var(--head);font-size:17px}
 .todo-sig{font-size:13.5px;color:var(--ink-2);background:var(--tint);border-radius:10px;
   padding:9px 12px;margin-top:9px;line-height:1.6}
-.todo-sig i,.cl-sig i{font-style:normal;color:#8496A3}
+.todo-sig i,.cl-sig i{font-style:normal;color:#6B7A88}
 
 .cl-head{display:flex;align-items:center;gap:12px}
 .cl-nm{font-size:18.5px;font-weight:700}
-.cl-sub{font-size:13.5px;color:var(--ink-2);margin-top:2px}
+.cl-sub{font-size:13.5px;color:var(--ink);margin-top:2px}
 .cl-head .pill{margin-left:auto}
 .avatar{width:46px;height:46px;border-radius:50%;background:var(--navy);color:#fff;
   display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;flex:0 0 46px}
 .cl-sig{font-size:14px;color:var(--ink-2);background:var(--tint);border-radius:10px;
   padding:10px 12px;margin-top:11px;line-height:1.6}
-.cl-gap{font-size:14.5px;color:var(--ink-2);margin-top:9px}
+.cl-gap{font-size:14.5px;color:var(--ink);margin-top:9px}
 .cl-gap b{color:var(--head);font-size:17px}
+/* 次要但重要的數字（預估手續費、AUM、可承接）：只加粗加深、不另外上色。
+   主要數字才用深藍，這樣營業員一眼就知道先看哪個，也不會整片都是彩色。 */
+.todo-x b.s,.cl-sub b,.cl-gap b.s{color:var(--ink);font-weight:800;font-size:15px}
 
 .pill.hot3{background:var(--red-lt);color:var(--red)}
 .pill.hot2{background:var(--gold-lt);color:var(--gold-tx)}
@@ -2833,8 +2838,8 @@ var NOTES = {
       return '<div class="todo">' +
         '<div class="todo-top"><b>' + c.nm + '</b>' +
           '<span class="pill hot' + c.hot + '">缺口 ' + c.gap.toLocaleString() + '／月</span></div>' +
-        '<div class="todo-x">可承接 <b>' + wan(need) + '</b>　·　預估手續費 ' +
-          nt(need * ADV_CONV.feeRate) + '</div>' +
+        '<div class="todo-x">可承接 <b>' + wan(need) + '</b>　·　預估手續費 <b class="s">' +
+          nt(need * ADV_CONV.feeRate) + '</b></div>' +
         '<div class="todo-sig">' + c.sig + '　<i>' + c.when + '</i></div>' +
         '<button class="pick t">撥電話</button>' +
       '</div>';
@@ -2852,13 +2857,13 @@ var NOTES = {
         '<div class="cl-head">' +
           '<div class="avatar">' + c.nm.charAt(0) + '</div>' +
           '<div><div class="cl-nm">' + c.nm + '</div>' +
-          '<div class="cl-sub">' + c.age + ' 歲　·　' + c.rr + '　·　AUM ' + wan(c.aum) + '</div></div>' +
+          '<div class="cl-sub">' + c.age + ' 歲　·　' + c.rr + '　·　AUM <b>' + wan(c.aum) + '</b></div></div>' +
           '<span class="pill hot' + c.hot + '">' + hotTx[c.hot] + '</span>' +
         '</div>' +
         '<div class="cl-sig">' + c.sig + '　<i>' + c.when + '</i></div>' +
         '<div class="cl-gap">' +
-          (c.gap ? '每月缺口 <b>' + c.gap.toLocaleString() + ' 元</b>　→　可承接 ' +
-                   wan(c.gap * 12 / ADV_CONV.yield)
+          (c.gap ? '每月缺口 <b>' + c.gap.toLocaleString() + ' 元</b>　→　可承接 <b class="s">' +
+                   wan(c.gap * 12 / ADV_CONV.yield) + '</b>'
                  : '月退俸已達標，適合談年金險與傳承規劃') +
         '</div>' +
         (c.nm === '陳伯伯' ? '<button class="pick" data-go="advClient">看詳情</button>' : '') +

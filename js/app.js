@@ -944,8 +944,8 @@
       return '<div class="todo">' +
         '<div class="todo-top"><b>' + c.nm + '</b>' +
           '<span class="pill hot' + c.hot + '">缺口 ' + c.gap.toLocaleString() + '／月</span></div>' +
-        '<div class="todo-x">可承接 <b>' + wan(need) + '</b>　·　預估手續費 ' +
-          nt(need * ADV_CONV.feeRate) + '</div>' +
+        '<div class="todo-x">可承接 <b>' + wan(need) + '</b>　·　預估手續費 <b class="s">' +
+          nt(need * ADV_CONV.feeRate) + '</b></div>' +
         '<div class="todo-sig">' + c.sig + '　<i>' + c.when + '</i></div>' +
         '<button class="pick t">撥電話</button>' +
       '</div>';
@@ -963,13 +963,13 @@
         '<div class="cl-head">' +
           '<div class="avatar">' + c.nm.charAt(0) + '</div>' +
           '<div><div class="cl-nm">' + c.nm + '</div>' +
-          '<div class="cl-sub">' + c.age + ' 歲　·　' + c.rr + '　·　AUM ' + wan(c.aum) + '</div></div>' +
+          '<div class="cl-sub">' + c.age + ' 歲　·　' + c.rr + '　·　AUM <b>' + wan(c.aum) + '</b></div></div>' +
           '<span class="pill hot' + c.hot + '">' + hotTx[c.hot] + '</span>' +
         '</div>' +
         '<div class="cl-sig">' + c.sig + '　<i>' + c.when + '</i></div>' +
         '<div class="cl-gap">' +
-          (c.gap ? '每月缺口 <b>' + c.gap.toLocaleString() + ' 元</b>　→　可承接 ' +
-                   wan(c.gap * 12 / ADV_CONV.yield)
+          (c.gap ? '每月缺口 <b>' + c.gap.toLocaleString() + ' 元</b>　→　可承接 <b class="s">' +
+                   wan(c.gap * 12 / ADV_CONV.yield) + '</b>'
                  : '月退俸已達標，適合談年金險與傳承規劃') +
         '</div>' +
         (c.nm === '陳伯伯' ? '<button class="pick" data-go="advClient">看詳情</button>' : '') +

@@ -182,14 +182,15 @@ body{
    那樣就不亮了。改成亮金底＋深褐字，對比度 6.36～8.82:1，
    金色可以維持最亮的狀態——這也是康和「好康 fun 心投」官網
    那條黃色列的做法。 */
-/* 兩段柔和漸層：拿掉原本 46% 那道反光帶，金屬感放輕、整體提亮成淺金。
+/* 三段柔和漸層：46% 處放一道「只亮一點點」的反光帶，加上頂邊一條 inset 微光，
+   金屬感回來一點點、但不像原本那麼重。整體仍是提亮過的淺金。
    色相往冷側收（偏橘的暖金 → 偏中性的香檳金），看起來涼一點、不會太黃。
-   漸層角度改成 100deg，光由左往右帶過去。
+   漸層角度 100deg，光由左往右帶過去。
    金額改用全站的棕金字色 --gold-tx #8A5510，跟產品名同一個顏色；
    標籤與說明列維持較深的褐字，確保小字在最深的金色角落仍讀得清楚。 */
-.hero.sim{background:linear-gradient(100deg,#F6EACA 0%,#E4D2A2 100%);
+.hero.sim{background:linear-gradient(100deg,#F3E6C4 0%,#F8EDCB 46%,#E2CE9B 100%);
   border:2px solid #D3BE8B;border-left:7px solid #D3BE8B;color:#3A2A12;
-  box-shadow:0 4px 14px rgba(190,142,52,.18)}
+  box-shadow:0 4px 14px rgba(190,142,52,.18),inset 0 1px 0 rgba(255,255,255,.55)}
 .hero.sim .lbl{color:#4A3410}
 .hero.sim .amt{color:var(--gold-tx)}
 .hero.sim .amt small{color:var(--gold-tx)}

@@ -157,6 +157,23 @@ body{
    配上這裡的 border-radius 會在左邊畫出一條括號狀的弧線。 */
 .hero .note{font-size:14.5px;color:var(--ink-2);margin-top:8px;border:0;
   background:var(--tint);padding:7px 12px;border-radius:10px;display:inline-block;font-weight:600}
+/* 一般狀態（預計入帳）：整張卡換成深藍漸層＋白字，跟模擬狀態的亮金卡配成一對。
+   ------------------------------------------------------------------
+   結構刻意跟下面的 .hero.sim 一樣是五段漸層、46% 處放一道較亮的反光帶，
+   兩張卡才會像同一套「金屬質感」的設計，只是一藍一金。
+   色相都收在康和主色藍 #0F4C75 這一家，最深壓到 --navy-dk #0A3557。
+   白字放在最亮的反光帶 #366A90 上仍有 5.8:1，過 WCAG AA。
+   （亮金那張反過來配深褐字，是因為白字在亮金上只有 2.17:1，見下方說明。） */
+.hero.cash{background:linear-gradient(135deg,#2C5C82 0%,#1B4A70 30%,#366A90 46%,
+    #144263 62%,#0C3555 100%);
+  border:2px solid #0A3557;border-left:7px solid #0A3557;color:#fff;
+  box-shadow:0 6px 20px rgba(15,76,117,.32)}
+.hero.cash .lbl{color:#DCE9F4}
+.hero.cash .amt{color:#fff}
+.hero.cash .amt small{color:#CFE0EF}
+/* 說明列用「半透明白」提亮成比卡片淺一階的藍，白字放上去仍讀得清楚 */
+.hero.cash .note{background:rgba(255,255,255,.16);color:#fff}
+
 /* 模擬狀態（在 ② 選了補缺口方案之後）：整張卡換成亮金實底＋深褐字。
    一般狀態是白卡藍字、模擬狀態是亮金卡，兩者一眼就分得出來，
    在整頁白卡之中最搶眼。

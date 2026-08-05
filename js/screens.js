@@ -98,7 +98,7 @@ S.cashCal = function () {
         .replace('{b}', Math.abs(diff).toLocaleString());
 
   return '' +
-  '<div class="hero' + (on ? ' sim' : '') + '">' +
+  '<div class="hero ' + (on ? 'sim' : 'cash') + '">' +
     '<div class="lbl">' + CONFIG.year + ' 年 ' + CONFIG.month + ' 月　' +
       (on ? '模擬後預計入帳' : '預計入帳') + '</div>' +
     '<div class="amt"><small>NT$</small>' + sum.toLocaleString() + '</div>' +

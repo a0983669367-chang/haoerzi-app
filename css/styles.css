@@ -41,6 +41,7 @@
   --red:#7A2233;
   --red-lt:#FBE9E7;
   --teal:#1B7B8C;
+  --contact:#3F6A8C;     /* 聯絡真人的大按鈕（樂齡專線、預約回電）：比青色沉穩、不那麼跳的藍 */
   --brand-red:#DB190E;
 
   --radius:20px;
@@ -181,15 +182,17 @@ body{
    那樣就不亮了。改成亮金底＋深褐字，對比度 6.36～8.82:1，
    金色可以維持最亮的狀態——這也是康和「好康 fun 心投」官網
    那條黃色列的做法。 */
-/* 兩段柔和漸層：拿掉原本 46% 那道反光帶，金屬感放輕、整體提亮成淺金，
-   跟藍卡一藍一金但都比原本淡。色相仍壓在偏橘的暖金，不會偏綠像芥末醬。
-   最深的 #E7CC8F 配深褐字仍有很高對比，讀得很清楚。 */
-.hero.sim{background:linear-gradient(135deg,#F8E7BC 0%,#E7CC8F 100%);
-  border:2px solid #D8B871;border-left:7px solid #D8B871;color:#3A2A12;
-  box-shadow:0 4px 14px rgba(190,142,52,.20)}
+/* 兩段柔和漸層：拿掉原本 46% 那道反光帶，金屬感放輕、整體提亮成淺金。
+   色相往冷側收（偏橘的暖金 → 偏中性的香檳金），看起來涼一點、不會太黃。
+   漸層角度改成 100deg，光由左往右帶過去。
+   金額改用全站的棕金字色 --gold-tx #8A5510，跟產品名同一個顏色；
+   標籤與說明列維持較深的褐字，確保小字在最深的金色角落仍讀得清楚。 */
+.hero.sim{background:linear-gradient(100deg,#F6EACA 0%,#E4D2A2 100%);
+  border:2px solid #D3BE8B;border-left:7px solid #D3BE8B;color:#3A2A12;
+  box-shadow:0 4px 14px rgba(190,142,52,.18)}
 .hero.sim .lbl{color:#4A3410}
-.hero.sim .amt{color:#3A2A12}
-.hero.sim .amt small{color:#4A3410}
+.hero.sim .amt{color:var(--gold-tx)}
+.hero.sim .amt small{color:var(--gold-tx)}
 /* 說明列用「半透明白」提亮，讓中間比外框淺一階（之前用半透明黑，中間反而比旁邊深，
    看起來像凹陷）。卡片變淺了，這裡也提到 .5 讓說明列還分得出來。 */
 .hero.sim .note{background:rgba(255,255,255,.5);color:#3A2A12}
@@ -334,7 +337,7 @@ input[type=range]::-moz-range-thumb{width:32px;height:32px;border-radius:50%;
   align-items:center;justify-content:center;gap:9px}
 .bigbtn.p{background:var(--navy);color:#fff}
 .bigbtn.r{background:var(--red);color:#fff}
-.bigbtn.t{background:var(--teal);color:#fff}
+.bigbtn.t{background:var(--contact);color:#fff}
 .bigbtn.o{background:#fff;color:var(--navy);border:2.5px solid var(--navy)}
 .bigbtn.sm{padding:14px;font-size:16px;margin-top:12px}
 a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <button> 一致 */
@@ -521,7 +524,7 @@ a.bigbtn{text-decoration:none}   /* 撥號與外連用 <a>，外觀要跟 <butto
 .pick{width:100%;margin-top:11px;background:var(--navy);color:#fff;border:0;
   border-radius:12px;padding:14px;font-size:16px;font-weight:700;
   font-family:inherit;cursor:pointer}
-.pick.t{background:var(--teal);color:#fff}
+.pick.t{background:var(--contact);color:#fff}
 .prod.open .pick{background:#fff;color:var(--navy);border:2px solid var(--navy)}
 
 /* ===== 19. 申購試算面板 ===== */

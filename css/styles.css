@@ -157,22 +157,20 @@ body{
    配上這裡的 border-radius 會在左邊畫出一條括號狀的弧線。 */
 .hero .note{font-size:14.5px;color:var(--ink-2);margin-top:8px;border:0;
   background:var(--tint);padding:7px 12px;border-radius:10px;display:inline-block;font-weight:600}
-/* 一般狀態（預計入帳）：整張卡換成深藍漸層＋白字，跟模擬狀態的亮金卡配成一對。
+/* 一般狀態（預計入帳）：柔和的藍漸層＋白字，跟模擬狀態的淺金卡配成一對。
    ------------------------------------------------------------------
-   結構刻意跟下面的 .hero.sim 一樣是五段漸層、46% 處放一道較亮的反光帶，
-   兩張卡才會像同一套「金屬質感」的設計，只是一藍一金。
-   色相都收在康和主色藍 #0F4C75 這一家，最深壓到 --navy-dk #0A3557。
-   白字放在最亮的反光帶 #366A90 上仍有 5.8:1，過 WCAG AA。
-   （亮金那張反過來配深褐字，是因為白字在亮金上只有 2.17:1，見下方說明。） */
-.hero.cash{background:linear-gradient(135deg,#2C5C82 0%,#1B4A70 30%,#366A90 46%,
-    #144263 62%,#0C3555 100%);
-  border:2px solid #0A3557;border-left:7px solid #0A3557;color:#fff;
-  box-shadow:0 6px 20px rgba(15,76,117,.32)}
-.hero.cash .lbl{color:#DCE9F4}
+   拿掉原本 46% 那道反光帶、改成兩段柔和漸層，金屬感放輕；色調也整體提亮，
+   不要那麼重。色相仍收在康和主色藍 #0F4C75 這一家。
+   白字放在最亮的 #427397 上仍有 5.1:1，過 WCAG AA。
+   （模擬那張反過來配深褐字，是因為白字在金色上只有 2.17:1，見下方說明。） */
+.hero.cash{background:linear-gradient(135deg,#427397 0%,#2B5A7E 100%);
+  border:2px solid #2B5A7E;border-left:7px solid #2B5A7E;color:#fff;
+  box-shadow:0 4px 14px rgba(15,76,117,.18)}
+.hero.cash .lbl{color:#E1ECF5}
 .hero.cash .amt{color:#fff}
-.hero.cash .amt small{color:#CFE0EF}
+.hero.cash .amt small{color:#D3E1EF}
 /* 說明列用「半透明白」提亮成比卡片淺一階的藍，白字放上去仍讀得清楚 */
-.hero.cash .note{background:rgba(255,255,255,.16);color:#fff}
+.hero.cash .note{background:rgba(255,255,255,.18);color:#fff}
 
 /* 模擬狀態（在 ② 選了補缺口方案之後）：整張卡換成亮金實底＋深褐字。
    一般狀態是白卡藍字、模擬狀態是亮金卡，兩者一眼就分得出來，
@@ -183,19 +181,18 @@ body{
    那樣就不亮了。改成亮金底＋深褐字，對比度 6.36～8.82:1，
    金色可以維持最亮的狀態——這也是康和「好康 fun 心投」官網
    那條黃色列的做法。 */
-/* 五段漸層：46% 處放一道微亮的反光帶，金色才會像「金屬」而不是一塊平面的芥末色。
-   色相刻意壓在 39–43°（偏橘的暖金）——原本 44° 偏綠，看起來就會像芥末醬。
-   每一段都驗過對比度，最深的 #C99A42 配深褐字仍有 5.39:1。 */
-.hero.sim{background:linear-gradient(135deg,#F6E1AC 0%,#E7C67B 30%,#F0D293 46%,
-    #DCB35F 62%,#C99A42 100%);
-  border:2px solid #BE8E34;border-left:7px solid #BE8E34;color:#3A2A12;
-  box-shadow:0 6px 20px rgba(190,142,52,.32)}
+/* 兩段柔和漸層：拿掉原本 46% 那道反光帶，金屬感放輕、整體提亮成淺金，
+   跟藍卡一藍一金但都比原本淡。色相仍壓在偏橘的暖金，不會偏綠像芥末醬。
+   最深的 #E7CC8F 配深褐字仍有很高對比，讀得很清楚。 */
+.hero.sim{background:linear-gradient(135deg,#F8E7BC 0%,#E7CC8F 100%);
+  border:2px solid #D8B871;border-left:7px solid #D8B871;color:#3A2A12;
+  box-shadow:0 4px 14px rgba(190,142,52,.20)}
 .hero.sim .lbl{color:#4A3410}
 .hero.sim .amt{color:#3A2A12}
 .hero.sim .amt small{color:#4A3410}
 /* 說明列用「半透明白」提亮，讓中間比外框淺一階（之前用半透明黑，中間反而比旁邊深，
-   看起來像凹陷）。 */
-.hero.sim .note{background:rgba(255,255,255,.42);color:#3A2A12}
+   看起來像凹陷）。卡片變淺了，這裡也提到 .5 讓說明列還分得出來。 */
+.hero.sim .note{background:rgba(255,255,255,.5);color:#3A2A12}
 
 /* ===== 9. 現金流月曆 ===== */
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}

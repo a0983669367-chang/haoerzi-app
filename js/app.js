@@ -342,10 +342,20 @@
       return;
     }
 
+    /* 缺口越大，數字越偏紅（琥珀 → 紅），再做上淺下深的漸層 */
+    var maxGap  = Math.max(1, PENSION.targetMax - TOTAL);
+    var t       = Math.max(0, Math.min(1, gap / maxGap));
+    var mix     = function (a, b) { return [0, 1, 2].map(function (i) { return Math.round(a[i] + (b[i] - a[i]) * t); }); };
+    var lighten = function (c, f) { return c.map(function (v) { return Math.round(v + (255 - v) * f); }); };
+    var darken  = function (c, f) { return c.map(function (v) { return Math.round(v * (1 - f)); }); };
+    var rgb     = function (c) { return 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')'; };
+    var base    = mix([156, 100, 16], [176, 39, 26]);   // #9C6410 琥珀 → #B0271A 紅
+    var gapGrad = 'linear-gradient(180deg,' + rgb(lighten(base, .18)) + ' 0%,' + rgb(darken(base, .10)) + ' 100%)';
+
     box.className = 'result warn';
     box.innerHTML =
       '<div class="lbl">距離每月 ' + target.toLocaleString() + ' 元，還差</div>' +
-      '<div class="big">' + gap.toLocaleString() + ' 元</div>' +
+      '<div class="big" style="background-image:' + gapGrad + '">' + gap.toLocaleString() + ' 元</div>' +
       '<div class="tip">一年就是 <b>' + (gap * 12).toLocaleString() +
       ' 元</b>。下面三個方法都可以把這個缺口補起來。</div>';
 

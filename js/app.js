@@ -332,6 +332,8 @@
     /* 已達標：不製造假需求，改推「把多出來的錢鎖成終身給付」 */
     if (gap <= 0) {
       box.className = 'result';
+      box.style.background  = '';   // 清掉缺口狀態留下的紅色調，讓「已達標」回到綠色
+      box.style.borderColor = '';
       box.innerHTML =
         '<div class="lbl">您目前的月現金流</div>' +
         '<div class="big">已達標</div>' +
@@ -349,10 +351,15 @@
     var lighten = function (c, f) { return c.map(function (v) { return Math.round(v + (255 - v) * f); }); };
     var darken  = function (c, f) { return c.map(function (v) { return Math.round(v * (1 - f)); }); };
     var rgb     = function (c) { return 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')'; };
-    var base    = mix([156, 100, 16], [176, 39, 26]);   // #9C6410 琥珀 → #B0271A 紅
+    var base    = mix([156, 100, 16], [176, 39, 26]);   // #9C6410 琥珀 → #B0271A 紅（數字）
     var gapGrad = 'linear-gradient(180deg,' + rgb(lighten(base, .18)) + ' 0%,' + rgb(darken(base, .10)) + ' 100%)';
+    /* 整個框的色調也跟著缺口變：底色與外框由琥珀漸紅，缺口越大越有「警示」感 */
+    var bgCol   = mix([251, 240, 220], [251, 226, 214]);   // #FBF0DC 琥珀底 → #FBE2D6 紅底
+    var brCol   = mix([235, 203, 148], [228, 150, 126]);   // #EBCB94 琥珀框 → #E4967E 紅框
 
     box.className = 'result warn';
+    box.style.background  = rgb(bgCol);
+    box.style.borderColor = rgb(brCol);
     box.innerHTML =
       '<div class="lbl">距離每月 ' + target.toLocaleString() + ' 元，還差</div>' +
       '<div class="big" style="background-image:' + gapGrad + '">' + gap.toLocaleString() + ' 元</div>' +

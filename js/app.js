@@ -351,11 +351,11 @@
     var lighten = function (c, f) { return c.map(function (v) { return Math.round(v + (255 - v) * f); }); };
     var darken  = function (c, f) { return c.map(function (v) { return Math.round(v * (1 - f)); }); };
     var rgb     = function (c) { return 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')'; };
-    var base    = mix([156, 100, 16], [176, 39, 26]);   // #9C6410 琥珀 → #B0271A 紅（數字）
+    var base    = mix([156, 100, 16], [193, 33, 22]);   // #9C6410 琥珀 → #C12116 紅（數字，再紅一點）
     var gapGrad = 'linear-gradient(180deg,' + rgb(lighten(base, .18)) + ' 0%,' + rgb(darken(base, .10)) + ' 100%)';
     /* 整個框的色調也跟著缺口變：底色與外框由琥珀漸紅，缺口越大越有「警示」感 */
-    var bgCol   = mix([251, 240, 220], [251, 226, 214]);   // #FBF0DC 琥珀底 → #FBE2D6 紅底
-    var brCol   = mix([235, 203, 148], [228, 150, 126]);   // #EBCB94 琥珀框 → #E4967E 紅框
+    var bgCol   = mix([251, 240, 220], [251, 216, 205]);   // #FBF0DC 琥珀底 → #FBD8CD 紅底
+    var brCol   = mix([235, 203, 148], [221, 130, 106]);   // #EBCB94 琥珀框 → #DD826A 紅框
 
     box.className = 'result warn';
     box.style.background  = rgb(bgCol);

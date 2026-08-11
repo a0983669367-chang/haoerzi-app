@@ -711,7 +711,7 @@
   function order(amt) {
     var p = curProduct();
     if (!p) return;
-    var fee = CAT_FEE[p.c];
+    var fee = CAT_FEE[p.c] || { tx:'依個別商品公告', rate:0 };   // 沒對應分類也不讓試算壞掉
 
     document.getElementById('ordVal').textContent = nt(amt);
     document.getElementById('ordOut').innerHTML = p.y
@@ -726,7 +726,7 @@
   function openConfirm() {
     var p   = curProduct();
     var amt = +document.getElementById('ordSl').value;
-    var fee = CAT_FEE[p.c];
+    var fee = CAT_FEE[p.c] || { tx:'依個別商品公告', rate:0 };   // 沒對應分類也不讓試算壞掉
     var fit = p.rr <= CONFIG.maxRR;
 
     showSheet(

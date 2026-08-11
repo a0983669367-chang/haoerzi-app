@@ -206,9 +206,8 @@
   /* ---------- 共用小工具 ---------- */
   function paintTrack(sl) {
     var p = (sl.value - sl.min) / (sl.max - sl.min) * 100;
-    /* 已填滿的部分用主色藍 --navy（跟滑桿圓球的外框同色，整條看起來才是「藍色」，
-       不再是偏綠的青色）；未填滿的部分用 --track（灰），都不寫死顏色。 */
-    sl.style.background = 'linear-gradient(90deg,var(--navy) 0%,var(--navy) ' + p +
+    /* 軌道未填滿的部分用 --track（暖米色），跟 styles.css 的色票一致，不要寫死顏色 */
+    sl.style.background = 'linear-gradient(90deg,var(--teal) 0%,var(--teal) ' + p +
                           '%,var(--track) ' + p + '%,var(--track) 100%)';
   }
 
